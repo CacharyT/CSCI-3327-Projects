@@ -3,7 +3,7 @@
  * This class will test the functions of Solver Class:
  * 1. factorial
  * 2. combination
- * 3. 
+ * 3. permutation
  */
 
 public class TestSolver {
