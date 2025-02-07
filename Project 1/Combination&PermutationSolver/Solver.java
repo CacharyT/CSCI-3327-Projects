@@ -3,6 +3,7 @@
  * This class will:
  * 1. Allow for computing combinations
  * 2. Allow for computing permutations
+ * 3. Allow for computing factorial
  */
 
  //Imports
