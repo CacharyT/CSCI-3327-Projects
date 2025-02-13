@@ -1,5 +1,6 @@
 /*
- * 
+ * Cachary Tolentino
+ * The Card class will be an object that contains a card type.
  */
 
 
@@ -10,6 +11,8 @@ public class Card {
 
     /*
      * Default Constructor
+     * @param none
+     * @return none
      */
     public Card(){
         cardType = "";
@@ -17,27 +20,26 @@ public class Card {
 
     /*
      * Contructor with parameter
-     * @param
-     * @return
+     * @param type a string value for the type of card
+     * @return none
      */
     public Card(String type){
         cardType = type;
     }
 
-
-    //Setters
-
     /*
-     * 
+     * The function will update the current value of the cardType
+     * @param newType a string value of the new type
+     * @return none
      */
     public void setCardType(String newType){
         cardType = newType;
     }
 
-    //Getters
-
     /*
-     * 
+     * The function will return the type of card
+     * @param none
+     * @return cardType a string value of the type of card
      */
     public String getCardType(){
         return cardType;

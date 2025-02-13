@@ -37,10 +37,10 @@ public class Mulligan {
      */
     public double[] mulliganProbabilityPerPokemonCount(int trialNum){
 
-        double[] mulliganProbabilities = new double[60];
+        double[] mulliganProbabilities = new double[61];
 
 
-        for(int pokemonCount = 0; pokemonCount < 60; pokemonCount++){
+        for(int pokemonCount = 0; pokemonCount < 61; pokemonCount++){
 
             int totalMulligans = 0;
 
@@ -62,7 +62,7 @@ public class Mulligan {
     }
 
     /*
-     * This function will check whether a mulligan appears during the first seven cards drawn
+     * This function will check whether a mulligan appears during the first seven cards drawn (random draws to emulate a shuffled deck)
      * @param deck an array of card objects
      * @return boolean decides if a mulligan appears or not
      */

@@ -1,33 +1,60 @@
-
+/*
+ * Cachary Tolentino
+ * 
+ */
 
 public class Pokemon extends Card{
     
     //Global Variable(s)
     private int hp;
-    //private Ability basic
-    //private Ability special
-    private String weakness;
+    private Energy[] energies;
 
     /*
      * Default Constructor
      */
     public Pokemon(){
         hp = 0;
-        //basic = 0;
-        //special = 0;
-        weakness = "";
+        energies = new Energy[0];
+        super.setCardType("Pokemon");
     }
 
-    //Setters
+    /*
+     * Default Constructor
+     */
+    public Pokemon(int newHP, Energy[] newEnergies){
+        hp = newHP;
+        energies = newEnergies;
+        super.setCardType("Pokemon");
+    }
 
-    //Getters
 
     /*
      * 
      */
-    @Override
-    public String getCardType(){
-        return super.getCardType();
+    public void setHP(int newHP){
+        hp = newHP;
+    }
+
+    /*
+     * 
+     */
+    public void setEnergies(Energy[] newEnergies){
+        energies = newEnergies;
+    }
+
+    /*
+     * 
+     */
+    public int getHP(){
+        return hp;
+    }
+
+
+    /*
+     * 
+     */
+    public Energy[] getEnergies(){
+        return energies;
     }
 
 }

@@ -1,5 +1,6 @@
 /*
- * 
+ * Cachary Tolentino
+ * The Energy class is a type of Card object that will contain a type of energy.
  */
 
 public class Energy extends Card{
@@ -9,42 +10,40 @@ public class Energy extends Card{
 
     /*
      * Default Constructor
+     * @param none
+     * @return none
      */
     public Energy(){
         energyType = "";
+        super.setCardType("Energy");
     }
 
     /*
-     * 
+     * Constructor with parameters
+     * @param type a string value of the energy type
+     * @return none
      */
     public Energy(String type){
         energyType = type;
+        super.setCardType("Energy");
     }
-
-    //Setters
     
     /*
-     * 
+     * The function will update the current energy type
+     * @param newType  a string value of the new energy type
+     * @return none
      */
     public void setEnergyType(String newType){
         energyType = newType;
     }
 
-    //Getters
-
     /*
-     * 
+     * The function will return the current energy card's type
+     * @param none
+     * @return energyType a string value of the energy type
      */
     public String getEnergyType(){
         return energyType;
     }
-
-    /*
-     * 
-     */
-    @Override
-    public String getCardType(){
-        return super.getCardType();
-    }
-
+    
 }
