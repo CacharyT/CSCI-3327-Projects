@@ -12,9 +12,9 @@ public class Bricked {
     
 
     //Global Variable()
-    Card[] deck;
-    Card[] hand;
-    Card[] prizePile;
+    private Card[] deck;
+    private Card[] hand;
+    private Card[] prizePile;
 
     /*
      * Default Constructor
@@ -56,17 +56,17 @@ public class Bricked {
 
             for(int trial = 0; trial < trialNum; trial++){
 
-                deck = createBrickedDeck(rareCandyCount);
-                hand = createHand(deck);
+                setDeck(createBrickedDeck(rareCandyCount));
+                setHand(createHand(this.deck));
 
                 //Ensure hand contains a pokemon, then check if hand contains pokemon (it should)
-                while(!checkContainsPokemon(hand)){
-                    hand = createHand(deck);
+                while(checkContainsPokemon(this.hand) == false){
+                    setHand(createHand(this.deck));
                 }
 
                 //then make and check prize pile, if contains all rare candies, then bricked
-                prizePile = createPrizePile(deck);
-                if(checkBricked(prizePile, rareCandyCount)){
+                setPrizePile(createPrizePile(this.deck));
+                if(checkBricked(this.prizePile, rareCandyCount)){
                     totalBricked++;
                 }
             }
@@ -126,18 +126,17 @@ public class Bricked {
      */
     public Card[] createHand(Card[] deck){
 
-        Random random = new Random();
+        //Draw 7 cards
         Card[] currentHand = new Card[7];
 
-        for(int currentCount = 0; currentCount < 7; currentCount++){
-
-            currentHand[currentCount] = deck[random.nextInt(deck.length)];
-
+        for(int i = 0; i < 7; i++){
+            currentHand[i] = drawCard(this.deck);
         }
 
+        //Return hand
         return currentHand;
-    }
 
+    }
 
 
     /*
@@ -147,16 +146,62 @@ public class Bricked {
      */
     public Card[] createPrizePile(Card[] deck){
 
-        Random random = new Random();
+        //Draw 6 cards
         Card[] currentPrizePile = new Card[6];
-
-        for(int currentCount = 0; currentCount < 6; currentCount++){
-
-            currentPrizePile[currentCount] = deck[random.nextInt(deck.length)];
-
+        for(int i = 0; i < 6; i++){
+            currentPrizePile[i] = drawCard(this.deck);
         }
 
+        //Return prize pile
         return currentPrizePile;
+
+    }
+
+
+    /*
+     * This is a helper function that check if an array contains a certain number
+     * @param indexes an array of int values
+     * @param currentIndex an int value
+     * @return boolean decides if the array contains the number
+     */
+    public Boolean checkIndex(int[] indexes, int currentIndex){
+        for(int num : indexes){
+            if(num == currentIndex){
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    /*
+     * This function will draw a card from the deck and remove it from the deck
+     * @param deck an array of card objects
+     * @return drawnCard a card object
+     */
+    public Card drawCard(Card[] deck){
+        
+        //Draw a card randomly
+        Random random = new Random();
+        int num = random.nextInt(deck.length);
+        Card drawnCard = deck[num];
+
+
+        //Remove card from the deck
+        Card[] updatedDeck = new Card[deck.length - 1];
+        int newIndex = 0;
+
+        for(int i = 0; i < deck.length; i++){
+            if(i != num){
+                updatedDeck[newIndex++] = deck[i];
+            }
+        }
+
+        //Update deck
+        this.deck = updatedDeck;
+
+        return drawnCard;
+        
     }
 
 
@@ -190,6 +235,61 @@ public class Bricked {
         }
 
         return brickedDeck;
+    }
+
+
+    /*
+     * This function will set the deck
+     * @param newDeck an array of card objects
+     * @return none
+     */
+    public void setDeck(Card[] newDeck){
+        deck = newDeck;
+    }
+
+    /*
+     * This function will set the hand
+     * @param newHand an array of card objects
+     * @return none
+     */
+    public void setHand(Card[] newHand){
+        hand = newHand;
+    }
+
+    /*
+     * This function will set the prize pile
+     * @param newPrizePile an array of card objects
+     * @return none
+     */
+    public void setPrizePile(Card[] newPrizePile){
+        prizePile = newPrizePile;
+    }
+
+    /*
+     * This function will return the deck
+     * @param none
+     * @return deck an array of card objects
+     */
+    public Card[] getDeck(){
+        return deck;
+    }
+
+    /*
+     * This function will return the hand
+     * @param none
+     * @return hand an array of card objects
+     */
+    public Card[] getHand(){
+        return hand;
+    }
+
+    /*
+     * This function will return the prize pile
+     * @param none
+     * @return prizePile an array of card objects
+     */
+    public Card[] getPrizePile(){
+        return prizePile;
     }
 
 }
