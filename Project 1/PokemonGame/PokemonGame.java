@@ -39,6 +39,14 @@ public class PokemonGame {
      * 
      */
     public void startGame(){
+
+        //CHECK NEW CONDITIONS HE ADDED FROM LAST CLASS
+
+
+
+
+
+
         Scanner scan = new Scanner(System.in);
 
         //PRINT GAME RULE
