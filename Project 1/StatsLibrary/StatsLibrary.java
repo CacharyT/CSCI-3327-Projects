@@ -5,6 +5,7 @@
  */
 
 //Imports
+import java.math.BigInteger;
 import java.util.*;
 
 public class StatsLibrary {
@@ -154,5 +155,174 @@ public class StatsLibrary {
         //Return the value
         return std;
     }
+
+
+    /*
+     * The function will return the union of the given pair arraylists
+     * @param: list1 an  arraylist of strings
+     * @param: list2 an  arraylist of strings
+     * @return: unionList an arraylist of string values containing the union of the provided pair of arraylist
+     */
+    public ArrayList<String> Union(ArrayList<String> list1, ArrayList<String> list2){
+
+        //Declared variables
+        ArrayList<String> unionList = new ArrayList<>();
+
+        for(String word1 : list1){
+            if(!unionList.contains(word1)){ //Checks the arraylist if the current word is already in it, otherwise add it
+                unionList.add(word1);
+            }
+        }
+
+        for(String word2 : list2){
+            if(!unionList.contains(word2)){ //Checks the arraylist if the current word is already in it, otherwise add it
+                unionList.add(word2);
+            }
+        }
+
+        return unionList;
+    }
+
+    /*
+     * The function will return the intersect of the given pair of arraylists
+     * @param: list1 an  arraylist of strings
+     * @param: list2 an  arraylist of strings
+     * @return: result an arraylist of string values containing the intersect of the provided pair of arraylist
+     */
+    public ArrayList<String> Intersect(ArrayList<String> list1, ArrayList<String> list2){
+
+        //Declared variables
+        ArrayList<String> intersectList = new ArrayList<>();
+
+        //Find the longest list
+        int list1Length = list1.size();
+        int list2Length = list2.size();
+
+        if(list1Length >= list2Length){ //Uses list1 as the length of the list since it contains the most values
+            for(String word : list1){
+                if(list2.contains(word) && !intersectList.contains(word)){ //checks if the word is in both list1 and list2 but not in the list already
+                    intersectList.add(word);
+                }
+            }
+        } else{
+            for(String word : list2){ //Uses list2 as the length of the list since it contains the most values
+                if(list1.contains(word) && !intersectList.contains(word)){ //checks if the word is in both list1 and list2 but not in the list already
+                    intersectList.add(word);
+                }
+            }
+        }
+
+        return intersectList;
+    }
+
+    /*
+     * The function will return the complement of the given arraylist
+     * @param: allList an  arraylist of strings
+     * @param: list1 an  arraylist of strings
+     * @return: result an arraylist of string values containing the complement of the provided arraylist
+     */
+    public ArrayList<String> Complement(ArrayList<String> allList, ArrayList<String> list1){
+
+        //Declared variables
+        ArrayList<String> complementList = new ArrayList<>();
+
+        for(String word1 : allList){ //Adds all possible strings 
+            complementList.add(word1);
+        }
+
+        for(String word2 : list1){
+            if(complementList.contains(word2)){ //If the list contains the word then remove the word (emulates complement)
+                complementList.remove(word2);
+            }
+        }
+
+        return complementList;
+    }
+
+
+    /*
+     * This function calculates the combination value of the given n and r values
+     * @param n an int value
+     * @param r an int value
+     * @return BigInteger value of the combination
+     */
+    public BigInteger combination(int n, int r){
+
+        BigInteger factN = factorial(n);
+        BigInteger factR = factorial(r);
+        BigInteger factNMinusR = factorial(n - r);
+        BigInteger combinationValue = factN.divide(factR.multiply(factNMinusR));
+
+        return combinationValue;
+
+    }
+
+    /*
+     * This function will calculate the permutation value of the given n and r values
+     * @param n an int value
+     * @param r an int value
+     * @return BigInteger value of the permutation
+     */
+    public BigInteger permutation(int n, int r){
+        
+        BigInteger factN = factorial(n);
+        BigInteger factNMinusR = factorial(n - r);
+        BigInteger permutationValue = factN.divide(factNMinusR);
+
+        return permutationValue;
+
+    }
+
+    /*
+     * The function will retun the factorial value of the given number
+     * @param num the number to find the factorial for
+     * @return factorial value as a BigInteger type
+     */
+    public BigInteger factorial(int num){
+        
+        //Checks if the current num is 0, if so, can return (base case)
+        if(num == 0){
+            return BigInteger.ONE;
+        }
+
+        return BigInteger.valueOf(num).multiply(factorial(num - 1)); //recursion case (decrease num each call)
+    }
+
+
+    /*
+     * The function will compute the given value based on the mn rule
+     * @param m an int value
+     * @param n an int value
+     * @return: the value (m * n)
+     */
+    public double getMNRule(int m, int n){
+
+        //Return the value (m * n)
+        return (double) (m * n);
+
+    }
+
+
+    /*
+     * This function will compute the given value based on the multinomial coefficient formula
+     * @param n an int value
+     * @param nums an array of int values
+     * @return: the value of the multinomial coefficient
+     */
+    public BigInteger getMultinomialCoefficient(int n, int[] nums){
+
+        //Numerator
+        BigInteger numerator = factorial(n);
+
+        //deonominator
+        BigInteger denominator = BigInteger.ONE;
+        for(int num : nums){
+            denominator = denominator.multiply(factorial(num));
+        }
+
+        return numerator.divide(denominator);
+
+    }
+
 
 }

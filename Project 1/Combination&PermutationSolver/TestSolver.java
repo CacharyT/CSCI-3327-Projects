@@ -8,6 +8,7 @@
 
 public class TestSolver {
     public static void main(String[] args) {
+
         Solver solver = new Solver();
 
         //Testing factorial
