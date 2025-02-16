@@ -23,6 +23,7 @@ public class Bulbasaur extends Pokemon{
      */
     public Bulbasaur(){
         super.setHP(70);
+        super.setName("Bulbasaur");
         basicAttack = 10;
         specialAttack = 20;
         abilityDescription = new String[2];

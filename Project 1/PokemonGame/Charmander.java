@@ -23,6 +23,7 @@ public class Charmander extends Pokemon{
      */
     public Charmander(){
         super.setHP(70);
+        super.setName("Charmander");
         basicAttack = 0;
         specialAttack = 30;
         abilityDescription = new String[2];
@@ -91,7 +92,6 @@ public class Charmander extends Pokemon{
         return 0; //did not meet energy requirements
 
     }
-
 
     /*
      * 

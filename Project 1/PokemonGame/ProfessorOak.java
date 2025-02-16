@@ -9,12 +9,15 @@
 public class ProfessorOak extends Trainer{
 
     //Global Variable(s)
+    private String trainerDescription;
 
     /*
      * Default Constructor
      */
     public ProfessorOak(){
         super.setCardType("Trainer");
+        super.setName("ProfessorOak");
+        trainerDescription = "Discard your hand and draw 7 cards.";
     }
 
 
@@ -52,6 +55,20 @@ public class ProfessorOak extends Trainer{
             PokemonGame.fillPlayerHand(player);
         }
 
+    }
+
+    /*
+     * 
+     */
+    public void setTrainerDescription(String newDescription){
+        trainerDescription = newDescription;
+    }
+
+    /*
+     * 
+     */
+    public String getTrainerDescription(){
+        return trainerDescription;
     }
     
 }

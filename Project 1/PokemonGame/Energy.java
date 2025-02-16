@@ -7,6 +7,7 @@ public class Energy extends Card{
     
     //Global Variable(s)
     private String energyType;
+    private String cardName;
 
     /*
      * Default Constructor
@@ -16,6 +17,7 @@ public class Energy extends Card{
     public Energy(){
         energyType = "";
         super.setCardType("Energy");
+        cardName = "";
     }
 
     /*
@@ -26,6 +28,7 @@ public class Energy extends Card{
     public Energy(String type){
         energyType = type;
         super.setCardType("Energy");
+        cardName = "";
     }
     
     /*
@@ -35,6 +38,21 @@ public class Energy extends Card{
      */
     public void setEnergyType(String newType){
         energyType = newType;
+    }
+
+    /*
+     * 
+     */
+    public void setName(String newName){
+        cardName = newName;
+    }
+
+    /*
+     * 
+     */
+    @Override
+    public String getName(){
+        return cardName;
     }
 
     /*

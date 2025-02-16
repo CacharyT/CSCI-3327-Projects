@@ -9,12 +9,15 @@ public class Recylce extends Trainer{
 
 
     //Global Variable(s)
+    private String trainerDescription;
 
     /*
      * Default Constructor
      */
     public Recylce(){
         super.setCardType("Trainer");
+        super.setName("Recycle");
+        trainerDescription = "Flip a coin. If heads, put a card in your discard pileon top of your deck.";
     }
 
 
@@ -72,12 +75,21 @@ public class Recylce extends Trainer{
                 }
             }
 
-
-
         }
+    }
 
+    /*
+     * 
+     */
+    public void setTrainerDescription(String newDescription){
+        trainerDescription = newDescription;
+    }
 
-
+    /*
+     * 
+     */
+    public String getTrainerDescription(){
+        return trainerDescription;
     }
 
 

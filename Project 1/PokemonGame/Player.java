@@ -113,6 +113,9 @@ public class Player {
             }
         }
 
+        //Update the deck
+        setDeck(newDeck);
+
         return newDeck;
 
     }
@@ -121,11 +124,11 @@ public class Player {
     /*
      * 
      */
-    public Card[] createDeck(int pokemonCount, int energyCount, int trainerCount){
+    public Card[] createDeck(int pokemonCount, int trainerCount, int energyCount){
         
         Random random = new Random();
 
-        if(trainerCount >= 16){ //To ensure that the player does not exceed 4 cards per trainer card
+        if(trainerCount > 16 || pokemonCount > 16){ //To ensure that the player does not exceed 4 cards per card type
             return null;
         }
 
@@ -190,7 +193,36 @@ public class Player {
             }
         }
 
+        //Update the deck
+        setDeck(newDeck);
+
         return newDeck;
+
+    }
+
+
+    /*
+     * 
+     */
+    public void reAddHandToDeck(){
+
+        Card[] updatedDeck = new Card[deck.length + hand.length];
+
+        //Re adding hand cards to deck
+        for(int i = 0; i < deck.length; i++){
+            
+            updatedDeck[i] = deck[i];
+
+        }
+
+        for(int i = deck.length; i < updatedDeck.length; i++){
+
+            updatedDeck[i] = hand[i - deck.length];
+
+        }
+
+        //Update the deck
+        setDeck(updatedDeck);
 
     }
 
@@ -210,6 +242,22 @@ public class Player {
         setDeck(newDeck);
 
         return drawnCard;
+    }
+
+    /*
+     * 
+     */
+    public void addCardToHand(Card newCard){
+
+        //Make new hand with new card and update hand
+        Card[] newHand = new Card[hand.length + 1];
+        for(int i = 1; i < newHand.length; i++){
+            newHand[i] = hand[i];
+        }
+        newHand[newHand.length] = newCard;
+
+        setHand(newHand);
+
     }
 
     /*
@@ -257,8 +305,9 @@ public class Player {
 
             //Remove the card from the prize pile
             Card[] newPrizePile = new Card[prizePile.length - 1];
+            int newIndex = 0;
             for(int i = 0; i < newPrizePile.length; i++){
-                newPrizePile[i] = prizePile[i + 1];
+                newPrizePile[newIndex++] = prizePile[i + 1];
             }
             setPrizePile(newPrizePile);
         }
@@ -272,8 +321,9 @@ public class Player {
 
             //Remove the card from the prize pile
             Card[] newPrizePile = new Card[prizePile.length - 1];
+            int newIndex = 0;
             for(int i = 0; i < newPrizePile.length; i++){
-                newPrizePile[i] = prizePile[i + 1];
+                newPrizePile[newIndex++] = prizePile[i + 1];
             }
             setPrizePile(newPrizePile);
         }

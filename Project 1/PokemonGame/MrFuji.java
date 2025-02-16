@@ -10,12 +10,15 @@ public class MrFuji extends Trainer{
 
 
     //Global Variable(s)
+    private String trainerDescription;
 
     /*
      * Default Constructor
      */
     public MrFuji(){
         super.setCardType("Trainer");
+        super.setName("Mr.Fuji");
+        trainerDescription = "Choose a pokemon on your bench. Shuffle it and any cards attached to it into your deck.";
     }
 
 
@@ -65,6 +68,20 @@ public class MrFuji extends Trainer{
         player.setDeck(newDeck);
         player.shuffleDeck();
 
+    }
+
+    /*
+     * 
+     */
+    public void setTrainerDescription(String newDescription){
+        trainerDescription = newDescription;
+    }
+
+    /*
+     * 
+     */
+    public String getTrainerDescription(){
+        return trainerDescription;
     }
     
 }

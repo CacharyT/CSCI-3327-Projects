@@ -22,6 +22,7 @@ public class Pikachu extends Pokemon{
      */
     public Pikachu(){
         super.setHP(60);
+        super.setName("Pikachu");
         basicAttack = 10;
         specialAttack = 50;
         abilityDescription = new String[2];

@@ -4,7 +4,7 @@
  */
 
 
-public class Card {
+abstract class Card {
 
     //Global Variable(s)
     private String cardType;
@@ -44,5 +44,7 @@ public class Card {
     public String getCardType(){
         return cardType;
     }
+
+    public abstract String getName();
     
 }

@@ -8,6 +8,7 @@ public class Pokemon extends Card{
     //Global Variable(s)
     private int hp;
     private Energy[] energies;
+    private String cardName;
 
     /*
      * Default Constructor
@@ -16,6 +17,7 @@ public class Pokemon extends Card{
         hp = 0;
         energies = new Energy[0];
         super.setCardType("Pokemon");
+        cardName = "";
     }
 
     /*
@@ -40,6 +42,21 @@ public class Pokemon extends Card{
      */
     public void setEnergies(Energy[] newEnergies){
         energies = newEnergies;
+    }
+
+    /*
+     * 
+     */
+    public void setName(String newName){
+        cardName = newName;
+    }
+
+    /*
+     * 
+     */
+    @Override
+    public String getName(){
+        return cardName;
     }
 
     /*

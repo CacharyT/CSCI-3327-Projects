@@ -23,6 +23,7 @@ public class Squirtle extends Pokemon{
      */
     public Squirtle(){
         super.setHP(70);
+        super.setName("Squirtle");
         basicAttack = 10;
         specialAttack = 20;
         abilityDescription = new String[2];
@@ -94,7 +95,6 @@ public class Squirtle extends Pokemon{
         return 0; //did not meet energy requirements
 
     }
-
 
     /*
      * 
