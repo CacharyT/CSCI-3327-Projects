@@ -128,7 +128,8 @@ public class Player {
         
         Random random = new Random();
 
-        if(trainerCount > 16 || pokemonCount > 16){ //To ensure that the player does not exceed 4 cards per card type
+        if(trainerCount > 16 || pokemonCount > 16 || (trainerCount + pokemonCount + energyCount) < 60 || (trainerCount + pokemonCount + energyCount) > 60){ //To ensure that the player does not exceed 4 cards per card type
+            System.out.println("Invalid allocation sizes. Please try again.");
             return null;
         }
 
@@ -206,23 +207,26 @@ public class Player {
      */
     public void reAddHandToDeck(){
 
-        Card[] updatedDeck = new Card[deck.length + hand.length];
+        Card[] updatedDeck = new Card[getDeck().length + getHand().length];
 
         //Re adding hand cards to deck
-        for(int i = 0; i < deck.length; i++){
+        for(int i = 0; i < getDeck().length; i++){
             
-            updatedDeck[i] = deck[i];
+            updatedDeck[i] = getDeck()[i];
 
         }
 
         for(int i = deck.length; i < updatedDeck.length; i++){
 
-            updatedDeck[i] = hand[i - deck.length];
+            updatedDeck[i] = getDeck()[i - deck.length];
 
         }
 
         //Update the deck
         setDeck(updatedDeck);
+
+        //Update hand (empty)
+        setHand(new Card[7]);
 
     }
 
@@ -250,11 +254,11 @@ public class Player {
     public void addCardToHand(Card newCard){
 
         //Make new hand with new card and update hand
-        Card[] newHand = new Card[hand.length + 1];
-        for(int i = 1; i < newHand.length; i++){
-            newHand[i] = hand[i];
+        Card[] newHand = new Card[getHand().length + 1];
+        for(int i = 0; i < newHand.length - 1; i++){
+            newHand[i] = getHand()[i];
         }
-        newHand[newHand.length] = newCard;
+        newHand[newHand.length - 1] = newCard;
 
         setHand(newHand);
 
@@ -266,10 +270,12 @@ public class Player {
     public Card[] fillHand(){
         Card[] newHand = new Card[7];
 
+        //Get cards from the deck
         for(int i = 0; i < newHand.length; i++){
             newHand[i] = drawCard();
         }
 
+        //Update hand
         setHand(newHand);
 
         return newHand;
@@ -279,7 +285,7 @@ public class Player {
     /*
      * 
      */
-    public void fillPrize(){
+    public Card[] fillPrize(){
         Card[] newPrizePile = new Card[6];
 
         for(int i = 0; i < newPrizePile.length; i++){
@@ -288,6 +294,8 @@ public class Player {
 
         setPrizePile(newPrizePile);
 
+        return newPrizePile;
+
     }
 
 
@@ -295,43 +303,36 @@ public class Player {
      * 
      */
     public void getPrizeCard(){
-        int count = 0;
-        for(Card card : hand){
-            count++;
+
+        Card[] currentPrizePile = getPrizePile();
+        Card[] currentHand = getHand();
+
+        //Get card from the prize pile
+        Card wonCard = currentPrizePile[currentPrizePile.length - 1];
+
+        //Notify Player of Card won
+        System.out.println("You won a card from the prize pile! It is a " + wonCard.getName());
+
+        //Remove card from prize pile, update prize pile
+        Card[] newPrizePile = new Card[currentPrizePile.length - 1];
+        for(int i = 0; i < currentPrizePile.length - 1; i++){ //skips the last card (removed card)
+            newPrizePile[i] = currentPrizePile[i];
         }
+        setPrizePile(newPrizePile);
 
-        if(count < hand.length){
-            hand[count + 1] = prizePile[0];
-
-            //Remove the card from the prize pile
-            Card[] newPrizePile = new Card[prizePile.length - 1];
-            int newIndex = 0;
-            for(int i = 0; i < newPrizePile.length; i++){
-                newPrizePile[newIndex++] = prizePile[i + 1];
-            }
-            setPrizePile(newPrizePile);
+        //Add the card to the hand, update hand
+        Card[] newHand = new Card[currentHand.length + 1];
+        for(int i = 0; i < currentHand.length; i++){
+            newHand[i] = currentHand[i];
         }
-        else{
-            Card[] newHand = new Card[hand.length + 10];
-            for(int i = 0; i < newHand.length; i++){
-                newHand[i] = hand[i];
-            }
+        newHand[newHand.length - 1] = wonCard;
+        setHand(newHand);
 
-            hand[count + 1] = prizePile[0];
-
-            //Remove the card from the prize pile
-            Card[] newPrizePile = new Card[prizePile.length - 1];
-            int newIndex = 0;
-            for(int i = 0; i < newPrizePile.length; i++){
-                newPrizePile[newIndex++] = prizePile[i + 1];
-            }
-            setPrizePile(newPrizePile);
-        }
     }
 
 
     /*
-     * Uses Fisher-Yates Algorith,
+     * Uses Fisher-Yates Algorithm
      */
     public void shuffleDeck(){
         Random random = new Random();
@@ -342,6 +343,7 @@ public class Player {
             deck[i] = deck[j];
             deck[j] = tempCard;
         }
+
     }
 
 
