@@ -26,34 +26,29 @@ public class ProfessorOak extends Trainer{
      */
     public void activateEffect(Player player){
 
+        System.out.println("You have activated a ProfessorOak trainer card! The card's effect is: " + trainerDescription);
+
         //Discard hand to discard pile
         Card[] currentHand = player.getHand();
-        Card[] currentDiscardPile = player.getDiscardPile();
-        int count = 0;
 
-
-        for(Card card : currentDiscardPile){
-            count++;
+        System.out.print("The current hand will be discarded: [");
+        for(Card card : currentHand){
+            System.out.print(card.getName() + " ");
         }
+        System.out.print("]\n");
 
-        if(currentHand.length < currentDiscardPile.length){
-            for(int i = count; i < currentDiscardPile.length; i++){
-                currentDiscardPile[i + 1] = currentHand[i - count];
-            }
-            player.setDiscardPile(currentDiscardPile);
-            PokemonGame.fillPlayerHand(player);
-        } else{
-            Card[] newDiscardPile = new Card[currentDiscardPile.length + 10];
-            for(int i = 0; i < newDiscardPile.length; i++){
-                newDiscardPile[i] = currentDiscardPile[i];
-            }
+        player.reAddHandToDeck();
 
-            for(int i = count; i < newDiscardPile.length; i++){
-                newDiscardPile[i + 1] = currentHand[i - count];
-            }
-            player.setDiscardPile(newDiscardPile);
-            PokemonGame.fillPlayerHand(player);
+        player.fillHand();
+
+
+        Card[] newHand = player.getHand();
+        System.out.print("Your new hand: [");
+        for(Card card : newHand){
+            System.out.print(card.getName() + " ");
         }
+        System.out.print("]\n");
+        player.setHand(newHand);
 
     }
 

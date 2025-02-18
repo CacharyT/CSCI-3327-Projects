@@ -26,7 +26,7 @@ public class Player {
         deck = new Card[60];
         bench = new Card[6];
         prizePile = new Card[6];
-        discardPile = new Card[60];
+        discardPile = new Card[0];
     }
 
 
@@ -345,6 +345,71 @@ public class Player {
         }
 
     }
+
+    /*
+     * 
+     */
+    public void addEnergyToPokemon(int arrayPosition){
+
+        Card[] currentHand = getHand();
+        Card activePokemon = getActiveField();
+
+        //Add energy card to pokemon and update pokemon energy
+        Energy[] currentEnergies = activePokemon.getEnergies();
+        Energy[] newEnergies = new Energy[currentEnergies.length + 1];
+        newEnergies[newEnergies.length - 1] = (Energy) currentHand[arrayPosition];
+        activePokemon.setEnergies(newEnergies);
+
+
+        //Remove energy card from hand and update hand
+        Card[] newHand = new Card[currentHand.length - 1];
+        int newIndex = 0;
+        for(int i = 0; i < currentHand.length; i++){
+            if(i != arrayPosition){
+                newHand[newIndex++] = currentHand[i];
+            }
+        }
+        setHand(newHand);
+
+    }
+
+    /*
+     * 
+     */
+    public void useTrainerCard(Player player, int arrayPosition){
+
+        Card[] currentHand = getHand();
+
+        //Get trainer card
+        Card trainerCard = currentHand[arrayPosition];
+
+        //Activate effect
+        trainerCard.activateEffect(player);
+
+        //Remove card from hand (add to discard pile)
+        Card[] updatedHand = getHand();
+        Card[] newHand = new Card[updatedHand.length - 1];
+        int newIndex = 0;
+        for(int i = 0; i < updatedHand.length; i++){
+            if(i != arrayPosition){
+                newHand[newIndex++] = updatedHand[i];
+            }
+        }
+        setHand(newHand);
+
+        Card[] currentDiscardPile = getDiscardPile();
+        Card[] newDiDiscardPile = new Card[currentDiscardPile.length + 1];
+        for(int i = 0; i < currentDiscardPile.length; i++){
+            newDiDiscardPile[i] = currentDiscardPile[i];
+        }
+        newDiDiscardPile[newDiDiscardPile.length - 1] = trainerCard;
+        setDiscardPile(newDiDiscardPile);
+
+    }
+
+
+
+
 
 
 

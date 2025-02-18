@@ -410,7 +410,7 @@ public class PokemonGame {
     /*
      * 
      */
-    public void beginningPokemonBench(Player player){
+    public void beginningPokemonBench(Player player){ //FIX SO CAN NOT BENCH MORE THAN 6 POKEMON ALSO MAKE SUR EONLY POKEMON ALLOWED TO BENCH!!!!!!
 
         Scanner scan = new Scanner(System.in);
         Card[] currentHand = player.getHand();
@@ -572,7 +572,7 @@ public class PokemonGame {
     /*
      * 
      */
-    public void placePokemonInActiveField(Player player, int arrayPosition){
+    public void placePokemonInActiveField(Player player, int arrayPosition){ //FIX TO MAKE SURE ONLY POKEMON ALLOWED TO BE SET!!!!!!!!!!!
 
         Card[] currentHand = player.getHand();
 
@@ -608,8 +608,9 @@ public class PokemonGame {
         // 1. Play 1 energy for the turn (aka put the energy on a pokemon)
         // 2. Play a trainer card
         // 3. Play a pokemon card (CAN ONLY HAVE ONE POKEMON ACTIVE - BUT CAN BENCH MORE IF HAS SPACE 6 total spots)
-        // 3.5. Play a pokemon card (RETREAT - COST ENERGY, SO REMOVE NECESSARY ENERGY OR CHECK IF EVEN POSSIBLE)
-        // 4. (End turn) Attack w/ pokemon or declare pass
+        // 4. Play a pokemon card (RETREAT - COST ENERGY, SO REMOVE NECESSARY ENERGY OR CHECK IF EVEN POSSIBLE)
+        // 5. Attack with pokemon
+        // 6. (End turn) Attack w/ pokemon or declare pass
 
         Scanner scan = new Scanner(System.in);
 
@@ -636,24 +637,89 @@ public class PokemonGame {
             System.out.println("What would you like to do (enter the #): ");
             System.out.println("1) Play 1 energy for the turn (put the energy on a pokemon)");
             System.out.println("2) Play a trainer card");
-            System.out.println("3) Attack with active pokemon (ends turn)");
+            System.out.println("3) Bench a pokemon");
             System.out.println("4) Retreat active pokemon/swap with a benched pokemon");
-            System.out.println("5) End turn");
+            System.out.println("5) Attack with active pokemon (ends turn)");
+            System.out.println("6) End turn");
             System.out.print("Player choice: ");
 
             int decision = scan.nextInt();
 
             switch(decision){
                 case 1:
-                    System.out.println();
+                    Boolean energyDone = false;
+
+                    while(!energyDone){
+                        Card[] newHand = player1.getHand();
+                        System.out.print("This is your current hand: [");
+                        for(Card card : newHand){
+                            System.out.print(card.getName() + " ");
+                        }
+                        System.out.print("]\n");
+                        System.out.print("Pick an energy card to place on the current active pokemon (0 - N; position in array; if done then enter -1): ");
+                        int arrayPosition = scan.nextInt();
+
+                        if(arrayPosition == -1){
+                            energyDone = true;
+                        } else{
+                            addPokemonEnergy(player1, arrayPosition);
+
+                            Card activePokemon = player1.getActiveField();
+                            System.out.print("\nYour active pokemon " + activePokemon.getName() + " now has [");
+                            Energy[] pokemonEnergies = activePokemon.getEnergies();
+                            for(Energy energy: pokemonEnergies){
+                                System.out.print(energy.getName() + " ");
+                            }
+                            System.out.println("]");
+
+                        }
+                    }
+                    
                     break;
                 case 2:
+                    Boolean trainerDone = false;
+
+                    while(!trainerDone){
+
+                        Card[] newHand = player1.getHand();
+                        System.out.print("This is your current hand: [");
+                        for(Card card : newHand){
+                            System.out.print(card.getName() + " ");
+                        }
+                        System.out.print("]\n");
+                        System.out.print("Pick a trainer card to play (0 - N; position in array; if done then enter -1): ");
+                        int arrayPosition = scan.nextInt();
+
+
+                        if(arrayPosition == -1){
+                            trainerDone = true;
+                        } else{
+
+                            playTrainerCard(player1, arrayPosition);
+
+                        }
+                    }
+
                     break;
                 case 3:
+
+                    beginningPokemonBench(player1);
+
                     break;
                 case 4:
+
+
+
+
                     break;
                 case 5:
+
+
+
+
+
+                    break;
+                case 6:
                     System.out.println("Player 1 has ended their turn!");
                     endTurn = true;
                     break;
@@ -739,6 +805,24 @@ public class PokemonGame {
         
     }
 
+    /*
+     * 
+     */
+    public void addPokemonEnergy(Player player, int arrayPosition){
+
+        player.addEnergyToPokemon(arrayPosition);
+
+    }
+
+    /*
+     * 
+     */
+    public void playTrainerCard(Player player, int arrayPosition){
+
+        player.useTrainerCard(player, arrayPosition);
+
+    }
+
 
     /*
      * 
@@ -747,20 +831,6 @@ public class PokemonGame {
         //2 Options
         // Attack
         // Player retreat/swap pokemon (probably need to be a new function)
-
-    }
-
-    /*
-     * 
-     */
-    public void playerTrainer(){
-
-    }
-
-    /*
-     * 
-     */
-    public void playerEnergy(){
 
     }
 

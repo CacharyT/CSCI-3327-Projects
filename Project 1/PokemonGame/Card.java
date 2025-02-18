@@ -46,5 +46,11 @@ abstract class Card {
     }
 
     public abstract String getName();
+
+    public abstract Energy[] getEnergies();
+
+    public abstract void setEnergies(Energy[] newEnergies);
+
+    public abstract void activateEffect(Player player);
     
 }

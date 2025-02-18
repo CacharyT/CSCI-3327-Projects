@@ -32,4 +32,26 @@ public class Trainer extends Card{
         return cardName;
     }
 
+    /*
+     * 
+     */
+    public void activateEffect(Player player){
+
+
+    }
+
+    /*
+     * 
+     */
+    public Energy[] getEnergies(){
+        return new Energy[0];
+    }
+
+    /*
+     * 
+     */
+    public void setEnergies(Energy[] newEnergies){
+        
+    }
+
 }

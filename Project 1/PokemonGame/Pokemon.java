@@ -74,4 +74,13 @@ public class Pokemon extends Card{
         return energies;
     }
 
+    /*
+     * 
+     */
+    public Card[] activateEffect(Player player){
+
+        return new Card[0];
+
+    }
+
 }

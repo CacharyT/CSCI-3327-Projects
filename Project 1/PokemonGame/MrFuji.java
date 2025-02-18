@@ -27,43 +27,70 @@ public class MrFuji extends Trainer{
      */
     public void activateEffect(Player player){
 
+        System.out.println("You have activated a Mr.Fuji trainer card! The card's effect is: " + trainerDescription);
+
         Scanner scan = new Scanner(System.in);
 
         //Allow for user to choose a pokemon from the bench
-        System.out.println("Choose a pokemon from the bench (type the bench spot number): ");
-
         Card[] playerBench = player.getbench();
 
-        for(int i = 0; i < playerBench.length; i++){
-            System.out.println("Bench Spot #" + i + ": " + playerBench[i].getCardType()); //change this to show the card type AS in Charmander, etc.. not 'Pokemon'
-        }
-
-        int benchSpot = scan.nextInt();
-        scan.close();
-        Card cardPicked = playerBench[benchSpot];
-
-
-        //Remove pokemon from bench
-        Card[] newBench = new Card[playerBench.length];
-        for(int i = 1; i < newBench.length; i++){
-            if(i == benchSpot){
+        System.out.print("This is your current bench: [");
+        for(Card card : playerBench){
+            if(card == null){
                 break;
             } else{
-                newBench[i - 1] = playerBench[i];
+                System.out.print(card.getName() + " ");
+            }
+        }
+        System.out.print("]\n");
+
+        System.out.print("Choose a pokemon from the bench (0 - N; position in array; if done then enter -1): ");
+
+        int benchSpot = scan.nextInt();
+        Card cardPicked = playerBench[benchSpot];
+        Energy[] cardPickedEnergies = cardPicked.getEnergies();
+
+        //Remove pokemon from bench and update bench
+        Card[] newBench = new Card[playerBench.length - 1];
+        int newIndex = 0;
+        for(int i = 0; i < playerBench.length; i++){
+            if(i != benchSpot){
+                newBench[newIndex++] = playerBench[i];
             }
         }
         player.setBench(newBench);
 
 
-        //Add picked card to the deck and shuffle
+        //Add picked card and energies to the deck and shuffle
         Card[] currentDeck = player.getDeck();
-        Card[] newDeck = new Card[currentDeck.length + 10];
+        Card[] newDeck = new Card[currentDeck.length + cardPickedEnergies.length + 1]; //card could have no energy
 
-        for(int i = 0; i < newDeck.length; i++){
+        int endIndex = 0;
+
+        //Finding end index
+        for(Card card : currentDeck){
+            if(card != null){
+                endIndex++;
+            }
+        }
+
+        //Copying
+        for(int i = 0; i < currentDeck.length; i++){
             newDeck[i] = currentDeck[i];
         }
 
-        newDeck[currentDeck.length + 1] = cardPicked;
+        //Adding
+        if(cardPickedEnergies.length == 0){
+            newDeck[newDeck.length - 1] = cardPicked;
+        } else{
+
+            int newerIndex = 0;
+            for(int i = 0; i < newDeck.length; i++){
+                if(newDeck[i] == null){
+                    newDeck[i] = cardPickedEnergies[newerIndex++];
+                }
+            }
+        }
 
         player.setDeck(newDeck);
         player.shuffleDeck();
