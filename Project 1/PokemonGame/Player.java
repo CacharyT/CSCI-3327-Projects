@@ -3,7 +3,8 @@
  */
 
 //Imports
-import java.util.Random;
+import java.lang.reflect.Method;
+import java.util.*;
 
 public class Player {
     
@@ -357,6 +358,11 @@ public class Player {
         //Add energy card to pokemon and update pokemon energy
         Energy[] currentEnergies = activePokemon.getEnergies();
         Energy[] newEnergies = new Energy[currentEnergies.length + 1];
+
+        for(int i =0; i < currentEnergies.length; i++){
+            newEnergies[i] = currentEnergies[i];
+        }
+
         newEnergies[newEnergies.length - 1] = (Energy) currentHand[arrayPosition];
         activePokemon.setEnergies(newEnergies);
 
@@ -407,10 +413,183 @@ public class Player {
 
     }
 
+    /*
+     * 
+     */
+    public void allowRetreatPokemon(){
+
+        Scanner scan = new Scanner(System.in);
+
+        Boolean doneSwap = false;
+
+        while(!doneSwap){
+
+            Card currentActivePokemon = getActiveField();
+            Energy[] activeEnergies = currentActivePokemon.getEnergies();
+
+            System.out.print("Your " + currentActivePokemon.getName() + " has [");
+            for(Energy energy : activeEnergies){
+                if(energy != null){
+                    System.out.print(energy.getName() + " ");
+                }
+            }
+            System.out.print("]\n");
+
+            System.out.print("Would you like to retreat your " + currentActivePokemon.getName() + "? (Yes or No): ");
+            String swapOrNot = scan.next().toLowerCase();
+
+            if(swapOrNot.equals("y") || swapOrNot.equals("yes")){
 
 
+                //Check first if pokemon has enough energy and correct types of energy
+                Energy[] currentRetreatCost = currentActivePokemon.getRetreatCost();
+
+                //Checks if active pokemon has enough energy
+                int correctCounter = currentRetreatCost.length;
+                for(Energy retreatEnergy : currentRetreatCost){
+                    for(Energy activeEnergy : activeEnergies){
+                        if(activeEnergy.getName().equals(retreatEnergy.getName())){
+                            correctCounter--;
+                        }
+                    }
+                }
+
+                if(correctCounter <= 0){
+
+                    System.out.print("Your " + currentActivePokemon.getName() + " has enough energy to retreat!");
+                    Card[] currentBench = getbench();
+                    Card[] currentDiscardPile = getDiscardPile();
+
+                    System.out.print("\nThis is your bench: [");
+                    for(Card card : currentBench){
+                        if(card != null){
+                            System.out.print(card.getName() + " ");
+                        }
+                    }
+                    System.out.print("] energy \n");
+
+                    System.out.print("Choose a pokemon to swap with the active pokemon (0 - N; position in array; if done then enter -1): ");
+                    int arrayPosition = scan.nextInt();
 
 
+                    //Get chosen pokemon to swap with
+                    Card newActivePokemon = currentBench[arrayPosition];
+
+                    //Swap pokemon
+                    Card[] newBench = new Card[currentBench.length];
+                    for(int i = 0; i < currentBench.length; i++){
+
+                        if(i == arrayPosition){
+                            newBench[i] = currentActivePokemon;
+                        } else{
+                            newBench[i] = currentBench[i];
+                        }
+
+                    }
+                    setBench(newBench);
+                    setActiveField(newActivePokemon);
+
+
+                    //Move the used active energy to the discard pile
+                    Card[] newDiscardPile = new Card[currentDiscardPile.length + activeEnergies.length];
+                    for(int i = 0; i < currentDiscardPile.length; i++){
+                        newDiscardPile[i] = currentDiscardPile[i];
+                    }
+                    for(int i = activeEnergies.length; i > 0; i--){
+                        newDiscardPile[newDiscardPile.length - i] = activeEnergies[i - 1];
+                    }
+                    setDiscardPile(newDiscardPile);
+
+                } else{
+                    System.out.print("Your " + currentActivePokemon.getName() + " does not have enough energy to retreat!");
+                    break;
+                }
+
+            } else{
+                doneSwap = true;
+            }
+        }
+    }
+
+
+    /*
+     * 
+     */
+    public Boolean allowPokemonAttack(Player opponentPlayer){
+
+        Scanner scan = new Scanner(System.in);
+
+        System.out.println("Player has chosen to attack!");
+
+        Card currentActivePokemon = getActiveField();
+        Energy[] activeEnergies = currentActivePokemon.getEnergies();
+
+        System.out.print("Your " + currentActivePokemon.getName() + " has [");
+        for(Energy energy : activeEnergies){
+            if(energy != null){
+                System.out.print(energy.getName() + " ");
+            }
+        }
+        System.out.print("] energy \n");
+
+        String[] abilityList = currentActivePokemon.getAbilityDescriptions();
+        System.out.print("Your " + currentActivePokemon.getName() + " has [");
+        for(String ability : abilityList){
+            System.out.print(ability + ", ");
+        }
+        System.out.print("] abilities \n");
+
+
+        System.out.print("Choose an ability to perform (0 - N; position in array; if done then enter -1): ");
+        int arrayPosition = scan.nextInt();
+
+        if(arrayPosition == -1){
+            return false;
+        } else{
+
+            String abilityChosen = abilityList[arrayPosition];
+
+            if (currentActivePokemon instanceof Pokemon) {
+                Pokemon activePokemon = (Pokemon) currentActivePokemon;
+
+                try {
+                    // Find the method for the chosen ability dynamically
+                    Method method = activePokemon.getClass().getMethod(abilityChosen, Energy[].class);
+                    Object result = method.invoke(activePokemon, (Object) activeEnergies); //Need casting for correct resolution
+
+                    if (result instanceof Boolean) {
+                        Boolean collected = (Boolean) result;
+                        if (collected) {
+                            System.out.println("\nYour " + currentActivePokemon.getName() + " performs " + abilityChosen);
+                            System.out.println("You draw 1 extra card!");
+                            Card drawnCard = drawCard();
+                            System.out.println("You got a " + drawnCard.getName() + "!");
+                        }
+                    } else if (result instanceof Integer) {
+                        int damageDone = (int) result;
+                        Pokemon opponentActivePokemon = (Pokemon) opponentPlayer.getActiveField();
+
+                        System.out.println("\nYour " + currentActivePokemon.getName() + " has attacked with " + abilityChosen + " causing " + damageDone + " damage to " + opponentActivePokemon.getName() + "!");
+                        
+                        // Update health based on damage dealt
+                        int currentOpponentHP = opponentActivePokemon.getHP();
+                        int newOpponentHp = currentOpponentHP - damageDone;
+                        opponentActivePokemon.setHP(newOpponentHp);
+
+                        System.out.println("Enemy's " + opponentActivePokemon.getName() + " health is now " + opponentActivePokemon.getHP());
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                System.out.println("Error: Active Pokemon is not a valid Pokemon instance.");
+            }
+
+        }
+
+        return true;
+    }
 
 
     /*

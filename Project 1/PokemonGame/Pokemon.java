@@ -77,9 +77,26 @@ public class Pokemon extends Card{
     /*
      * 
      */
-    public Card[] activateEffect(Player player){
+    public void activateEffect(Player player){
 
-        return new Card[0];
+
+    }
+
+    /*
+     * 
+     */
+    public Energy[] getRetreatCost(){
+
+        return new Energy[0];
+
+    }
+
+    /*
+     * 
+     */
+    public String[] getAbilityDescriptions(){
+
+        return new String[0];
 
     }
 

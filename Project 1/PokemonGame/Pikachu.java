@@ -26,8 +26,8 @@ public class Pikachu extends Pokemon{
         basicAttack = 10;
         specialAttack = 50;
         abilityDescription = new String[2];
-        abilityDescription[0] = "Quick Attack - Flip a coin. If heads, this attack deals 10 more damage.";
-        abilityDescription[1] = "Electro Ball";
+        abilityDescription[0] = "QuickAttack";
+        abilityDescription[1] = "ElectroBall";
         weakness = "Fighting";
         retreatCost = new Energy[1];
         retreatCost[0] = new Basic();
@@ -37,7 +37,7 @@ public class Pikachu extends Pokemon{
     /*
      * 
      */
-    public int quickAttack(Energy[] energyRequirements){
+    public int QuickAttack(Energy[] energyRequirements){
 
         //Ability requires 1 lightning energy
 
@@ -72,7 +72,7 @@ public class Pikachu extends Pokemon{
     /*
      * 
      */
-    public int electroBall(Energy[] energyRequirements){
+    public int ElectroBall(Energy[] energyRequirements){
 
         //Ability requires 2 lightning energy & 1 basic energy
 

@@ -27,8 +27,8 @@ public class Bulbasaur extends Pokemon{
         basicAttack = 10;
         specialAttack = 20;
         abilityDescription = new String[2];
-        abilityDescription[0] = "Vine Whip";
-        abilityDescription[1] = "Razor Leaf";
+        abilityDescription[0] = "VineWhip";
+        abilityDescription[1] = "RazorLeaf";
         weakness = "Fire";
         retreatCost = new Energy[2];
         retreatCost[0] = new Basic();
@@ -39,7 +39,7 @@ public class Bulbasaur extends Pokemon{
     /*
      * 
      */
-    public int vineWhip(Energy[] energyRequirements){
+    public int VineWhip(Energy[] energyRequirements){
 
         //Ability requires 1 grass energy
 
@@ -68,7 +68,7 @@ public class Bulbasaur extends Pokemon{
     /*
      * 
      */
-    public int razorLeaf(Energy[] energyRequirements){
+    public int RazorLeaf(Energy[] energyRequirements){
 
         //Ability requires 1 grass energy & 1 basic energy
 

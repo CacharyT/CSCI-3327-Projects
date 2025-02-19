@@ -66,7 +66,7 @@ public class PokemonGame {
                     int playerCoin = scan.nextInt();
                     int coinFlipped = flipACoin();
 
-                    if(coinFlipped == playerCoin){
+                    if(coinFlipped == playerCoin){ //user is plyer 1 and deck is customized
 
                         System.out.print("\nThe coin landed on " + playerCoin + "! You will be player 1 and have the first turn! Player 2 will be the AI.");
 
@@ -228,7 +228,11 @@ public class PokemonGame {
 
                                 //Allow user to make their choice
                                 System.out.println("It is now Player 1's turn!\n");
-                                playerTurn(player1);
+                                winnerFound = checkDrawableDeck(player1);
+                                if(winnerFound != null){
+                                    break;
+                                }
+                                playerTurn(player1, player2);
                                 winnerFound = checkWinner(player1, player2);
                                 if(winnerFound != null){
                                     break;
@@ -236,6 +240,10 @@ public class PokemonGame {
 
                                 //AI Turn - randomly chooses what to do
                                 System.out.println("It is now Player 2's turn!\n");
+                                winnerFound = checkDrawableDeck(player2);
+                                if(winnerFound != null){
+                                    break;
+                                }
                                 aiTurn(player2);
                                 winnerFound = checkWinner(player1, player2);
                                 if(winnerFound != null){
@@ -246,20 +254,165 @@ public class PokemonGame {
                             
 
                             //Winner has been found, announce who won. And end program
+                            if(winnerFound == player1){
+                                System.out.println("Player 1 has won the game!");
+                            }   else{
+                                System.out.println("Player 2 has won the game!");
+                            }
 
 
+                        } else if(customize.equals("n")){ //user is plyer 1 but deck is not customized
 
-
-
-
-
-
-                        } else if(customize.equals("n")){
+                            //GAME SETUP PHASE---------------
 
                             //Create both players decks
+                            createPlayerDeck(player1);
+                            createPlayerDeck(player2);
+
+                            //Boolean round1Identifier = true;
+                            //Boolean winnerFound = false;
+                            int player1Redraws = 0;
+                            int player2Redraws = 0;
+
+                            //Let Player 1 and 2 perform start phase
+                            //Player 1 phase:
+                            fillPlayerHand(player1);
+
+                            while(!checkIfPokemonInHand(player1)){
+
+                                //Reveal hand
+                                System.out.println("\nYou do not have a pokemon on hand. Reveal, shuffle, and redraw until you do.");
+                                Card[] currentHand = player1.getHand();
+
+                                for(Card card : currentHand){
+                                    System.out.println("You are revealing a: " + card.getName());
+                                }
+
+                                //Put back the hand into the deck
+                                player1.reAddHandToDeck();
+
+                                //Shuffle deck
+                                player1.shuffleDeck();
+
+                                //Draw 7 again
+                                fillPlayerHand(player1);
+
+                                //Allow for player 2 to draw 1 extra
+                                player2Redraws++;
+                            }
+
+                            //Player 1 phase:
+                            fillPlayerHand(player2);
+
+                            while(!checkIfPokemonInHand(player2)){
+
+                                //Reveal hand
+                                System.out.println("\nPlayer 2 did not have a pokemon on hand. Reveal, shuffle, and redraw.");
+                                Card[] currentHand = player2.getHand();
+
+                                for(Card card : currentHand){
+                                    System.out.println("Player 2 is revealing a: " + card.getName());
+                                }
+
+                                //Put back the hand into the deck
+                                player2.reAddHandToDeck();
+
+                                //Shuffle deck
+                                player2.shuffleDeck();
+
+                                //Draw 7 again
+                                fillPlayerHand(player2);
+
+                                //Allow for player 2 to draw 1 extra
+                                player1Redraws++;
+
+                            }
+
+                            System.out.println(""); //Added space for visual format
+
+                            //Allow Players to redraw due to reshuffling
+                            for(int num = 0; num < player1Redraws; num++){
+                                drawPlayerCard(player1);
+                                System.out.println("Player 1 has also drawn an extra card!");
+                            }
+                            for(int num = 0; num < player2Redraws; num++){
+                                drawPlayerCard(player2);
+                                System.out.println("Player 2 has also drawn an extra card!");
+                            }
 
 
-                            //Start game loop
+                            //Players put down a pokemon(allow player to add however many they want, Ai auto adds all)
+                            //Player 1 placing pokemons (active zone minimum, bench optional)
+                            System.out.println("\nPlayer 1: Please place a pokemon in the active zone");
+                            Card[] currentHand = player1.getHand();
+
+                            System.out.print("\nThis is your current hand: ");
+                            System.out.print("[");
+                            for(Card card : currentHand){
+                                System.out.print(card.getName() + " ");
+                            }
+                            System.out.print("]");
+
+                            System.out.print("\nWhich pokemon would you like to place in the active zone? (O - n; position in array): ");
+                            int position = scan.nextInt();
+
+                            placePokemonInActiveField(player1, position);
+
+                            //optional allow user to bench any additional pokemon
+                            beginningPokemonBench(player1); 
+
+                            //Player 2 auto place pokemon to active zone and every other pokemon to bench
+                            aiAutoActiveFieldAndBenchPokemon(player2);
+
+
+                            //Fill prize piles
+                            fillPlayerPrize(player1);
+                            System.out.println("\nPlayer 1 has made their prize pile!");
+                            fillPlayerPrize(player2);
+                            System.out.println("Player 2 has made their prize pile!");
+
+                            //Reveal the active pokemons for both players
+                            System.out.println("\nPlayer 1's active pokemon is " + player1.getActiveField().getName());
+                            System.out.println("Player 2's active pokemon is " + player2.getActiveField().getName());
+
+                            //Main game loop (does not end until a winner is found)
+                            Player winnerFound = null;
+
+                            while(winnerFound == null){
+
+                                //Allow user to make their choice
+                                System.out.println("It is now Player 1's turn!\n");
+                                winnerFound = checkDrawableDeck(player1);
+                                if(winnerFound != null){
+                                    break;
+                                }
+                                playerTurn(player1, player2);
+                                winnerFound = checkWinner(player1, player2);
+                                if(winnerFound != null){
+                                    break;
+                                }
+
+                                //AI Turn - randomly chooses what to do
+                                System.out.println("It is now Player 2's turn!\n");
+                                winnerFound = checkDrawableDeck(player2);
+                                if(winnerFound != null){
+                                    break;
+                                }
+                                aiTurn(player2);
+                                winnerFound = checkWinner(player1, player2);
+                                if(winnerFound != null){
+                                    break;
+                                }
+
+                            }
+                            
+
+                            //Winner has been found, announce who won. And end program
+                            if(winnerFound == player1){
+                                System.out.println("Player 1 has won the game!");
+                            }   else{
+                                System.out.println("Player 2 has won the game!");
+                            }
 
 
                         } else{
@@ -267,20 +420,358 @@ public class PokemonGame {
                             startGame();
                         }
 
-                    } else{
+                    } else{ 
 
                         System.out.print("\nThe coin landed on " + coinFlipped + "! AI will be player 1 and have the first turn! You will be player 2.");
 
-                        Boolean winnerFound = false;
+                        Player player1 = getPlayers()[0];
+                        Player player2 = getPlayers()[1];
 
-                        while(!winnerFound){
+                        //Extra credit - Allow player to create their own deck or not
+                        System.out.print("\nWould you like to customize the allocation of your deck? (Y or N): ");
+                        String customize = scan.next().toLowerCase();
+
+                        if(customize.equals("y")){ //ai is player 1 but deck is customized
+
+                            System.out.println("Note: Total # of Cards must add up to 60.");
+                            System.out.println("Note: The database contains 4 types of pokemons, 4 types of trainer cards, and 5 types of energy cards.");
+                            System.out.println("Note: Upon entering desired allocation, card types will be evenly distributed based on given amount. (i.e 16 pokemon = 4 charmander, 4 squirtle, etc...)");
+                            System.out.println("Reminder: You can only have a maximum of 4 cards of the same kind (not type - i.e Trainer, Pokemon, Energy)");
+
+                            int pokemonCount = 0;
+                            int trainerCount = 0;
+                            int energyCount = 0;
+
+                            System.out.print("\nEnter the # of pokemons (maximum: 16): ");
+                            pokemonCount = scan.nextInt();
+                            System.out.print("Enter the # of trainers (maximum: 16): ");
+                            trainerCount = scan.nextInt();
+                            System.out.print("Enter the # of energies: ");
+                            energyCount = scan.nextInt();
+
+                            //GAME SETUP PHASE---------------
+
+                            //Create both players decks
+                            Boolean status = createPlayerDeck(player2, pokemonCount, trainerCount, energyCount);
+
+                            while(!status){ //ensures player inputs correcting allocation of the deck
+
+                                System.out.print("\nEnter the # of pokemons (maximum: 16): ");
+                                pokemonCount = scan.nextInt();
+                                System.out.print("Enter the # of trainers (maximum: 16): ");
+                                trainerCount = scan.nextInt();
+                                System.out.print("Enter the # of energies: ");
+                                energyCount = scan.nextInt();
+
+                                status = createPlayerDeck(player2, pokemonCount, trainerCount, energyCount);
+                            }
+
+                            //AI Deck
+                            createPlayerDeck(player2);
+
+                            //Boolean round1Identifier = true;
+                            //Boolean winnerFound = false;
+                            int player1Redraws = 0;
+                            int player2Redraws = 0;
+
+                            //Let Player 1 and 2 perform start phase
+                            //Player 1 phase:
+                            fillPlayerHand(player2);
+
+                            while(!checkIfPokemonInHand(player2)){
+
+                                //Reveal hand
+                                System.out.println("\nYou do not have a pokemon on hand. Reveal, shuffle, and redraw until you do.");
+                                Card[] currentHand = player2.getHand();
+
+                                for(Card card : currentHand){
+                                    System.out.println("You are revealing a: " + card.getName());
+                                }
+
+                                //Put back the hand into the deck
+                                player2.reAddHandToDeck();
+
+                                //Shuffle deck
+                                player2.shuffleDeck();
+
+                                //Draw 7 again
+                                fillPlayerHand(player2);
+
+                                //Allow for player 2 to draw 1 extra
+                                player1Redraws++;
+                            }
+
+                            //Player 1 phase:
+                            fillPlayerHand(player1);
+
+                            while(!checkIfPokemonInHand(player1)){
+
+                                //Reveal hand
+                                System.out.println("\nPlayer 1 did not have a pokemon on hand. Reveal, shuffle, and redraw.");
+                                Card[] currentHand = player2.getHand();
+
+                                for(Card card : currentHand){
+                                    System.out.println("Player 1 is revealing a: " + card.getName());
+                                }
+
+                                //Put back the hand into the deck
+                                player1.reAddHandToDeck();
+
+                                //Shuffle deck
+                                player1.shuffleDeck();
+
+                                //Draw 7 again
+                                fillPlayerHand(player1);
+
+                                //Allow for player 2 to draw 1 extra
+                                player2Redraws++;
+
+                            }
+
+                            System.out.println(""); //Added space for visual format
+
+                            //Allow Players to redraw due to reshuffling
+                            for(int num = 0; num < player2Redraws; num++){
+                                drawPlayerCard(player2);
+                                System.out.println("Player 2 has also drawn an extra card!");
+                            }
+                            for(int num = 0; num < player1Redraws; num++){
+                                drawPlayerCard(player1);
+                                System.out.println("Player 1 has also drawn an extra card!");
+                            }
+
+
+                            //Players put down a pokemon(allow player to add however many they want, Ai auto adds all)
+                            //Player 1 placing pokemons (active zone minimum, bench optional)
+                            System.out.println("\nPlayer 2: Please place a pokemon in the active zone");
+                            Card[] currentHand = player2.getHand();
+
+                            System.out.print("\nThis is your current hand: ");
+                            System.out.print("[");
+                            for(Card card : currentHand){
+                                System.out.print(card.getName() + " ");
+                            }
+                            System.out.print("]");
+
+                            System.out.print("\nWhich pokemon would you like to place in the active zone? (O - n; position in array): ");
+                            int position = scan.nextInt();
+
+                            placePokemonInActiveField(player2, position);
+
+                            //optional allow user to bench any additional pokemon
+                            beginningPokemonBench(player2); 
+
+                            //Player 2 auto place pokemon to active zone and every other pokemon to bench
+                            aiAutoActiveFieldAndBenchPokemon(player1);
+
+
+                            //Fill prize piles
+                            fillPlayerPrize(player2);
+                            System.out.println("\nPlayer 2 has made their prize pile!");
+                            fillPlayerPrize(player1);
+                            System.out.println("Player 1 has made their prize pile!");
+
+                            //Reveal the active pokemons for both players
+                            System.out.println("\nPlayer 2's active pokemon is " + player2.getActiveField().getName());
+                            System.out.println("Player 1's active pokemon is " + player1.getActiveField().getName());
+
+                            //Main game loop (does not end until a winner is found)
+                            Player winnerFound = null;
+
+                            while(winnerFound == null){
+
+                                //AI Turn - randomly chooses what to do
+                                System.out.println("It is now Player 1's turn!\n");
+                                winnerFound = checkDrawableDeck(player1);
+                                if(winnerFound != null){
+                                    break;
+                                }
+                                aiTurn(player1);
+                                winnerFound = checkWinner(player1, player2);
+                                if(winnerFound != null){
+                                    break;
+                                }
+
+                                //Allow user to make their choice
+                                System.out.println("It is now Player 2's turn!\n");
+                                winnerFound = checkDrawableDeck(player2);
+                                if(winnerFound != null){
+                                    break;
+                                }
+                                playerTurn(player2, player1);
+                                winnerFound = checkWinner(player2, player1);
+                                if(winnerFound != null){
+                                    break;
+                                }
+
+                            }
                             
+
+                            //Winner has been found, announce who won. And end program
+                            if(winnerFound == player1){
+                                System.out.println("Player 1 has won the game!");
+                            }   else{
+                                System.out.println("Player 2 has won the game!");
+                            }
+
+
+                        } else if(customize.equals("n")){ //ai is player 1 but deck is not customized
+
+                            //GAME SETUP PHASE---------------
+
+                            //Create both players decks
+                            createPlayerDeck(player1);
+                            createPlayerDeck(player2);
+
+                            //Boolean round1Identifier = true;
+                            //Boolean winnerFound = false;
+                            int player1Redraws = 0;
+                            int player2Redraws = 0;
+
+                            //Let Player 1 and 2 perform start phase
+                            //Player 1 phase:
+                            fillPlayerHand(player2);
+
+                            while(!checkIfPokemonInHand(player2)){
+
+                                //Reveal hand
+                                System.out.println("\nYou do not have a pokemon on hand. Reveal, shuffle, and redraw until you do.");
+                                Card[] currentHand = player1.getHand();
+
+                                for(Card card : currentHand){
+                                    System.out.println("You are revealing a: " + card.getName());
+                                }
+
+                                //Put back the hand into the deck
+                                player2.reAddHandToDeck();
+
+                                //Shuffle deck
+                                player2.shuffleDeck();
+
+                                //Draw 7 again
+                                fillPlayerHand(player1);
+
+                                //Allow for player 2 to draw 1 extra
+                                player1Redraws++;
+                            }
+
+                            //Player 1 phase:
+                            fillPlayerHand(player1);
+
+                            while(!checkIfPokemonInHand(player1)){
+
+                                //Reveal hand
+                                System.out.println("\nPlayer 1 did not have a pokemon on hand. Reveal, shuffle, and redraw.");
+                                Card[] currentHand = player2.getHand();
+
+                                for(Card card : currentHand){
+                                    System.out.println("Player 1 is revealing a: " + card.getName());
+                                }
+
+                                //Put back the hand into the deck
+                                player1.reAddHandToDeck();
+
+                                //Shuffle deck
+                                player1.shuffleDeck();
+
+                                //Draw 7 again
+                                fillPlayerHand(player1);
+
+                                //Allow for player 2 to draw 1 extra
+                                player2Redraws++;
+
+                            }
+
+                            System.out.println(""); //Added space for visual format
+
+                            //Allow Players to redraw due to reshuffling
+                            for(int num = 0; num < player2Redraws; num++){
+                                drawPlayerCard(player1);
+                                System.out.println("Player 2 has also drawn an extra card!");
+                            }
+                            for(int num = 0; num < player1Redraws; num++){
+                                drawPlayerCard(player2);
+                                System.out.println("Player 1 has also drawn an extra card!");
+                            }
+
+
+                            //Players put down a pokemon(allow player to add however many they want, Ai auto adds all)
+                            //Player 1 placing pokemons (active zone minimum, bench optional)
+                            System.out.println("\nPlayer 2: Please place a pokemon in the active zone");
+                            Card[] currentHand = player2.getHand();
+
+                            System.out.print("\nThis is your current hand: ");
+                            System.out.print("[");
+                            for(Card card : currentHand){
+                                System.out.print(card.getName() + " ");
+                            }
+                            System.out.print("]");
+
+                            System.out.print("\nWhich pokemon would you like to place in the active zone? (O - n; position in array): ");
+                            int position = scan.nextInt();
+
+                            placePokemonInActiveField(player2, position);
+
+                            //optional allow user to bench any additional pokemon
+                            beginningPokemonBench(player2); 
+
+                            //Player 2 auto place pokemon to active zone and every other pokemon to bench
+                            aiAutoActiveFieldAndBenchPokemon(player1);
+
+
+                            //Fill prize piles
+                            fillPlayerPrize(player2);
+                            System.out.println("\nPlayer 2 has made their prize pile!");
+                            fillPlayerPrize(player1);
+                            System.out.println("Player 1 has made their prize pile!");
+
+                            //Reveal the active pokemons for both players
+                            System.out.println("\nPlayer 2's active pokemon is " + player2.getActiveField().getName());
+                            System.out.println("Player 1's active pokemon is " + player1.getActiveField().getName());
+
+                            //Main game loop (does not end until a winner is found)
+                            Player winnerFound = null;
+
+                            while(winnerFound == null){
+
+                                //AI Turn - randomly chooses what to do
+                                System.out.println("It is now Player 1's turn!\n");
+                                winnerFound = checkDrawableDeck(player1);
+                                if(winnerFound != null){
+                                    break;
+                                }
+                                aiTurn(player1);
+                                winnerFound = checkWinner(player1, player2);
+                                if(winnerFound != null){
+                                    break;
+                                }
+
+                                //Allow user to make their choice
+                                System.out.println("It is now Player 2's turn!\n");
+                                winnerFound = checkDrawableDeck(player2);
+                                if(winnerFound != null){
+                                    break;
+                                }
+                                playerTurn(player2, player1);
+                                winnerFound = checkWinner(player2, player1);
+                                if(winnerFound != null){
+                                    break;
+                                }
+
+                            }
                             
 
+                            //Winner has been found, announce who won. And end program
+                            if(winnerFound == player1){
+                                System.out.println("Player 1 has won the game!");
+                            }   else{
+                                System.out.println("Player 2 has won the game!");
+                            }
 
 
-
-
+                        } else{
+                            System.out.println("That is an invalid option. Game restarting.");
+                            startGame();
                         }
 
                     }
@@ -289,10 +780,857 @@ public class PokemonGame {
 
                 } else if(gameType.equals("self")){
 
-                    
 
 
 
+
+
+
+
+
+
+
+
+
+                    //Flip a coin: 0 - heads, 1 - tail
+                    //Check which player goes first
+                    System.out.print("\nCoin flip: Heads or Tails? (0 - Head, 1 - Tails): ");
+                    int playerCoin = scan.nextInt();
+                    int coinFlipped = flipACoin();
+
+                    if(coinFlipped == playerCoin){ //user is player 1 and deck is customized
+
+                        System.out.print("\nThe coin landed on " + playerCoin + "! You will be player 1 and have the first turn! Player 2 will also be you.");
+
+                        Player player1 = getPlayers()[0];
+                        Player player2 = getPlayers()[1];
+
+                        //Extra credit - Allow player to create their own deck or not
+                        System.out.print("\nWould you like to customize the allocation of your deck? (Y or N): ");
+                        String customize = scan.next().toLowerCase();
+
+                        if(customize.equals("y")){
+
+                            System.out.println("Note: Total # of Cards must add up to 60.");
+                            System.out.println("Note: The database contains 4 types of pokemons, 4 types of trainer cards, and 5 types of energy cards.");
+                            System.out.println("Note: Upon entering desired allocation, card types will be evenly distributed based on given amount. (i.e 16 pokemon = 4 charmander, 4 squirtle, etc...)");
+                            System.out.println("Reminder: You can only have a maximum of 4 cards of the same kind (not type - i.e Trainer, Pokemon, Energy)");
+
+                            int pokemonCount = 0;
+                            int trainerCount = 0;
+                            int energyCount = 0;
+
+                            System.out.print("\nEnter the # of pokemons (maximum: 16): ");
+                            pokemonCount = scan.nextInt();
+                            System.out.print("Enter the # of trainers (maximum: 16): ");
+                            trainerCount = scan.nextInt();
+                            System.out.print("Enter the # of energies: ");
+                            energyCount = scan.nextInt();
+
+                            //GAME SETUP PHASE---------------
+
+                            //Create both players decks
+                            Boolean status = createPlayerDeck(player1, pokemonCount, trainerCount, energyCount);
+
+                            while(!status){ //ensures player inputs correcting allocation of the deck
+
+                                System.out.print("\nEnter the # of pokemons (maximum: 16): ");
+                                pokemonCount = scan.nextInt();
+                                System.out.print("Enter the # of trainers (maximum: 16): ");
+                                trainerCount = scan.nextInt();
+                                System.out.print("Enter the # of energies: ");
+                                energyCount = scan.nextInt();
+
+                                status = createPlayerDeck(player1, pokemonCount, trainerCount, energyCount);
+                            }
+
+                            //Self deck
+                            System.out.println("Note: Total # of Cards must add up to 60.");
+                            System.out.println("Note: The database contains 4 types of pokemons, 4 types of trainer cards, and 5 types of energy cards.");
+                            System.out.println("Note: Upon entering desired allocation, card types will be evenly distributed based on given amount. (i.e 16 pokemon = 4 charmander, 4 squirtle, etc...)");
+                            System.out.println("Reminder: You can only have a maximum of 4 cards of the same kind (not type - i.e Trainer, Pokemon, Energy)");
+
+                            int pokemonCount2 = 0;
+                            int trainerCount2 = 0;
+                            int energyCount2 = 0;
+
+                            System.out.print("\nEnter the # of pokemons (maximum: 16): ");
+                            pokemonCount = scan.nextInt();
+                            System.out.print("Enter the # of trainers (maximum: 16): ");
+                            trainerCount = scan.nextInt();
+                            System.out.print("Enter the # of energies: ");
+                            energyCount = scan.nextInt();
+
+
+                            Boolean status2 = createPlayerDeck(player2, pokemonCount2, trainerCount2, energyCount2);
+
+                            while(!status2){ //ensures player inputs correcting allocation of the deck
+
+                                System.out.print("\nEnter the # of pokemons (maximum: 16): ");
+                                pokemonCount2 = scan.nextInt();
+                                System.out.print("Enter the # of trainers (maximum: 16): ");
+                                trainerCount2 = scan.nextInt();
+                                System.out.print("Enter the # of energies: ");
+                                energyCount2 = scan.nextInt();
+
+                                status = createPlayerDeck(player2, pokemonCount2, trainerCount2, energyCount2);
+                            }
+
+                            //Boolean round1Identifier = true;
+                            //Boolean winnerFound = false;
+                            int player1Redraws = 0;
+                            int player2Redraws = 0;
+
+                            //Let Player 1 and 2 perform start phase
+                            //Player 1 phase:
+                            fillPlayerHand(player1);
+
+                            while(!checkIfPokemonInHand(player1)){
+
+                                //Reveal hand
+                                System.out.println("\nYou do not have a pokemon on hand. Reveal, shuffle, and redraw until you do.");
+                                Card[] currentHand = player1.getHand();
+
+                                for(Card card : currentHand){
+                                    System.out.println("You are revealing a: " + card.getName());
+                                }
+
+                                //Put back the hand into the deck
+                                player1.reAddHandToDeck();
+
+                                //Shuffle deck
+                                player1.shuffleDeck();
+
+                                //Draw 7 again
+                                fillPlayerHand(player1);
+
+                                //Allow for player 2 to draw 1 extra
+                                player2Redraws++;
+                            }
+
+                            //Player 1 phase:
+                            fillPlayerHand(player2);
+
+                            while(!checkIfPokemonInHand(player2)){
+
+                                //Reveal hand
+                                System.out.println("\nPlayer 2 did not have a pokemon on hand. Reveal, shuffle, and redraw.");
+                                Card[] currentHand = player2.getHand();
+
+                                for(Card card : currentHand){
+                                    System.out.println("Player 2 is revealing a: " + card.getName());
+                                }
+
+                                //Put back the hand into the deck
+                                player2.reAddHandToDeck();
+
+                                //Shuffle deck
+                                player2.shuffleDeck();
+
+                                //Draw 7 again
+                                fillPlayerHand(player2);
+
+                                //Allow for player 2 to draw 1 extra
+                                player1Redraws++;
+
+                            }
+
+                            System.out.println(""); //Added space for visual format
+
+                            //Allow Players to redraw due to reshuffling
+                            for(int num = 0; num < player1Redraws; num++){
+                                drawPlayerCard(player1);
+                                System.out.println("Player 1 has also drawn an extra card!");
+                            }
+                            for(int num = 0; num < player2Redraws; num++){
+                                drawPlayerCard(player2);
+                                System.out.println("Player 2 has also drawn an extra card!");
+                            }
+
+
+                            //Players put down a pokemon(allow player to add however many they want, Ai auto adds all)
+                            //Player 1 placing pokemons (active zone minimum, bench optional)
+                            System.out.println("\nPlayer 1: Please place a pokemon in the active zone");
+                            Card[] currentHand = player1.getHand();
+
+                            System.out.print("\nThis is your current hand: ");
+                            System.out.print("[");
+                            for(Card card : currentHand){
+                                System.out.print(card.getName() + " ");
+                            }
+                            System.out.print("]");
+
+                            System.out.print("\nWhich pokemon would you like to place in the active zone? (O - n; position in array): ");
+                            int position = scan.nextInt();
+
+                            placePokemonInActiveField(player1, position);
+
+                            //optional allow user to bench any additional pokemon
+                            beginningPokemonBench(player1); 
+
+                            //Player 2 auto place pokemon to active zone and every other pokemon to bench
+                            System.out.println("\nPlayer 2: Please place a pokemon in the active zone");
+                            Card[] currentHand2 = player2.getHand();
+
+                            System.out.print("\nThis is your current hand: ");
+                            System.out.print("[");
+                            for(Card card : currentHand2){
+                                System.out.print(card.getName() + " ");
+                            }
+                            System.out.print("]");
+
+                            System.out.print("\nWhich pokemon would you like to place in the active zone? (O - n; position in array): ");
+                            int position2 = scan.nextInt();
+
+                            placePokemonInActiveField(player2, position2);
+
+                            //optional allow user to bench any additional pokemon
+                            beginningPokemonBench(player2); 
+
+
+                            //Fill prize piles
+                            fillPlayerPrize(player1);
+                            System.out.println("\nPlayer 1 has made their prize pile!");
+                            fillPlayerPrize(player2);
+                            System.out.println("Player 2 has made their prize pile!");
+
+                            //Reveal the active pokemons for both players
+                            System.out.println("\nPlayer 1's active pokemon is " + player1.getActiveField().getName());
+                            System.out.println("Player 2's active pokemon is " + player2.getActiveField().getName());
+
+                            //Main game loop (does not end until a winner is found)
+                            Player winnerFound = null;
+
+                            while(winnerFound == null){
+
+                                //Allow user to make their choice
+                                System.out.println("It is now Player 1's turn!\n");
+                                winnerFound = checkDrawableDeck(player1);
+                                if(winnerFound != null){
+                                    break;
+                                }
+                                playerTurn(player1, player2);
+                                winnerFound = checkWinner(player1, player2);
+                                if(winnerFound != null){
+                                    break;
+                                }
+
+                                //AI Turn - randomly chooses what to do
+                                System.out.println("It is now Player 2's turn!\n");
+                                winnerFound = checkDrawableDeck(player2);
+                                if(winnerFound != null){
+                                    break;
+                                }
+                                playerTurn(player2, player1);
+                                winnerFound = checkWinner(player1, player2);
+                                if(winnerFound != null){
+                                    break;
+                                }
+
+                            }
+                            
+
+                            //Winner has been found, announce who won. And end program
+                            if(winnerFound == player1){
+                                System.out.println("Player 1 has won the game!");
+                            }   else{
+                                System.out.println("Player 2 has won the game!");
+                            }
+
+
+                        } else if(customize.equals("n")){ //user is plyer 1 but deck is not customized
+
+                            //GAME SETUP PHASE---------------
+
+                            //Create both players decks
+                            createPlayerDeck(player1);
+                            createPlayerDeck(player2);
+
+                            //Boolean round1Identifier = true;
+                            //Boolean winnerFound = false;
+                            int player1Redraws = 0;
+                            int player2Redraws = 0;
+
+                            //Let Player 1 and 2 perform start phase
+                            //Player 1 phase:
+                            fillPlayerHand(player1);
+
+                            while(!checkIfPokemonInHand(player1)){
+
+                                //Reveal hand
+                                System.out.println("\nYou do not have a pokemon on hand. Reveal, shuffle, and redraw until you do.");
+                                Card[] currentHand = player1.getHand();
+
+                                for(Card card : currentHand){
+                                    System.out.println("You are revealing a: " + card.getName());
+                                }
+
+                                //Put back the hand into the deck
+                                player1.reAddHandToDeck();
+
+                                //Shuffle deck
+                                player1.shuffleDeck();
+
+                                //Draw 7 again
+                                fillPlayerHand(player1);
+
+                                //Allow for player 2 to draw 1 extra
+                                player2Redraws++;
+                            }
+
+                            //Player 1 phase:
+                            fillPlayerHand(player2);
+
+                            while(!checkIfPokemonInHand(player2)){
+
+                                //Reveal hand
+                                System.out.println("\nYou do not have a pokemon on hand. Reveal, shuffle, and redraw.");
+                                Card[] currentHand = player2.getHand();
+
+                                for(Card card : currentHand){
+                                    System.out.println("Player 2 is revealing a: " + card.getName());
+                                }
+
+                                //Put back the hand into the deck
+                                player2.reAddHandToDeck();
+
+                                //Shuffle deck
+                                player2.shuffleDeck();
+
+                                //Draw 7 again
+                                fillPlayerHand(player2);
+
+                                //Allow for player 2 to draw 1 extra
+                                player1Redraws++;
+
+                            }
+
+                            System.out.println(""); //Added space for visual format
+
+                            //Allow Players to redraw due to reshuffling
+                            for(int num = 0; num < player1Redraws; num++){
+                                drawPlayerCard(player1);
+                                System.out.println("Player 1 has also drawn an extra card!");
+                            }
+                            for(int num = 0; num < player2Redraws; num++){
+                                drawPlayerCard(player2);
+                                System.out.println("Player 2 has also drawn an extra card!");
+                            }
+
+
+                            //Players put down a pokemon(allow player to add however many they want, Ai auto adds all)
+                            //Player 1 placing pokemons (active zone minimum, bench optional)
+                            System.out.println("\nPlayer 1: Please place a pokemon in the active zone");
+                            Card[] currentHand = player1.getHand();
+
+                            System.out.print("\nThis is your current hand: ");
+                            System.out.print("[");
+                            for(Card card : currentHand){
+                                System.out.print(card.getName() + " ");
+                            }
+                            System.out.print("]");
+
+                            System.out.print("\nWhich pokemon would you like to place in the active zone? (O - n; position in array): ");
+                            int position = scan.nextInt();
+
+                            placePokemonInActiveField(player1, position);
+
+                            //optional allow user to bench any additional pokemon
+                            beginningPokemonBench(player1); 
+
+                            //Player 2 auto place pokemon to active zone and every other pokemon to bench
+                            System.out.println("\nPlayer 2: Please place a pokemon in the active zone");
+                            Card[] currentHand2 = player2.getHand();
+
+                            System.out.print("\nThis is your current hand: ");
+                            System.out.print("[");
+                            for(Card card : currentHand2){
+                                System.out.print(card.getName() + " ");
+                            }
+                            System.out.print("]");
+
+                            System.out.print("\nWhich pokemon would you like to place in the active zone? (O - n; position in array): ");
+                            int position2 = scan.nextInt();
+
+                            placePokemonInActiveField(player2, position2);
+
+                            //optional allow user to bench any additional pokemon
+                            beginningPokemonBench(player2); 
+
+
+                            //Fill prize piles
+                            fillPlayerPrize(player1);
+                            System.out.println("\nPlayer 1 has made their prize pile!");
+                            fillPlayerPrize(player2);
+                            System.out.println("Player 2 has made their prize pile!");
+
+                            //Reveal the active pokemons for both players
+                            System.out.println("\nPlayer 1's active pokemon is " + player1.getActiveField().getName());
+                            System.out.println("Player 2's active pokemon is " + player2.getActiveField().getName());
+
+                            //Main game loop (does not end until a winner is found)
+                            Player winnerFound = null;
+
+                            while(winnerFound == null){
+
+                                //Allow user to make their choice
+                                System.out.println("It is now Player 1's turn!\n");
+                                winnerFound = checkDrawableDeck(player1);
+                                if(winnerFound != null){
+                                    break;
+                                }
+                                playerTurn(player1, player2);
+                                winnerFound = checkWinner(player1, player2);
+                                if(winnerFound != null){
+                                    break;
+                                }
+
+                                //AI Turn - randomly chooses what to do
+                                System.out.println("It is now Player 2's turn!\n");
+                                winnerFound = checkDrawableDeck(player2);
+                                if(winnerFound != null){
+                                    break;
+                                }
+                                playerTurn(player2, player1);
+                                winnerFound = checkWinner(player1, player2);
+                                if(winnerFound != null){
+                                    break;
+                                }
+
+                            }
+                            
+
+                            //Winner has been found, announce who won. And end program
+                            if(winnerFound == player1){
+                                System.out.println("Player 1 has won the game!");
+                            }   else{
+                                System.out.println("Player 2 has won the game!");
+                            }
+
+
+                        } else{
+                            System.out.println("That is an invalid option. Game restarting.");
+                            startGame();
+                        }
+
+                    } else{ 
+
+                        System.out.print("\nThe coin landed on " + coinFlipped + "! You will be player 2 and have the second turn! You will also be player 2.");
+
+                        Player player1 = getPlayers()[0];
+                        Player player2 = getPlayers()[1];
+
+                        //Extra credit - Allow player to create their own deck or not
+                        System.out.print("\nWould you like to customize the allocation of your deck? (Y or N): ");
+                        String customize = scan.next().toLowerCase();
+
+                        if(customize.equals("y")){ //user is player 1 but deck is customized
+
+                            System.out.println("Note: Total # of Cards must add up to 60.");
+                            System.out.println("Note: The database contains 4 types of pokemons, 4 types of trainer cards, and 5 types of energy cards.");
+                            System.out.println("Note: Upon entering desired allocation, card types will be evenly distributed based on given amount. (i.e 16 pokemon = 4 charmander, 4 squirtle, etc...)");
+                            System.out.println("Reminder: You can only have a maximum of 4 cards of the same kind (not type - i.e Trainer, Pokemon, Energy)");
+
+                            int pokemonCount = 0;
+                            int trainerCount = 0;
+                            int energyCount = 0;
+
+                            System.out.print("\nEnter the # of pokemons (maximum: 16): ");
+                            pokemonCount = scan.nextInt();
+                            System.out.print("Enter the # of trainers (maximum: 16): ");
+                            trainerCount = scan.nextInt();
+                            System.out.print("Enter the # of energies: ");
+                            energyCount = scan.nextInt();
+
+                            //GAME SETUP PHASE---------------
+
+                            //Create both players decks
+                            Boolean status = createPlayerDeck(player2, pokemonCount, trainerCount, energyCount);
+
+                            while(!status){ //ensures player inputs correcting allocation of the deck
+
+                                System.out.print("\nEnter the # of pokemons (maximum: 16): ");
+                                pokemonCount = scan.nextInt();
+                                System.out.print("Enter the # of trainers (maximum: 16): ");
+                                trainerCount = scan.nextInt();
+                                System.out.print("Enter the # of energies: ");
+                                energyCount = scan.nextInt();
+
+                                status = createPlayerDeck(player2, pokemonCount, trainerCount, energyCount);
+                            }
+
+                            //AI Deck
+                            createPlayerDeck(player2);
+                            System.out.println("Note: Total # of Cards must add up to 60.");
+                            System.out.println("Note: The database contains 4 types of pokemons, 4 types of trainer cards, and 5 types of energy cards.");
+                            System.out.println("Note: Upon entering desired allocation, card types will be evenly distributed based on given amount. (i.e 16 pokemon = 4 charmander, 4 squirtle, etc...)");
+                            System.out.println("Reminder: You can only have a maximum of 4 cards of the same kind (not type - i.e Trainer, Pokemon, Energy)");
+
+                            int pokemonCount2 = 0;
+                            int trainerCount2 = 0;
+                            int energyCount2 = 0;
+
+                            System.out.print("\nEnter the # of pokemons (maximum: 16): ");
+                            pokemonCount2 = scan.nextInt();
+                            System.out.print("Enter the # of trainers (maximum: 16): ");
+                            trainerCount2 = scan.nextInt();
+                            System.out.print("Enter the # of energies: ");
+                            energyCount2 = scan.nextInt();
+
+                            //GAME SETUP PHASE---------------
+
+                            //Create both players decks
+                            Boolean status2 = createPlayerDeck(player1, pokemonCount2, trainerCount2, energyCount2);
+
+                            while(!status){ //ensures player inputs correcting allocation of the deck
+
+                                System.out.print("\nEnter the # of pokemons (maximum: 16): ");
+                                pokemonCount2 = scan.nextInt();
+                                System.out.print("Enter the # of trainers (maximum: 16): ");
+                                trainerCount2 = scan.nextInt();
+                                System.out.print("Enter the # of energies: ");
+                                energyCount2 = scan.nextInt();
+
+                                status2 = createPlayerDeck(player1, pokemonCount2, trainerCount2, energyCount2);
+                            }
+
+                            //Boolean round1Identifier = true;
+                            //Boolean winnerFound = false;
+                            int player1Redraws = 0;
+                            int player2Redraws = 0;
+
+                            //Let Player 1 and 2 perform start phase
+                            //Player 1 phase:
+                            fillPlayerHand(player2);
+
+                            while(!checkIfPokemonInHand(player2)){
+
+                                //Reveal hand
+                                System.out.println("\nYou do not have a pokemon on hand. Reveal, shuffle, and redraw until you do.");
+                                Card[] currentHand = player2.getHand();
+
+                                for(Card card : currentHand){
+                                    System.out.println("You are revealing a: " + card.getName());
+                                }
+
+                                //Put back the hand into the deck
+                                player2.reAddHandToDeck();
+
+                                //Shuffle deck
+                                player2.shuffleDeck();
+
+                                //Draw 7 again
+                                fillPlayerHand(player2);
+
+                                //Allow for player 2 to draw 1 extra
+                                player1Redraws++;
+                            }
+
+                            //Player 1 phase:
+                            fillPlayerHand(player1);
+
+                            while(!checkIfPokemonInHand(player1)){
+
+                                //Reveal hand
+                                System.out.println("\nPlayer 1 did not have a pokemon on hand. Reveal, shuffle, and redraw.");
+                                Card[] currentHand = player2.getHand();
+
+                                for(Card card : currentHand){
+                                    System.out.println("Player 1 is revealing a: " + card.getName());
+                                }
+
+                                //Put back the hand into the deck
+                                player1.reAddHandToDeck();
+
+                                //Shuffle deck
+                                player1.shuffleDeck();
+
+                                //Draw 7 again
+                                fillPlayerHand(player1);
+
+                                //Allow for player 2 to draw 1 extra
+                                player2Redraws++;
+
+                            }
+
+                            System.out.println(""); //Added space for visual format
+
+                            //Allow Players to redraw due to reshuffling
+                            for(int num = 0; num < player2Redraws; num++){
+                                drawPlayerCard(player2);
+                                System.out.println("Player 2 has also drawn an extra card!");
+                            }
+                            for(int num = 0; num < player1Redraws; num++){
+                                drawPlayerCard(player1);
+                                System.out.println("Player 1 has also drawn an extra card!");
+                            }
+
+
+                            //Players put down a pokemon(allow player to add however many they want, Ai auto adds all)
+                            //Player 1 placing pokemons (active zone minimum, bench optional)
+                            System.out.println("\nPlayer 2: Please place a pokemon in the active zone");
+                            Card[] currentHand = player2.getHand();
+
+                            System.out.print("\nThis is your current hand: ");
+                            System.out.print("[");
+                            for(Card card : currentHand){
+                                System.out.print(card.getName() + " ");
+                            }
+                            System.out.print("]");
+
+                            System.out.print("\nWhich pokemon would you like to place in the active zone? (O - n; position in array): ");
+                            int position = scan.nextInt();
+
+                            placePokemonInActiveField(player2, position);
+
+                            //optional allow user to bench any additional pokemon
+                            beginningPokemonBench(player2); 
+
+                            //Player 2 auto place pokemon to active zone and every other pokemon to bench
+                            System.out.println("\nPlayer 1: Please place a pokemon in the active zone");
+                            Card[] currentHand2 = player1.getHand();
+
+                            System.out.print("\nThis is your current hand: ");
+                            System.out.print("[");
+                            for(Card card : currentHand2){
+                                System.out.print(card.getName() + " ");
+                            }
+                            System.out.print("]");
+
+                            System.out.print("\nWhich pokemon would you like to place in the active zone? (O - n; position in array): ");
+                            int position2 = scan.nextInt();
+
+                            placePokemonInActiveField(player1, position2);
+
+                            //optional allow user to bench any additional pokemon
+                            beginningPokemonBench(player1); 
+
+
+                            //Fill prize piles
+                            fillPlayerPrize(player2);
+                            System.out.println("\nPlayer 2 has made their prize pile!");
+                            fillPlayerPrize(player1);
+                            System.out.println("Player 1 has made their prize pile!");
+
+                            //Reveal the active pokemons for both players
+                            System.out.println("\nPlayer 2's active pokemon is " + player2.getActiveField().getName());
+                            System.out.println("Player 1's active pokemon is " + player1.getActiveField().getName());
+
+                            //Main game loop (does not end until a winner is found)
+                            Player winnerFound = null;
+
+                            while(winnerFound == null){
+
+                                System.out.println("It is now Player 1's turn!\n");
+                                winnerFound = checkDrawableDeck(player1);
+                                if(winnerFound != null){
+                                    break;
+                                }
+                                playerTurn(player1, player2);
+                                winnerFound = checkWinner(player1, player2);
+                                if(winnerFound != null){
+                                    break;
+                                }
+
+                                //Allow user to make their choice
+                                System.out.println("It is now Player 2's turn!\n");
+                                winnerFound = checkDrawableDeck(player2);
+                                if(winnerFound != null){
+                                    break;
+                                }
+                                playerTurn(player2, player1);
+                                winnerFound = checkWinner(player2, player1);
+                                if(winnerFound != null){
+                                    break;
+                                }
+
+                            }
+                            
+
+                            //Winner has been found, announce who won. And end program
+                            if(winnerFound == player1){
+                                System.out.println("Player 1 has won the game!");
+                            }   else{
+                                System.out.println("Player 2 has won the game!");
+                            }
+
+
+                        } else if(customize.equals("n")){ //ai is player 1 but deck is not customized
+
+                            //GAME SETUP PHASE---------------
+
+                            //Create both players decks
+                            createPlayerDeck(player1);
+                            createPlayerDeck(player2);
+
+                            //Boolean round1Identifier = true;
+                            //Boolean winnerFound = false;
+                            int player1Redraws = 0;
+                            int player2Redraws = 0;
+
+                            //Let Player 1 and 2 perform start phase
+                            //Player 1 phase:
+                            fillPlayerHand(player2);
+
+                            while(!checkIfPokemonInHand(player2)){
+
+                                //Reveal hand
+                                System.out.println("\nYou do not have a pokemon on hand. Reveal, shuffle, and redraw until you do.");
+                                Card[] currentHand = player1.getHand();
+
+                                for(Card card : currentHand){
+                                    System.out.println("You are revealing a: " + card.getName());
+                                }
+
+                                //Put back the hand into the deck
+                                player2.reAddHandToDeck();
+
+                                //Shuffle deck
+                                player2.shuffleDeck();
+
+                                //Draw 7 again
+                                fillPlayerHand(player1);
+
+                                //Allow for player 2 to draw 1 extra
+                                player1Redraws++;
+                            }
+
+                            //Player 1 phase:
+                            fillPlayerHand(player1);
+
+                            while(!checkIfPokemonInHand(player1)){
+
+                                //Reveal hand
+                                System.out.println("\nYou did not have a pokemon on hand. Reveal, shuffle, and redraw.");
+                                Card[] currentHand = player2.getHand();
+
+                                for(Card card : currentHand){
+                                    System.out.println("You are revealing a: " + card.getName());
+                                }
+
+                                //Put back the hand into the deck
+                                player1.reAddHandToDeck();
+
+                                //Shuffle deck
+                                player1.shuffleDeck();
+
+                                //Draw 7 again
+                                fillPlayerHand(player1);
+
+                                //Allow for player 2 to draw 1 extra
+                                player2Redraws++;
+
+                            }
+
+                            System.out.println(""); //Added space for visual format
+
+                            //Allow Players to redraw due to reshuffling
+                            for(int num = 0; num < player2Redraws; num++){
+                                drawPlayerCard(player1);
+                                System.out.println("Player 2 has also drawn an extra card!");
+                            }
+                            for(int num = 0; num < player1Redraws; num++){
+                                drawPlayerCard(player2);
+                                System.out.println("Player 1 has also drawn an extra card!");
+                            }
+
+
+                            //Players put down a pokemon(allow player to add however many they want, Ai auto adds all)
+                            //Player 1 placing pokemons (active zone minimum, bench optional)
+                            System.out.println("\nPlayer 2: Please place a pokemon in the active zone");
+                            Card[] currentHand = player2.getHand();
+
+                            System.out.print("\nThis is your current hand: ");
+                            System.out.print("[");
+                            for(Card card : currentHand){
+                                System.out.print(card.getName() + " ");
+                            }
+                            System.out.print("]");
+
+                            System.out.print("\nWhich pokemon would you like to place in the active zone? (O - n; position in array): ");
+                            int position = scan.nextInt();
+
+                            placePokemonInActiveField(player2, position);
+
+                            //optional allow user to bench any additional pokemon
+                            beginningPokemonBench(player2); 
+
+                            //Player 2 auto place pokemon to active zone and every other pokemon to bench
+                            System.out.println("\nPlayer 1: Please place a pokemon in the active zone");
+                            Card[] currentHand2 = player1.getHand();
+
+                            System.out.print("\nThis is your current hand: ");
+                            System.out.print("[");
+                            for(Card card : currentHand2){
+                                System.out.print(card.getName() + " ");
+                            }
+                            System.out.print("]");
+
+                            System.out.print("\nWhich pokemon would you like to place in the active zone? (O - n; position in array): ");
+                            int position2 = scan.nextInt();
+
+                            placePokemonInActiveField(player1, position2);
+
+                            //optional allow user to bench any additional pokemon
+                            beginningPokemonBench(player1); 
+
+
+                            //Fill prize piles
+                            fillPlayerPrize(player2);
+                            System.out.println("\nPlayer 2 has made their prize pile!");
+                            fillPlayerPrize(player1);
+                            System.out.println("Player 1 has made their prize pile!");
+
+                            //Reveal the active pokemons for both players
+                            System.out.println("\nPlayer 2's active pokemon is " + player2.getActiveField().getName());
+                            System.out.println("Player 1's active pokemon is " + player1.getActiveField().getName());
+
+                            //Main game loop (does not end until a winner is found)
+                            Player winnerFound = null;
+
+                            while(winnerFound == null){
+
+                                //AI Turn - randomly chooses what to do
+                                System.out.println("It is now Player 1's turn!\n");
+                                winnerFound = checkDrawableDeck(player1);
+                                if(winnerFound != null){
+                                    break;
+                                }
+                                aiTurn(player1);
+                                winnerFound = checkWinner(player1, player2);
+                                if(winnerFound != null){
+                                    break;
+                                }
+
+                                //Allow user to make their choice
+                                System.out.println("It is now Player 2's turn!\n");
+                                winnerFound = checkDrawableDeck(player2);
+                                if(winnerFound != null){
+                                    break;
+                                }
+                                playerTurn(player2, player1);
+                                winnerFound = checkWinner(player2, player1);
+                                if(winnerFound != null){
+                                    break;
+                                }
+
+                            }
+                            
+
+                            //Winner has been found, announce who won. And end program
+                            if(winnerFound == player1){
+                                System.out.println("Player 1 has won the game!");
+                            }   else{
+                                System.out.println("Player 2 has won the game!");
+                            }
+
+
+                        } else{
+                            System.out.println("That is an invalid option. Game restarting.");
+                            startGame();
+                        }
+
+                    }
 
 
 
@@ -598,7 +1936,7 @@ public class PokemonGame {
     /*
      * 
      */
-    private Boolean playerTurn(Player player1){
+    private Boolean playerTurn(Player player1, Player player2){
 
         //KEEP IN MIND FOR SOME POKEMON HAVE SPECIAL EFFECTS (i.e CHARMANDER'S BASIC, MAKE THE PLAYER DRAW A CARD IF TRUE RETURNED BY ABILITY)
 
@@ -611,6 +1949,7 @@ public class PokemonGame {
         // 4. Play a pokemon card (RETREAT - COST ENERGY, SO REMOVE NECESSARY ENERGY OR CHECK IF EVEN POSSIBLE)
         // 5. Attack with pokemon
         // 6. (End turn) Attack w/ pokemon or declare pass
+
 
         Scanner scan = new Scanner(System.in);
 
@@ -645,7 +1984,7 @@ public class PokemonGame {
 
             int decision = scan.nextInt();
 
-            switch(decision){
+            switch(decision){ //MIGHT HAVE TO UPDATE TO ALLOW PLAYER TO NOT ONLY ADD ON ACTIVE BUT ALSO BENCHED POKEMON
                 case 1:
                     Boolean energyDone = false;
 
@@ -708,16 +2047,18 @@ public class PokemonGame {
                     break;
                 case 4:
 
-
-
+                    retreatPokemon(player1);
 
                     break;
                 case 5:
 
-
-
-
-
+                    Boolean state = attackPokemon(player1, player2);
+                    if(state){
+                        System.out.println("Player 1 has ended their turn!");
+                        endTurn = true;
+                    } else{
+                        continue;
+                    }
                     break;
                 case 6:
                     System.out.println("Player 1 has ended their turn!");
@@ -729,8 +2070,6 @@ public class PokemonGame {
             }
                 
         }
-
-
 
 
         return false;
@@ -827,10 +2166,34 @@ public class PokemonGame {
     /*
      * 
      */
-    public void playerPokemon(){
-        //2 Options
-        // Attack
-        // Player retreat/swap pokemon (probably need to be a new function)
+    public void retreatPokemon(Player player){
+
+        player.allowRetreatPokemon();
+
+    }
+
+    /*
+     * 
+     */
+    public Boolean attackPokemon(Player player1, Player player2){
+
+        Boolean state = player1.allowPokemonAttack(player2);
+        return state;
+
+    }
+
+    /*
+     * 
+     */
+    public Player checkDrawableDeck(Player player){
+
+        Card[] deck = player.getDeck();
+
+        if(deck.length == 0){
+            return player;
+        }
+
+        return null;
 
     }
 
@@ -840,16 +2203,46 @@ public class PokemonGame {
      */
     public Player checkWinner(Player player1, Player player2){
 
-        //Check if all prize pile for current player is empty, opposite player wins
+        //Check if current player has any pokemon left (assuming active was defeated)
+        Card p1Active = player1.getActiveField();
+        Card[] p1Bench = player1.getbench();
+        Card[] p1Hand = player1.getHand();
 
+        Boolean benchHasPokemon = false;
+        for(Card card : p1Bench){
+            if(card.getCardType().equals("Pokemon")){
+                benchHasPokemon = true;
+                break;
+            }
+        }
+
+        Boolean handHasPokemon = false;
+        for(Card card : p1Hand){
+            if(card.getCardType().equals("Pokemon")){
+                handHasPokemon = true;
+                break;
+            }
+        }
+
+        if(p1Active == null || benchHasPokemon == false || handHasPokemon == false){
+            return player2;
+        }
+
+
+        //Check if all prize pile for current player is empty, player wins
+        Card[] p1PrizePile = player1.getPrizePile();
+        if(p1PrizePile.length == 0){
+            return player1;
+        }
+        
 
         //Check if current player's opponent has no active pokemon, no benched pokemon, and no pokemon in hand
+        Card p2ActivePokemon = player2.getActiveField();
 
+        if(p2ActivePokemon != null){
+            return player1;
+        }
 
-        //Check if current player's opponent has an empty deck, if so, current player wins
-
-
-        //Whoever is the winner, return the player object
 
         return null;
     }

@@ -28,7 +28,7 @@ public class Squirtle extends Pokemon{
         specialAttack = 20;
         abilityDescription = new String[2];
         abilityDescription[0] = "Tackle";
-        abilityDescription[1] = "Rain Splash";
+        abilityDescription[1] = "RainSplash";
         weakness = "Grass";
         retreatCost = new Energy[1];
         retreatCost[0] = new Basic();
@@ -38,7 +38,7 @@ public class Squirtle extends Pokemon{
     /*
      * 
      */
-    public int tackle(Energy[] energyRequirements){
+    public int Tackle(Energy[] energyRequirements){
 
         //Ability requires 1 basic energy
 
@@ -67,7 +67,7 @@ public class Squirtle extends Pokemon{
     /*
      * 
      */
-    public int rainSplash(Energy[] energyRequirements){
+    public int RainSplash(Energy[] energyRequirements){
 
         //Ability requires 1 water energy & 1 basic energy
 

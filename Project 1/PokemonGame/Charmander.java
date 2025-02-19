@@ -38,7 +38,7 @@ public class Charmander extends Pokemon{
     /*
      * 
      */
-    public Boolean Collect(Energy[] energyRequirements, Player player){
+    public Boolean Collect(Energy[] energyRequirements){
 
         //Ability requires 1 fire energy
 
@@ -67,7 +67,7 @@ public class Charmander extends Pokemon{
     /*
      * 
      */
-    public int flare(Energy[] energyRequirements){
+    public int Flare(Energy[] energyRequirements){
 
         //Ability requires 2 fire energy
 

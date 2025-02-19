@@ -52,5 +52,9 @@ abstract class Card {
     public abstract void setEnergies(Energy[] newEnergies);
 
     public abstract void activateEffect(Player player);
+
+    public abstract Energy[] getRetreatCost();
+
+    public abstract String[] getAbilityDescriptions();
     
 }
