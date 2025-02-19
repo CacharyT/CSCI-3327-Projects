@@ -325,4 +325,226 @@ public class StatsLibrary {
     }
 
 
+
+    /*
+    * This function will allow the user to check if a given subset/event fulfills the probability axiom 1
+    * @param space an arraylist of strings
+    * @param subset an arraylist of strings
+    * @param subsetProbabilities an array of double
+    * @return boolean value determining if the given subset fulfills probability axiom 1
+    */
+    public Boolean checkAxiomOne(ArrayList<String> space, ArrayList<String> subset, double[] subsetProbabilities){
+
+        //Count the numbers of element in subset appearing in the space
+        int instanceCounter = 0;
+        for(String spaceElement : space){
+            for(String subsetElement : subset){
+                if(spaceElement.equals(subsetElement)){
+                    instanceCounter++;
+                    break;
+                }
+            }
+        }
+
+        //Check if all elements in the subset appear in the space
+        if(instanceCounter == subset.size()){
+
+            //Sum the amount of probabilities 
+            double totalProbability = 0;
+            for(double num : subsetProbabilities){
+                totalProbability+=num;
+            }
+
+            //Check if sum equals to one, return true
+            if(totalProbability >= 0){
+                return true;
+            }
+
+        }
+
+        //otherwise return false
+        return false;
+
+    }
+
+    /*
+    * This function will allow the user to check if the probability of a given space is equal to 1
+    * @param spaceProbabilities an array of double
+    * @return boolean value determining if the given probabilities of space fulfills probability axiom 2
+    */
+    public Boolean checkAxiomTwo(double[] spaceProbabilities){
+
+        //Sum the amount of probabilities 
+        double totalProbability = 0;
+        for(double num : spaceProbabilities){
+            totalProbability+=num;
+        }
+
+        //Check if sum equals to one, return true
+        if(totalProbability == 1){
+            return true;
+        }
+
+
+        //otherwise return false
+        return false;
+    }
+
+    /*
+    * This function will allow the user find the total probability of an event based on the Probability Axiom 3
+    * @param space an arraylist of strings
+    * @param subset an arraylist of strings
+    * @param subsetProbabilities an array of double
+    * @return a double value which is the porbability of the given event
+    */
+    public double checkAxiomThree(ArrayList<String> space, ArrayList<String> subset, double[] subsetProbabilities){
+
+        //Count the numbers of element in subset appearing in the space
+        int instanceCounter = 0;
+        for(String spaceElement : space){
+            for(String subsetElement : subset){
+                if(spaceElement.equals(subsetElement)){
+                    instanceCounter++;
+                    break;
+                }
+            }
+        }
+
+        //Check if all elements in the subset appear in the space
+        if(instanceCounter == subset.size()){
+
+            //Sum the amount of probabilities 
+            double totalProbability = 0;
+            for(double num : subsetProbabilities){
+                totalProbability+=num;
+            }
+
+            return totalProbability/ (double) space.size();
+
+        }
+
+        //otherwise return null (some elements were not in the space)
+        return 0;
+    }
+
+    /*
+     * The function will allow the user to check if the given events, A and B are independent
+     * @param eventAProbabilities an array of double
+     * @param eventBProbabilities an array of double
+     * @param eventAAndBProbabilities an array of double
+     * @return boolean value determining of it is independent
+     */
+    public Boolean checkIfIndependent(double eventAProbabilities, double eventBProbabilities, double eventAAndBProbabilities){
+
+        //Calculate P(A)
+        double probabilityOfA = eventAProbabilities;
+
+        //Calculate P(B)
+        double probabilityOfB = eventBProbabilities;
+
+        //Calculate P(A AND B)
+        double probabilityOfAAndB = probabilityOfA * probabilityOfB;
+
+        //Calculate P(A|B)
+        double probabilityOfAGivenB = eventAAndBProbabilities / probabilityOfB;
+
+        //Calculate P(B|A)
+        double probabilityOfBGivenA = eventAAndBProbabilities / probabilityOfA;
+
+        if(probabilityOfAGivenB == probabilityOfA){ //Check if P(A|B) = P(A)
+            return true;
+        } else if(probabilityOfBGivenA == probabilityOfB){ //Check if P(B|A) = P(B)
+            return true;
+        } else if(probabilityOfAAndB == eventAAndBProbabilities){ //Check if P(A AND B) = P(A) P(B)
+            return true;
+        }
+
+        //otherwise, return false
+        return false;
+    }
+
+    /*
+     * The function will allow the user to check if the given events, A and B are dependent
+     * @param eventAProbabilities an array of double
+     * @param eventBProbabilities an array of double
+     * @param eventAAndBProbabilities an array of double
+     * @return boolean value determining of it is independent
+     */
+    public Boolean checkIfDependent(double eventAProbabilities, double eventBProbabilities, double eventAAndBProbabilities){
+
+        //Returns the opposite of the return value of checkIfIndependent
+        return !checkIfIndependent(eventAProbabilities, eventBProbabilities, eventAAndBProbabilities);
+
+    }
+
+    /*
+     * This function will calculate the intersection of given events, depending on if it is dependent or independent
+     * @param eventAProbabilities an array of double
+     * @param eventBProbabilities an array of double
+     * @param eventAAndBProbabilities an array of double
+     * @return a double value
+     */
+    public double calculateInDependentOrDependentIntersection(double eventAProbabilities, double eventBProbabilities, double eventAAndBProbabilities){
+
+        if(checkIfDependent(eventAProbabilities, eventBProbabilities, eventAAndBProbabilities)){ //Dependent events P(A AND B) = P(A)P(B|A)
+
+            //Calculate P(B|A)
+            double probabilityOfBGivenA = eventAAndBProbabilities / eventAProbabilities;
+
+            double dependentProbability = (eventAProbabilities * probabilityOfBGivenA);
+
+            System.out.println("The dependent intersection of " + eventAProbabilities + " and " + eventBProbabilities + " is " + dependentProbability);
+
+            return dependentProbability;
+
+
+        } else{ //Indepedent events P(A AND B) = P(A)P(B)
+
+            double independentProbability = (eventAProbabilities * eventBProbabilities);
+
+            System.out.println("The independent intersection of " + eventAProbabilities + " and " + eventBProbabilities + " is " + independentProbability);
+
+            return independentProbability;
+
+        }
+
+    }
+
+
+    /*
+     * The function will allow users to calculate the exclusive or not exclusive union of the given events
+     * @param eventAProbabilities an array of double
+     * @param eventBProbabilities an array of double
+     * @param eventAAndBProbabilities an array of double
+     * @return a double value
+     */
+    public double calculateExclusiveOrNotExclusiveunion(double eventAProbabilities, double eventBProbabilities, double eventAAndBProbabilities){
+
+        double aAndBIntersection = calculateInDependentOrDependentIntersection(eventAProbabilities, eventBProbabilities, eventAAndBProbabilities);
+
+        //Check first if exclusive P(A AND B) = 0
+        if(aAndBIntersection == 0){
+
+            double exclusiveValue = (eventAProbabilities + eventBProbabilities);
+
+            System.out.println("The exclusive union of " + eventAProbabilities + " and " + eventBProbabilities + " is " + exclusiveValue);
+
+            //Simply P(A OR B) = P(A) + P(B)
+            return exclusiveValue;
+
+
+        } else{
+
+            //Simply P(A OR B) = P(A) + P(B) - P(A AND B)
+            double notExclusiveValue = (eventAProbabilities + eventBProbabilities - aAndBIntersection);
+
+            System.out.println("The not exclusive union of " + eventAProbabilities + " and " + eventBProbabilities + " is " + notExclusiveValue);
+
+            return notExclusiveValue;
+
+        }
+
+    }
+
+
 }
