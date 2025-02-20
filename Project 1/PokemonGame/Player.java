@@ -578,6 +578,14 @@ public class Player {
 
                         System.out.println("Enemy's " + opponentActivePokemon.getName() + " health is now " + opponentActivePokemon.getHP());
 
+                        if(newOpponentHp == 0){
+
+                            //Allow current player to draw from the prize pile
+                            System.out.println("\nThe enemy's " + opponentActivePokemon.getName() + " has fallen. You may draw rom the prize pile!");
+                            getPrizeCard();
+
+                        }
+
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
