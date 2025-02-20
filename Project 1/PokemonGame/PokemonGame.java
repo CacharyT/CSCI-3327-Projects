@@ -564,7 +564,6 @@ public class PokemonGame {
                             //Player 2 auto place pokemon to active zone and every other pokemon to bench
                             aiAutoActiveFieldAndBenchPokemon(player1);
 
-
                             //Fill prize piles
                             fillPlayerPrize(player2);
                             System.out.println("\nPlayer 2 has made their prize pile!");
@@ -1856,7 +1855,7 @@ public class PokemonGame {
         player.setActiveField(firstPoke);
 
         //Remove pokemon from hand
-        Card[] newHand = new Card[currentHand.length];
+        Card[] newHand = new Card[currentHand.length - 1];
         int newIndex = 0; //Allows for shifting the skipped values down
         for(int i = 0; i < currentHand.length; i++){
             if(i != firstPokePosition){
@@ -1868,32 +1867,33 @@ public class PokemonGame {
         //All other pokemon in hand, place in bench
         Card[] updatedHand = player.getHand();
         Card[] newBench = new Card[player.getbench().length];
-        int[] removePokemonPositions = new int[updatedHand.length];
-
+        int index = 0;
         for(int i = 0; i < updatedHand.length; i++){
             if(updatedHand[i] == null){
                 break;
             } else if(updatedHand[i].getCardType().equals("Pokemon")){
-                newBench[i] = updatedHand[i];
-                removePokemonPositions[i] = i;
+                newBench[index++] = updatedHand[i];
             }
         }
         player.setBench(newBench);
 
+        //Find how many non-pokemon in hand
+        int nonPokemonCounter = 0;
+        for(Card card : updatedHand){
+            if(!card.getCardType().equals("Pokemon")){
+                nonPokemonCounter++;
+            }
+        }
 
         //Remove pokemons from hand
-        Card[] newerHand = new Card[updatedHand.length];
+        Card[] newerHand = new Card[nonPokemonCounter];
+        int newerIndex = 0;
         for(int i = 0; i < updatedHand.length; i++){
-            int newerIndex = 0; //Allows for shifting the skipped values down
-            for(int position : removePokemonPositions){
-                if(i != position){
-                    newerHand[newerIndex] = updatedHand[i];
-                }
+            if(!updatedHand[i].getCardType().equals("Pokemon")){
+                newerHand[newerIndex++] = updatedHand[i];
             }
-            newerIndex++;
         }
         player.setHand(newerHand);
-
 
     }
 
