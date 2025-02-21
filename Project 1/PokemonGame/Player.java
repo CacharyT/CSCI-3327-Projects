@@ -333,7 +333,7 @@ public class Player {
 
 
     /*
-     * Uses Fisher-Yates Algorithm
+     * Uses Fisher-Yates Algorithm CITE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
      */
     public void shuffleDeck(){
         Random random = new Random();
