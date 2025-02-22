@@ -44,7 +44,7 @@ public class Pikachu extends Pokemon{
         int lightningEnergyRequirement = 0;
 
         for(Card card : energyRequirements){
-            if(card.getCardType().equals("Lightning")){
+            if(card.getName().equals("Lightning")){
                 lightningEnergyRequirement++;
             }
         }
@@ -80,9 +80,9 @@ public class Pikachu extends Pokemon{
         int basicEnergyRequirement = 0;
 
         for(Card card : energyRequirements){
-            if(card.getCardType().equals("Lightning")){
+            if(card.getName().equals("Lightning")){
                 lightningEnergyRequirement++;
-            } else if(card.getCardType().equals("Basic")){
+            } else if(card.getName().equals("Basic")){
                 basicEnergyRequirement++;
             }
         }

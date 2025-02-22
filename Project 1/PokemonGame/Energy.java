@@ -63,5 +63,56 @@ public class Energy extends Card{
     public String getEnergyType(){
         return energyType;
     }
+
+    /*
+     * 
+     */
+    @Override
+    public Energy[] getEnergies(){
+
+        return new Energy[0];
+
+    }
+
+    /*
+     * 
+     */
+    @Override
+    public void setEnergies(Energy[] newEnergies){
+
+
+
+    }
+
+    /*
+     * 
+     */
+    @Override
+    public void activateEffect(Player player){
+
+
+
+    }
+
+    /*
+     * 
+     */
+    @Override
+    public Energy[] getRetreatCost(){
+
+        return new Energy[0];
+
+    }
+
+    /*
+     * 
+     */
+    @Override
+    public String[] getAbilityDescriptions(){
+
+        return new String[0];
+
+    }
+
     
 }

@@ -17,7 +17,7 @@ public class Recylce extends Trainer{
     public Recylce(){
         super.setCardType("Trainer");
         super.setName("Recycle");
-        trainerDescription = "Flip a coin. If heads, put a card in your discard pileon top of your deck.";
+        trainerDescription = "Flip a coin. If heads, put a card in your discard pile on top of your deck.";
     }
 
 
@@ -33,9 +33,6 @@ public class Recylce extends Trainer{
 
         //Flip a coin (o - heads, 1 - tails)
         int coin = PokemonGame.flipACoin();
-
-
-
 
         //If head, then put a card from the discard pile to the top of the deck
         if(coin == 0){
@@ -53,20 +50,26 @@ public class Recylce extends Trainer{
                 }
             }
             System.out.print("]\n");
-            System.out.print("Pick a card (0 - N; position in array; if done then enter -1): ");
+            System.out.print("Pick a card (0 - N; position in array; if none then enter -1): ");
             int arrayPosition = scan.nextInt();
 
-            //Add card to top of deck
-            Card[] currentDeck = player.getDeck();
-            Card[] newDeck = new Card[currentDeck.length + 1];
+            if(arrayPosition == -1){
 
-            for(int i = 0; i < currentDeck.length; i++){
-                newDeck[i] = currentDeck[i];
+            } else{
+
+                //Add card to top of deck
+                Card[] currentDeck = player.getDeck();
+                Card[] newDeck = new Card[currentDeck.length + 1];
+
+                for(int i = 0; i < currentDeck.length; i++){
+                    newDeck[i] = currentDeck[i];
+                }
+                newDeck[newDeck.length - 1] = currentDiscardPile[arrayPosition];
+
+                //Update deck
+                player.setDeck(newDeck);
+
             }
-            newDeck[newDeck.length - 1] = currentDiscardPile[arrayPosition];
-
-            //Update deck
-            player.setDeck(newDeck);
 
             //Remove card from discard pile
             Card[] newDiscardPile = new Card[currentDiscardPile.length - 1];

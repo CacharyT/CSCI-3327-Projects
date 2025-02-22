@@ -45,7 +45,7 @@ public class Charmander extends Pokemon{
         int fireEnergyRequirement = 0;
 
         for(Card card : energyRequirements){
-            if(card.getCardType().equals("Fire")){
+            if(card.getName().equals("Fire")){
                 fireEnergyRequirement++;
             }
         }
@@ -74,7 +74,7 @@ public class Charmander extends Pokemon{
         int fireEnergyRequirement = 0;
 
         for(Card card : energyRequirements){
-            if(card.getCardType().equals("Fire")){
+            if(card.getName().equals("Fire")){
                 fireEnergyRequirement++;
             }
         }

@@ -46,7 +46,7 @@ public class Bulbasaur extends Pokemon{
         int grassEnergyRequirement = 0;
 
         for(Card card : energyRequirements){
-            if(card.getCardType().equals("Grass")){
+            if(card.getName().equals("Grass")){
                 grassEnergyRequirement++;
             }
         }
@@ -76,9 +76,9 @@ public class Bulbasaur extends Pokemon{
         int basicEnergyRequirement = 0;
 
         for(Card card : energyRequirements){
-            if(card.getCardType().equals("Grass")){
+            if(card.getName().equals("Grass")){
                 grassEnergyRequirement++;
-            } else if(card.getCardType().equals("Basic")){
+            } else if(card.getName().equals("Basic")){
                 basicEnergyRequirement++;
             }
         }

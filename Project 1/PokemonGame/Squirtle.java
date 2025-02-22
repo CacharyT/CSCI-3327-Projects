@@ -40,12 +40,16 @@ public class Squirtle extends Pokemon{
      */
     public int Tackle(Energy[] energyRequirements){
 
+        for(Energy energy : energyRequirements){
+            System.out.println(energy.getName());
+        }
+
         //Ability requires 1 basic energy
 
         int basicEnergyRequirement = 0;
 
         for(Card card : energyRequirements){
-            if(card.getCardType().equals("Basic")){
+            if(card.getName().equals("Basic")){
                 basicEnergyRequirement++;
             }
         }
@@ -75,9 +79,9 @@ public class Squirtle extends Pokemon{
         int basicEnergyRequirement = 0;
 
         for(Card card : energyRequirements){
-            if(card.getCardType().equals("Water")){
+            if(card.getName().equals("Water")){
                 waterEnergyRequirement++;
-            } else if(card.getCardType().equals("Basic")){
+            } else if(card.getName().equals("Basic")){
                 basicEnergyRequirement++;
             }
         }

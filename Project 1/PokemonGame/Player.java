@@ -299,6 +299,23 @@ public class Player {
 
     }
 
+    /*
+     * 
+     */
+    public Boolean checkPokemonInHand(){
+
+        Card[] currentHand = getHand();
+
+        for(Card card :currentHand){
+            if(card.getCardType().equals("Pokemon")){
+                return true;
+            }
+        }
+
+        return false;
+
+    }
+
 
     /*
      * 
@@ -387,21 +404,29 @@ public class Player {
         Card[] currentHand = getHand();
 
         //Get trainer card
-        Card trainerCard = currentHand[arrayPosition];
+        Trainer trainerCard = (Trainer) currentHand[arrayPosition];
 
         //Activate effect
         trainerCard.activateEffect(player);
 
-        //Remove card from hand (add to discard pile)
-        Card[] updatedHand = getHand();
-        Card[] newHand = new Card[updatedHand.length - 1];
-        int newIndex = 0;
-        for(int i = 0; i < updatedHand.length; i++){
-            if(i != arrayPosition){
-                newHand[newIndex++] = updatedHand[i];
+        if(trainerCard instanceof ProfessorOak){
+
+            //Do nothing, ProfessorOak handles the updating
+            
+        } else{
+
+            //Remove card from hand (add to discard pile)
+            Card[] updatedHand = getHand();
+            Card[] newHand = new Card[updatedHand.length - 1];
+            int newIndex = 0;
+            for(int i = 0; i < updatedHand.length; i++){
+                if(i != arrayPosition){
+                    newHand[newIndex++] = updatedHand[i];
+                }
             }
+            setHand(newHand);
+
         }
-        setHand(newHand);
 
         Card[] currentDiscardPile = getDiscardPile();
         Card[] newDiDiscardPile = new Card[currentDiscardPile.length + 1];
@@ -466,7 +491,7 @@ public class Player {
                             System.out.print(card.getName() + " ");
                         }
                     }
-                    System.out.print("] energy \n");
+                    System.out.print("]\n");
 
                     System.out.print("Choose a pokemon to swap with the active pokemon (0 - N; position in array; if done then enter -1): ");
                     int arrayPosition = scan.nextInt();
@@ -501,7 +526,7 @@ public class Player {
                     setDiscardPile(newDiscardPile);
 
                 } else{
-                    System.out.print("Your " + currentActivePokemon.getName() + " does not have enough energy to retreat!");
+                    System.out.println("Your " + currentActivePokemon.getName() + " does not have enough energy to retreat!");
                     break;
                 }
 
@@ -535,7 +560,7 @@ public class Player {
         String[] abilityList = currentActivePokemon.getAbilityDescriptions();
         System.out.print("Your " + currentActivePokemon.getName() + " has [");
         for(String ability : abilityList){
-            System.out.print(ability + ", ");
+            System.out.print(ability + " ");
         }
         System.out.print("] abilities \n");
 
@@ -578,10 +603,10 @@ public class Player {
 
                         System.out.println("Enemy's " + opponentActivePokemon.getName() + " health is now " + opponentActivePokemon.getHP());
 
-                        if(newOpponentHp == 0){
+                        if(newOpponentHp <= 0){
 
                             //Allow current player to draw from the prize pile
-                            System.out.println("\nThe enemy's " + opponentActivePokemon.getName() + " has fallen. You may draw rom the prize pile!");
+                            System.out.println("\nThe enemy's " + opponentActivePokemon.getName() + " has fallen. You may draw from the prize pile!");
                             getPrizeCard();
 
                         }
@@ -594,6 +619,68 @@ public class Player {
                 System.out.println("Error: Active Pokemon is not a valid Pokemon instance.");
             }
 
+        }
+
+        return true;
+    }
+
+    /*
+     * 
+     */
+    public Boolean allowPokemonAttackAI(Player opponentPlayer){
+
+        Random random = new Random();
+
+        Card currentActivePokemon = getActiveField();
+        Energy[] activeEnergies = currentActivePokemon.getEnergies();
+
+        //Randomly choose an ability to perform (with our without knowing if enough energy)
+        String[] abilityList = currentActivePokemon.getAbilityDescriptions();
+        String abilityChosen = abilityList[random.nextInt(2)];
+
+        if (currentActivePokemon instanceof Pokemon) {
+            Pokemon activePokemon = (Pokemon) currentActivePokemon;
+
+            try {
+                // Find the method for the chosen ability dynamically
+                Method method = activePokemon.getClass().getMethod(abilityChosen, Energy[].class);
+                Object result = method.invoke(activePokemon, (Object) activeEnergies); //Need casting for correct resolution
+
+                if (result instanceof Boolean) {
+                    Boolean collected = (Boolean) result;
+                    if (collected) {
+                        System.out.println("\nYour " + currentActivePokemon.getName() + " performs " + abilityChosen);
+                        System.out.println("You draw 1 extra card!");
+                        Card drawnCard = drawCard();
+                        System.out.println("You got a " + drawnCard.getName() + "!");
+                    }
+                } else if (result instanceof Integer) {
+                    int damageDone = (int) result;
+                    Pokemon opponentActivePokemon = (Pokemon) opponentPlayer.getActiveField();
+
+                    System.out.println("\nYour " + currentActivePokemon.getName() + " has attacked with " + abilityChosen + " causing " + damageDone + " damage to " + opponentActivePokemon.getName() + "!");
+                    
+                    // Update health based on damage dealt
+                    int currentOpponentHP = opponentActivePokemon.getHP();
+                    int newOpponentHp = currentOpponentHP - damageDone;
+                    opponentActivePokemon.setHP(newOpponentHp);
+
+                    System.out.println("Enemy's " + opponentActivePokemon.getName() + " health is now " + opponentActivePokemon.getHP());
+
+                    if(newOpponentHp == 0){
+
+                        //Allow current player to draw from the prize pile
+                        System.out.println("\nThe enemy's " + opponentActivePokemon.getName() + " has fallen. You may draw rom the prize pile!");
+                        getPrizeCard();
+
+                    }
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("Error: Active Pokemon is not a valid Pokemon instance.");
         }
 
         return true;
