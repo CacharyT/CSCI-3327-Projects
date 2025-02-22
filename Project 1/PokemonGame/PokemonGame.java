@@ -848,45 +848,61 @@ public class PokemonGame {
      */
     public void benchPokemonFromHand(Player player, int arrayPosition){ //NOTE: MIGHT NEED TO MOVE TO PLAYER
 
-        //Get the pokemon from the hand
+        //Get the pokemon from the hand, but check first if of type pokemon, otherwise not allowed
         Card[] currentHand = player.getHand();
         Card pokemonCard = currentHand[arrayPosition];
 
-        //Remove from the hand and update hand
-        Card[] newHand = new Card[currentHand.length - 1];
-        int newIndex = 0; //Allows for shifting the skipped values down
-        for(int i = 0; i < currentHand.length; i++){
-            if(i != arrayPosition){
-                newHand[newIndex++] = currentHand[i];
+        if(pokemonCard.getCardType().equals("Pokemon")){
+
+            //Remove from the hand and update hand
+            Card[] newHand = new Card[currentHand.length - 1];
+            int newIndex = 0; //Allows for shifting the skipped values down
+            for(int i = 0; i < currentHand.length; i++){
+                if(i != arrayPosition){
+                    newHand[newIndex++] = currentHand[i];
+                }
             }
-        }
-        player.setHand(newHand);
+            player.setHand(newHand);
 
 
-        //Add on the newBench and update the bench
-        Card[] currentBench = player.getbench();
-        Card[] newBench = new Card[currentBench.length];
-        Boolean benchHasSpace = false;
+            //Add on the newBench and update the bench
+            Card[] currentBench = player.getbench();
+            Card[] newBench = new Card[currentBench.length];
+            Boolean benchHasSpace = false;
 
-        //Check first if the bench is already full
-        for(Card card : currentBench){
-            if(card == null){
-                benchHasSpace = true;
+            //Check first if the bench is already full
+            for(Card card : currentBench){
+                if(card == null){
+                    benchHasSpace = true;
+                }
             }
-        }
 
-        for(int i = 0; i < currentBench.length; i++){
+            if(benchHasSpace){
 
-            if(currentBench[i] != null){
-                newBench[i] = currentBench[i];
+                for(int i = 0; i < currentBench.length; i++){
+
+                    if(currentBench[i] != null){
+                        newBench[i] = currentBench[i];
+                    } else{
+                        newBench[i] = pokemonCard;
+                        break;
+                    }
+    
+                }
+    
+                player.setBench(newBench);
+
             } else{
-                newBench[i] = pokemonCard;
-                break;
+
+                System.out.println("There are no more space left in the bench.");
+
             }
 
-        }
+        } else{
 
-        player.setBench(newBench);
+            System.out.println("Chosen card is not a pokemon. Pick again.");
+
+        }
 
     }
 
@@ -1231,6 +1247,8 @@ public class PokemonGame {
 
             }
 
+
+            //CHECK WHICH DECISION BEING PERFORMED
             System.out.println(decision);
 
             switch(decision){
