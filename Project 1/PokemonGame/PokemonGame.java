@@ -644,9 +644,9 @@ public class PokemonGame {
     /*
      * 
      */
-    public void addPokemonEnergy(Player player, int arrayPosition){
+    public Boolean addPokemonEnergy(Player player, int arrayPosition){
 
-        player.addEnergyToPokemon(arrayPosition);
+        return player.addEnergyToPokemon(arrayPosition);
 
     }
 
@@ -1032,7 +1032,9 @@ public class PokemonGame {
             return false;
         }
 
+        //Turn restrictors
         Boolean endTurn = false;
+        Boolean doneEnergy = false;
 
         while(!endTurn){
 
@@ -1054,26 +1056,29 @@ public class PokemonGame {
             System.out.print("Player choice: ");
 
             int decision = scan.nextInt();
+            
 
             switch(decision){
                 case 1:
-                    Boolean energyDone = false;
+                    if(!doneEnergy){
 
-                    while(!energyDone){
-                        Card[] newHand = player1.getHand();
+                        Card[] newHandEnergy = player1.getHand();
                         System.out.print("This is your current hand: [");
-                        for(Card card : newHand){
+                        for(Card card : newHandEnergy){
                             System.out.print(card.getName() + " ");
                         }
                         System.out.print("]\n");
-                        System.out.print("Pick an energy card to place on the current active pokemon (0 - N; position in array; if done then enter -1): ");
-                        int arrayPosition = scan.nextInt();
 
-                        if(arrayPosition == -1){
-                            energyDone = true;
-                        } else{
-                            addPokemonEnergy(player1, arrayPosition);
+                        System.out.print("Would you like to continue to add an energy? (Y or N): ");
+                        String continueOrNot = scan.next().toLowerCase();
 
+                        if(continueOrNot.equals("y") || continueOrNot.equals("yes")){
+                            System.out.print("Pick an energy card to place on the current active pokemon (0 - N; position in array): ");
+                            int arrayPositionEnergy = scan.nextInt();
+                            doneEnergy = addPokemonEnergy(player1, arrayPositionEnergy);
+                        }
+
+                        if(doneEnergy){
                             Card activePokemon = player1.getActiveField();
                             System.out.print("\nYour active pokemon " + activePokemon.getName() + " now has [");
                             Energy[] pokemonEnergies = activePokemon.getEnergies();
@@ -1081,9 +1086,14 @@ public class PokemonGame {
                                 System.out.print(energy.getName() + " ");
                             }
                             System.out.println("]");
-
+                        } else{
+                            System.out.println("Adding energy failed.");
                         }
+
+                    } else{
+                        System.out.println("You can not add anymore energy this turn.");
                     }
+                    
                     
                     break;
                 case 2:
@@ -1157,7 +1167,9 @@ public class PokemonGame {
             return false;
         }
 
+        //Turn restrictors
         Boolean endTurn = false;
+        Boolean doneEnergy = false;
 
         while(!endTurn){
 
@@ -1250,36 +1262,43 @@ public class PokemonGame {
             switch(decision){
                 case 1:
 
-                    //Find the first energy and add it to the active pokemon
-                    Card[] playerHand = player1.getHand();
-                    int energyPosition = 0;
-                    Boolean fulfilled = false;
-                    for(int i = 0; i < playerHand.length; i++){
+                    
 
-                        if(playerHand[i].getCardType().equals("Energy")){
-                            energyPosition = i;
-                            fulfilled = true;
-                            break;
+                    if(!doneEnergy){
+
+                        //Find the first energy and add it to the active pokemon
+                        Card[] playerHand = player1.getHand();
+                        int energyPosition = 0;
+                        Boolean fulfilled = false;
+                        for(int i = 0; i < playerHand.length; i++){
+                            if(playerHand[i].getCardType().equals("Energy")){
+                                energyPosition = i;
+                                fulfilled = true;
+                                break;
+                            }
                         }
 
-                    }
+                        if(fulfilled){
 
-                    if(fulfilled){
+                            addPokemonEnergy(player1, energyPosition);
+                            Card activePokemon = player1.getActiveField();
+                            System.out.print("\nYour active pokemon " + activePokemon.getName() + " now has [");
+                            Energy[] pokemonEnergies = activePokemon.getEnergies();
+                            for(Energy energy: pokemonEnergies){
+                                System.out.print(energy.getName() + " ");
+                            }
+                            System.out.println("]");
 
-                        addPokemonEnergy(player1, energyPosition);
-                        Card activePokemon = player1.getActiveField();
-                        System.out.print("\nYour active pokemon " + activePokemon.getName() + " now has [");
-                        Energy[] pokemonEnergies = activePokemon.getEnergies();
-                        for(Energy energy: pokemonEnergies){
-                            System.out.print(energy.getName() + " ");
+                        } else{
+
+                            System.out.println("Found no energy.");
+                            System.out.println("Current player has ended their turn!");
+                            endTurn = true;
+
                         }
-                        System.out.println("]");
 
                     } else{
-
-                        System.out.println("Found no energy.");
-                        endTurn = true;
-
+                        System.out.println("You can not add anymore energy this turn.");
                     }
 
 
@@ -1309,6 +1328,7 @@ public class PokemonGame {
                         }
                     } else{
                         System.out.println("Found no trainer card.");
+                        System.out.println("Current player has ended their turn!");
                         endTurn = true;
                     }
 
@@ -1333,6 +1353,7 @@ public class PokemonGame {
                         benchPokemonFromHand(player1, arrayPositionBench);
                     } else{
                         System.out.println("Found no pokemon.");
+                        System.out.println("Current player has ended their turn!");
                         endTurn = true;
                     }
 
@@ -1391,6 +1412,7 @@ public class PokemonGame {
 
                     } else{
                         System.out.print("Your " + currentPokemon.getName() + " does not have enough energy to retreat!");
+                        System.out.println("Current player has ended their turn!");
                         endTurn = true;
                     }
 

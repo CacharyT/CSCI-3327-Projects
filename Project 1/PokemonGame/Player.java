@@ -41,21 +41,10 @@ public class Player {
         int totalCards = 60;
         Card[] newDeck = new Card[totalCards];
 
-        //Minimum of 1 Pokemon must be in the deck
-        int pokemonCount = random.nextInt(totalCards);
-
-        while(pokemonCount == 0){
-            pokemonCount = random.nextInt(totalCards);
-        }
-
-        totalCards -= pokemonCount;
-
-        //maximum of 4 trainer cards per trainer type
-        int trainerCount = 16; //only 4 different trainer types (currently)
-        totalCards -= trainerCount;
-
-        int energyCount = totalCards;
-
+        //Default deck to 16 16 28
+        int pokemonCount = 16;
+        int trainerCount = 16;
+        int energyCount = 28;
 
         for(int i = 0; i < pokemonCount; i++){
             int pokemonType = random.nextInt(4);
@@ -367,7 +356,7 @@ public class Player {
     /*
      * 
      */
-    public void addEnergyToPokemon(int arrayPosition){
+    public Boolean addEnergyToPokemon(int arrayPosition){
 
         Card[] currentHand = getHand();
         Card activePokemon = getActiveField();
@@ -380,19 +369,28 @@ public class Player {
             newEnergies[i] = currentEnergies[i];
         }
 
-        newEnergies[newEnergies.length - 1] = (Energy) currentHand[arrayPosition];
-        activePokemon.setEnergies(newEnergies);
+        if(currentHand[arrayPosition].getCardType().equals("Energy")){
+
+            newEnergies[newEnergies.length - 1] = (Energy) currentHand[arrayPosition];
+            activePokemon.setEnergies(newEnergies);
 
 
-        //Remove energy card from hand and update hand
-        Card[] newHand = new Card[currentHand.length - 1];
-        int newIndex = 0;
-        for(int i = 0; i < currentHand.length; i++){
-            if(i != arrayPosition){
-                newHand[newIndex++] = currentHand[i];
+            //Remove energy card from hand and update hand
+            Card[] newHand = new Card[currentHand.length - 1];
+            int newIndex = 0;
+            for(int i = 0; i < currentHand.length; i++){
+                if(i != arrayPosition){
+                    newHand[newIndex++] = currentHand[i];
+                }
             }
+            setHand(newHand);
+
+            return true;
+            
+        } else{
+            System.out.println("Chosen card is not an energy card.");
+            return false;
         }
-        setHand(newHand);
 
     }
 
