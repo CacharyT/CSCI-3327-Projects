@@ -846,7 +846,7 @@ public class PokemonGame {
     /*
      * 
      */
-    public void benchPokemonFromHand(Player player, int arrayPosition){ //NOTE: MIGHT NEED TO MOVE TO PLAYER
+    public void benchPokemonFromHand(Player player, int arrayPosition){
 
         //Get the pokemon from the hand, but check first if of type pokemon, otherwise not allowed
         Card[] currentHand = player.getHand();
@@ -1247,10 +1247,6 @@ public class PokemonGame {
 
             }
 
-
-            //CHECK WHICH DECISION BEING PERFORMED
-            System.out.println(decision);
-
             switch(decision){
                 case 1:
 
@@ -1282,6 +1278,7 @@ public class PokemonGame {
                     } else{
 
                         System.out.println("Found no energy.");
+                        endTurn = true;
 
                     }
 
@@ -1307,14 +1304,12 @@ public class PokemonGame {
                     //If trainer card is Recyle or Mr.Fuji; then redo turn (will lose the card)
                     if(foundValue){
                         Card trainerCard = trainerHand[arrayPosition];
-
-                        if(trainerCard instanceof MrFuji || trainerCard instanceof Recylce){
-                            continue;
-                        } else if(trainerCard instanceof Bill || trainerCard instanceof ProfessorOak){
+                        if(trainerCard instanceof Bill || trainerCard instanceof ProfessorOak){
                             playTrainerCard(player1, arrayPosition);
                         }
                     } else{
                         System.out.println("Found no trainer card.");
+                        endTurn = true;
                     }
 
                     break;
@@ -1338,6 +1333,7 @@ public class PokemonGame {
                         benchPokemonFromHand(player1, arrayPositionBench);
                     } else{
                         System.out.println("Found no pokemon.");
+                        endTurn = true;
                     }
 
                     break;
@@ -1366,16 +1362,16 @@ public class PokemonGame {
                         Card[] currentDiscardPile = player1.getDiscardPile();
 
                         //Find the first pokemon in the bench
-                        Card newActivePokemon = currentBench[0];
+                        Card newActivePokemon = bench[0];
 
                         //Swap pokemon
-                        Card[] newBench = new Card[currentBench.length];
-                        for(int i = 0; i < currentBench.length; i++){
+                        Card[] newBench = new Card[bench.length];
+                        for(int i = 0; i < bench.length; i++){
 
                             if(i == 0){
                                 newBench[i] = currentPokemon;
                             } else{
-                                newBench[i] = currentBench[i];
+                                newBench[i] = bench[i];
                             }
 
                         }
@@ -1395,7 +1391,7 @@ public class PokemonGame {
 
                     } else{
                         System.out.print("Your " + currentPokemon.getName() + " does not have enough energy to retreat!");
-                        break;
+                        endTurn = true;
                     }
 
                     break;
