@@ -114,5 +114,25 @@ public class Energy extends Card{
 
     }
 
+    /*
+     * 
+     */
+    @Override
+    public String getWeakness(){
+
+        return null;
+
+    }
+
+    /*
+     * 
+     */
+    @Override
+    public String getElementType(){
+
+        return null;
+
+    }
+
     
 }

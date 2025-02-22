@@ -1231,6 +1231,8 @@ public class PokemonGame {
 
             }
 
+            System.out.println(decision);
+
             switch(decision){
                 case 1:
 
@@ -1241,7 +1243,6 @@ public class PokemonGame {
                     for(int i = 0; i < playerHand.length; i++){
 
                         if(playerHand[i].getCardType().equals("Energy")){
-                            System.out.println("Current Card Checked: " + playerHand[i].getCardType());
                             energyPosition = i;
                             fulfilled = true;
                             break;
@@ -1273,10 +1274,12 @@ public class PokemonGame {
                     //Find the first trainer card in hand, play it
                     Card[] trainerHand = player1.getHand();
                     int arrayPosition = 0;
+                    Boolean foundValue = false;
                     for(int i = 0; i < trainerHand.length; i++){
 
                         if(trainerHand[i].getCardType().equals("Trainer")){
                             arrayPosition = i;
+                            foundValue = true;
                             break;
                         }
 
@@ -1284,12 +1287,16 @@ public class PokemonGame {
 
                     //Restrictions: AI can not play Mr.Fuji & Recycle (due to input limitation)
                     //If trainer card is Recyle or Mr.Fuji; then redo turn (will lose the card)
-                    Card trainerCard = trainerHand[arrayPosition];
+                    if(foundValue){
+                        Card trainerCard = trainerHand[arrayPosition];
 
-                    if(trainerCard instanceof MrFuji || trainerCard instanceof Recylce){
-                        continue;
-                    } else if(trainerCard instanceof Bill || trainerCard instanceof ProfessorOak){
-                        playTrainerCard(player1, arrayPosition);
+                        if(trainerCard instanceof MrFuji || trainerCard instanceof Recylce){
+                            continue;
+                        } else if(trainerCard instanceof Bill || trainerCard instanceof ProfessorOak){
+                            playTrainerCard(player1, arrayPosition);
+                        }
+                    } else{
+                        System.out.println("Found no trainer card.");
                     }
 
                     break;

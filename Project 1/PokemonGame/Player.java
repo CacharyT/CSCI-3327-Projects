@@ -591,24 +591,53 @@ public class Player {
                             System.out.println("You got a " + drawnCard.getName() + "!");
                         }
                     } else if (result instanceof Integer) {
-                        int damageDone = (int) result;
+                        //Check element types and give damage multiplier if applicable
                         Pokemon opponentActivePokemon = (Pokemon) opponentPlayer.getActiveField();
 
-                        System.out.println("\nYour " + currentActivePokemon.getName() + " has attacked with " + abilityChosen + " causing " + damageDone + " damage to " + opponentActivePokemon.getName() + "!");
-                        
-                        // Update health based on damage dealt
-                        int currentOpponentHP = opponentActivePokemon.getHP();
-                        int newOpponentHp = currentOpponentHP - damageDone;
-                        opponentActivePokemon.setHP(newOpponentHp);
+                        String activeElement = activePokemon.getElementType();
+                        String opponentWeakness = opponentActivePokemon.getWeakness();
+                        if(activeElement.equals(opponentWeakness)){
 
-                        System.out.println("Enemy's " + opponentActivePokemon.getName() + " health is now " + opponentActivePokemon.getHP());
-
-                        if(newOpponentHp <= 0){
-
-                            //Allow current player to draw from the prize pile
-                            System.out.println("\nThe enemy's " + opponentActivePokemon.getName() + " has fallen. You may draw from the prize pile!");
-                            getPrizeCard();
-
+                            int damageDone = (int) result * 2;
+                            System.out.println("\n" + opponentActivePokemon.getName() + " is weak against " + opponentWeakness + "! 2X damage applied!");
+                            System.out.println("\nYour " + currentActivePokemon.getName() + " has attacked with " + abilityChosen + " causing " + damageDone + " damage to " + opponentActivePokemon.getName() + "!");
+                            
+                            // Update health based on damage dealt
+                            int currentOpponentHP = opponentActivePokemon.getHP();
+                            int newOpponentHp = currentOpponentHP - damageDone;
+                            opponentActivePokemon.setHP(newOpponentHp);
+    
+                            System.out.println("Enemy's " + opponentActivePokemon.getName() + " health is now " + opponentActivePokemon.getHP());
+    
+                            if(newOpponentHp <= 0){
+    
+                                //Allow current player to draw from the prize pile
+                                System.out.println("\nThe enemy's " + opponentActivePokemon.getName() + " has fallen. You may draw from the prize pile!");
+                                getPrizeCard();
+    
+                            }
+    
+                        } else {
+    
+                            int damageDone = (int) result;
+    
+                            System.out.println("\nYour " + currentActivePokemon.getName() + " has attacked with " + abilityChosen + " causing " + damageDone + " damage to " + opponentActivePokemon.getName() + "!");
+                            
+                            // Update health based on damage dealt
+                            int currentOpponentHP = opponentActivePokemon.getHP();
+                            int newOpponentHp = currentOpponentHP - damageDone;
+                            opponentActivePokemon.setHP(newOpponentHp);
+    
+                            System.out.println("Enemy's " + opponentActivePokemon.getName() + " health is now " + opponentActivePokemon.getHP());
+    
+                            if(newOpponentHp <= 0){
+    
+                                //Allow current player to draw from the prize pile
+                                System.out.println("\nThe enemy's " + opponentActivePokemon.getName() + " has fallen. You may draw from the prize pile!");
+                                getPrizeCard();
+    
+                            }
+    
                         }
 
                     }
@@ -655,26 +684,56 @@ public class Player {
                         System.out.println("You got a " + drawnCard.getName() + "!");
                     }
                 } else if (result instanceof Integer) {
-                    int damageDone = (int) result;
+
+                    //Check element types and give damage multiplier if applicable
                     Pokemon opponentActivePokemon = (Pokemon) opponentPlayer.getActiveField();
 
-                    System.out.println("\nYour " + currentActivePokemon.getName() + " has attacked with " + abilityChosen + " causing " + damageDone + " damage to " + opponentActivePokemon.getName() + "!");
-                    
-                    // Update health based on damage dealt
-                    int currentOpponentHP = opponentActivePokemon.getHP();
-                    int newOpponentHp = currentOpponentHP - damageDone;
-                    opponentActivePokemon.setHP(newOpponentHp);
+                    String activeElement = activePokemon.getElementType();
+                    String opponentWeakness = opponentActivePokemon.getWeakness();
 
-                    System.out.println("Enemy's " + opponentActivePokemon.getName() + " health is now " + opponentActivePokemon.getHP());
+                    if(activeElement.equals(opponentWeakness)){
 
-                    if(newOpponentHp == 0){
+                        int damageDone = (int) result * 2;
+                        System.out.println("\n" + opponentActivePokemon.getName() + " is weak against " + opponentWeakness + "! 2X damage applied!");
+                        System.out.println("\nYour " + currentActivePokemon.getName() + " has attacked with " + abilityChosen + " causing " + damageDone + " damage to " + opponentActivePokemon.getName() + "!");
+                        
+                        // Update health based on damage dealt
+                        int currentOpponentHP = opponentActivePokemon.getHP();
+                        int newOpponentHp = currentOpponentHP - damageDone;
+                        opponentActivePokemon.setHP(newOpponentHp);
 
-                        //Allow current player to draw from the prize pile
-                        System.out.println("\nThe enemy's " + opponentActivePokemon.getName() + " has fallen. You may draw rom the prize pile!");
-                        getPrizeCard();
+                        System.out.println("Enemy's " + opponentActivePokemon.getName() + " health is now " + opponentActivePokemon.getHP());
+
+                        if(newOpponentHp <= 0){
+
+                            //Allow current player to draw from the prize pile
+                            System.out.println("\nThe enemy's " + opponentActivePokemon.getName() + " has fallen. You may draw from the prize pile!");
+                            getPrizeCard();
+
+                        }
+
+                    } else {
+
+                        int damageDone = (int) result;
+
+                        System.out.println("\nYour " + currentActivePokemon.getName() + " has attacked with " + abilityChosen + " causing " + damageDone + " damage to " + opponentActivePokemon.getName() + "!");
+                        
+                        // Update health based on damage dealt
+                        int currentOpponentHP = opponentActivePokemon.getHP();
+                        int newOpponentHp = currentOpponentHP - damageDone;
+                        opponentActivePokemon.setHP(newOpponentHp);
+
+                        System.out.println("Enemy's " + opponentActivePokemon.getName() + " health is now " + opponentActivePokemon.getHP());
+
+                        if(newOpponentHp <= 0){
+
+                            //Allow current player to draw from the prize pile
+                            System.out.println("\nThe enemy's " + opponentActivePokemon.getName() + " has fallen. You may draw from the prize pile!");
+                            getPrizeCard();
+
+                        }
 
                     }
-
                 }
             } catch (Exception e) {
                 e.printStackTrace();

@@ -45,16 +45,14 @@ abstract class Card {
         return cardType;
     }
 
+    //Abstract methods
     public abstract String getName();
-
     public abstract Energy[] getEnergies();
-
     public abstract void setEnergies(Energy[] newEnergies);
-
     public abstract void activateEffect(Player player);
-
     public abstract Energy[] getRetreatCost();
-
     public abstract String[] getAbilityDescriptions();
+    public abstract String getWeakness();
+    public abstract String getElementType();
     
 }

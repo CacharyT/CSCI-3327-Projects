@@ -70,6 +70,7 @@ public class Pokemon extends Card{
     /*
      * 
      */
+    @Override
     public Energy[] getEnergies(){
         return energies;
     }
@@ -77,6 +78,7 @@ public class Pokemon extends Card{
     /*
      * 
      */
+    @Override
     public void activateEffect(Player player){
 
 
@@ -85,6 +87,7 @@ public class Pokemon extends Card{
     /*
      * 
      */
+    @Override
     public Energy[] getRetreatCost(){
 
         return new Energy[0];
@@ -94,9 +97,30 @@ public class Pokemon extends Card{
     /*
      * 
      */
+    @Override
     public String[] getAbilityDescriptions(){
 
         return new String[0];
+
+    }
+
+    /*
+     * 
+     */
+    @Override
+    public String getWeakness(){
+
+        return null;
+
+    }
+
+    /*
+     * 
+     */
+    @Override
+    public String getElementType(){
+
+        return null;
 
     }
 
