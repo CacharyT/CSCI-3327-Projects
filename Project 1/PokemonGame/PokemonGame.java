@@ -12,6 +12,7 @@ public class PokemonGame {
     
     //Global Variable(s)
     private Player[] players;
+    Boolean turnOne;
 
 
     /*
@@ -23,6 +24,7 @@ public class PokemonGame {
         players = new Player[2];
         players[0] = new Player();
         players[1] = new Player();
+        turnOne = true;
     }
 
     /*
@@ -405,6 +407,7 @@ public class PokemonGame {
                 break;
             }
             playerTurn(player1, player2);
+            setTurnOne(false);
             winnerFound = checkWinner(player1, player2);
             if(winnerFound != null){
                 break;
@@ -446,6 +449,7 @@ public class PokemonGame {
                 break;
             }
             aiTurn(player1, player2);
+            setTurnOne(false);
             winnerFound = checkWinner(player2, player1);
             if(winnerFound != null){
                 break;
@@ -487,6 +491,7 @@ public class PokemonGame {
                 break;
             }
             playerTurn(player1, player2);
+            setTurnOne(false);
             winnerFound = checkWinner(player1, player2);
             if(winnerFound != null){
                 break;
@@ -528,6 +533,7 @@ public class PokemonGame {
                 break;
             }
             playerTurn(player1, player2);
+            setTurnOne(false);
             winnerFound = checkWinner(player1, player2);
             if(winnerFound != null){
                 break;
@@ -1137,12 +1143,15 @@ public class PokemonGame {
 
                     break;
                 case 5:
-
-                    Boolean state = attackPokemon(player1, player2);
-                    if(state){
-                        System.out.println("Current player has ended their turn!");
-                        endTurn = true;
-                    } 
+                    if(!getTurnOne()){
+                        Boolean state = attackPokemon(player1, player2);
+                        if(state){
+                            System.out.println("Current player has ended their turn!");
+                            endTurn = true;
+                        } 
+                    } else{
+                        System.out.println("You can not attack during the first turn.");
+                    }
                     break;
                 case 6:
                     System.out.println("\nCurrent player has ended their turn!");
@@ -1432,12 +1441,15 @@ public class PokemonGame {
 
                     break;
                 case 5:
-
-                    Boolean state = attackPokemonAI(player1, player2);
-                    if(state){
-                        System.out.println("Current player has ended their turn!");
-                        endTurn = true;
-                    } 
+                    if(getTurnOne()){
+                        Boolean state = attackPokemonAI(player1, player2);
+                        if(state){
+                            System.out.println("Current player has ended their turn!");
+                            endTurn = true;
+                        } 
+                    } else{
+                        System.out.println("You can not attack during the first turn.");
+                    }
                     break;
                 case 6:
                     System.out.println("\nCurrent player has ended their turn!");
@@ -1746,6 +1758,24 @@ public class PokemonGame {
      */
     public void setPlayers(Player[] newPlayers){
         players = newPlayers;
+    }
+
+    /*
+     * This function will get the turn one
+     * @param none
+     * @return boolean value
+     */
+    public Boolean getTurnOne(){
+        return turnOne;
+    }
+
+    /*
+     * This function sets whether its turn one or not
+     * @param boolean value
+     * @return none
+     */
+    public void setTurnOne(Boolean turn){
+        turnOne = turn;
     }
 
 }
