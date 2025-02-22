@@ -599,8 +599,16 @@ public class Player {
                         if(activeElement.equals(opponentWeakness)){
 
                             int damageDone = (int) result * 2;
-                            System.out.println("\n" + opponentActivePokemon.getName() + " is weak against " + opponentWeakness + "! 2X damage applied!");
-                            System.out.println("\nYour " + currentActivePokemon.getName() + " has attacked with " + abilityChosen + " causing " + damageDone + " damage to " + opponentActivePokemon.getName() + "!");
+                            if(damageDone > 0){
+
+                                System.out.println("\n" + opponentActivePokemon.getName() + " is weak against " + opponentWeakness + "! 2X damage applied!");
+                                System.out.println("\nYour " + currentActivePokemon.getName() + " has attacked with " + abilityChosen + " causing " + damageDone + " damage to " + opponentActivePokemon.getName() + "!");
+    
+                            } else{
+    
+                                System.out.println("\nYour " + currentActivePokemon.getName() + " dealt no damage.");
+    
+                            }
                             
                             // Update health based on damage dealt
                             int currentOpponentHP = opponentActivePokemon.getHP();
@@ -620,8 +628,16 @@ public class Player {
                         } else {
     
                             int damageDone = (int) result;
+
+                            if(damageDone > 0){
+
+                                System.out.println("\nYour " + currentActivePokemon.getName() + " has attacked with " + abilityChosen + " causing " + damageDone + " damage to " + opponentActivePokemon.getName() + "!");
     
-                            System.out.println("\nYour " + currentActivePokemon.getName() + " has attacked with " + abilityChosen + " causing " + damageDone + " damage to " + opponentActivePokemon.getName() + "!");
+                            } else{
+    
+                                System.out.println("\nYour " + currentActivePokemon.getName() + " dealt no damage.");
+    
+                            }
                             
                             // Update health based on damage dealt
                             int currentOpponentHP = opponentActivePokemon.getHP();
@@ -694,8 +710,18 @@ public class Player {
                     if(activeElement.equals(opponentWeakness)){
 
                         int damageDone = (int) result * 2;
-                        System.out.println("\n" + opponentActivePokemon.getName() + " is weak against " + opponentWeakness + "! 2X damage applied!");
-                        System.out.println("\nYour " + currentActivePokemon.getName() + " has attacked with " + abilityChosen + " causing " + damageDone + " damage to " + opponentActivePokemon.getName() + "!");
+
+                        if(damageDone > 0){
+
+                            System.out.println("\n" + opponentActivePokemon.getName() + " is weak against " + opponentWeakness + "! 2X damage applied!");
+                            System.out.println("\nYour " + currentActivePokemon.getName() + " has attacked with " + abilityChosen + " causing " + damageDone + " damage to " + opponentActivePokemon.getName() + "!");
+
+                        } else{
+
+                            System.out.println("\nYour " + currentActivePokemon.getName() + " dealt no damage.");
+
+                        }
+                        
                         
                         // Update health based on damage dealt
                         int currentOpponentHP = opponentActivePokemon.getHP();
@@ -716,8 +742,17 @@ public class Player {
 
                         int damageDone = (int) result;
 
-                        System.out.println("\nYour " + currentActivePokemon.getName() + " has attacked with " + abilityChosen + " causing " + damageDone + " damage to " + opponentActivePokemon.getName() + "!");
-                        
+                        if(damageDone > 0){
+
+                            System.out.println("\nYour " + currentActivePokemon.getName() + " has attacked with " + abilityChosen + " causing " + damageDone + " damage to " + opponentActivePokemon.getName() + "!");
+
+                        } else{
+
+                            System.out.println("\nYour " + currentActivePokemon.getName() + " dealt no damage.");
+
+                        }
+
+
                         // Update health based on damage dealt
                         int currentOpponentHP = opponentActivePokemon.getHP();
                         int newOpponentHp = currentOpponentHP - damageDone;

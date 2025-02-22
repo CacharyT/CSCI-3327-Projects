@@ -1129,7 +1129,7 @@ public class PokemonGame {
     /*
      * 
      */
-    private Boolean aiTurn(Player player1, Player player2){ 
+    private Boolean aiTurn(Player player1, Player player2){ //CHECK FULLY IF CHECKING ALL ALLOWED POSSIBILITY!!!!!!!!!!!!!!!!!!!
 
         Random random = new Random();
 
