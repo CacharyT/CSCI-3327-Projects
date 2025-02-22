@@ -439,7 +439,7 @@ public class Player {
     /*
      * 
      */
-    public void allowRetreatPokemon(){
+    public Boolean allowRetreatPokemon(){
 
         Scanner scan = new Scanner(System.in);
 
@@ -530,8 +530,10 @@ public class Player {
 
             } else{
                 doneSwap = true;
+                return doneSwap;
             }
         }
+        return doneSwap;
     }
 
 

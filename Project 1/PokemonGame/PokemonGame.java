@@ -663,9 +663,9 @@ public class PokemonGame {
     /*
      * 
      */
-    public void retreatPokemon(Player player){
+    public Boolean retreatPokemon(Player player){
 
-        player.allowRetreatPokemon();
+        return player.allowRetreatPokemon();
 
     }
 
@@ -1035,6 +1035,7 @@ public class PokemonGame {
         //Turn restrictors
         Boolean endTurn = false;
         Boolean doneEnergy = false;
+        Boolean doneRetreat = false;
 
         while(!endTurn){
 
@@ -1128,7 +1129,11 @@ public class PokemonGame {
                     break;
                 case 4:
 
-                    retreatPokemon(player1);
+                    if(!doneRetreat){
+                        doneRetreat = retreatPokemon(player1);
+                    } else{
+                        System.out.println("You can not perform a retreat again for this turn.");
+                    }
 
                     break;
                 case 5:
@@ -1170,6 +1175,7 @@ public class PokemonGame {
         //Turn restrictors
         Boolean endTurn = false;
         Boolean doneEnergy = false;
+        Boolean doneRetreat = false;
 
         while(!endTurn){
 
@@ -1360,60 +1366,68 @@ public class PokemonGame {
                     break;
                 case 4:
 
-                    //Get Active Pokemon
-                    Card currentPokemon = player1.getActiveField();
-                    Energy[] activeEnergies = currentPokemon.getEnergies();
+                    if(!doneRetreat){
 
-                    //Check first if pokemon has enough energy and correct types of energy
-                    Energy[] currentRetreatCost = currentPokemon.getRetreatCost();
+                        //Get Active Pokemon
+                        Card currentPokemon = player1.getActiveField();
+                        Energy[] activeEnergies = currentPokemon.getEnergies();
 
-                    //Checks if active pokemon has enough energy
-                    int correctCounter = currentRetreatCost.length;
-                    for(Energy retreatEnergy : currentRetreatCost){
-                        for(Energy activeEnergy : activeEnergies){
-                            if(activeEnergy.getName().equals(retreatEnergy.getName())){
-                                correctCounter--;
+                        //Check first if pokemon has enough energy and correct types of energy
+                        Energy[] currentRetreatCost = currentPokemon.getRetreatCost();
+
+                        //Checks if active pokemon has enough energy
+                        int correctCounter = currentRetreatCost.length;
+                        for(Energy retreatEnergy : currentRetreatCost){
+                            for(Energy activeEnergy : activeEnergies){
+                                if(activeEnergy.getName().equals(retreatEnergy.getName())){
+                                    correctCounter--;
+                                }
                             }
                         }
-                    }
 
-                    if(correctCounter <= 0){
+                        if(correctCounter <= 0){
 
-                        Card[] bench = player1.getbench();
-                        Card[] currentDiscardPile = player1.getDiscardPile();
+                            Card[] bench = player1.getbench();
+                            Card[] currentDiscardPile = player1.getDiscardPile();
 
-                        //Find the first pokemon in the bench
-                        Card newActivePokemon = bench[0];
+                            //Find the first pokemon in the bench
+                            Card newActivePokemon = bench[0];
 
-                        //Swap pokemon
-                        Card[] newBench = new Card[bench.length];
-                        for(int i = 0; i < bench.length; i++){
+                            //Swap pokemon
+                            Card[] newBench = new Card[bench.length];
+                            for(int i = 0; i < bench.length; i++){
 
-                            if(i == 0){
-                                newBench[i] = currentPokemon;
-                            } else{
-                                newBench[i] = bench[i];
+                                if(i == 0){
+                                    newBench[i] = currentPokemon;
+                                } else{
+                                    newBench[i] = bench[i];
+                                }
+
                             }
-
-                        }
-                        player1.setBench(newBench);
-                        player1.setActiveField(newActivePokemon);
+                            player1.setBench(newBench);
+                            player1.setActiveField(newActivePokemon);
 
 
-                        //Move the used active energy to the discard pile
-                        Card[] newDiscardPile = new Card[currentDiscardPile.length + activeEnergies.length];
-                        for(int i = 0; i < currentDiscardPile.length; i++){
-                            newDiscardPile[i] = currentDiscardPile[i];
+                            //Move the used active energy to the discard pile
+                            Card[] newDiscardPile = new Card[currentDiscardPile.length + activeEnergies.length];
+                            for(int i = 0; i < currentDiscardPile.length; i++){
+                                newDiscardPile[i] = currentDiscardPile[i];
+                            }
+                            for(int i = activeEnergies.length; i > 0; i--){
+                                newDiscardPile[newDiscardPile.length - i] = activeEnergies[i - 1];
+                            }
+                            player1.setDiscardPile(newDiscardPile);
+
+                            doneRetreat = true;
+
+                        } else{
+                            System.out.print("Your " + currentPokemon.getName() + " does not have enough energy to retreat!");
+                            System.out.println("Current player has ended their turn!");
+                            endTurn = true;
                         }
-                        for(int i = activeEnergies.length; i > 0; i--){
-                            newDiscardPile[newDiscardPile.length - i] = activeEnergies[i - 1];
-                        }
-                        player1.setDiscardPile(newDiscardPile);
 
                     } else{
-                        System.out.print("Your " + currentPokemon.getName() + " does not have enough energy to retreat!");
-                        System.out.println("Current player has ended their turn!");
-                        endTurn = true;
+                        System.out.println("You can not perform a retreat again for this turn.");
                     }
 
                     break;
