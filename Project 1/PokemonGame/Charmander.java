@@ -1,10 +1,7 @@
 /*
- * 
+ * Cachary Tolentino
+ * This class represents a Charmander card. It contains various stats that a Charmander would have.
  */
-
- //Imports
-
-
 
 public class Charmander extends Pokemon{
     
@@ -36,12 +33,13 @@ public class Charmander extends Pokemon{
     }
 
     /*
-     * 
+     * This functions activates Charmander's ability Collect
+     * @param energyRequirements an aray of energy objects
+     * @return a boolean value denoting if the ability was executed
      */
     public Boolean Collect(Energy[] energyRequirements){
 
         //Ability requires 1 fire energy
-
         int fireEnergyRequirement = 0;
 
         for(Card card : energyRequirements){
@@ -51,10 +49,7 @@ public class Charmander extends Pokemon{
         }
 
         if(fireEnergyRequirement >= 1){
-
             return true;
-
-
         } else{
             System.out.println("You need 1 fire energy to perform collect");
         }
@@ -65,12 +60,13 @@ public class Charmander extends Pokemon{
 
 
     /*
-     * 
+     * This functions activates Charmander's ability Flare
+     * @param energyRequirements an aray of energy objects
+     * @return an int value representing the damage dealt
      */
     public int Flare(Energy[] energyRequirements){
 
         //Ability requires 2 fire energy
-
         int fireEnergyRequirement = 0;
 
         for(Card card : energyRequirements){
@@ -78,7 +74,6 @@ public class Charmander extends Pokemon{
                 fireEnergyRequirement++;
             }
         }
-
 
         if(fireEnergyRequirement >= 2){
 
@@ -88,48 +83,59 @@ public class Charmander extends Pokemon{
             System.out.println("You need 2 fire energy to perform flare");
         }
 
-
         return 0; //did not meet energy requirements
 
     }
 
     /*
-     * 
+     * The function allows for changing the basicAttack value
+     * @param newBasic an int value
+     * @return none
      */
     public void setBasic(int newBasic){
         basicAttack = newBasic;
     }
 
     /*
-     * 
+     * The function allows for changing the specialAttack value
+     * @param newSpecialAttack an int value
+     * @return none
      */
     public void setSpecial(int newSpecial){
         specialAttack = newSpecial;
     }
 
     /*
-     * 
+     * The function allows for changing the abilityDescription value
+     * @param newAbilityDescription an array of string values
+     * @return none
      */
     public void setAbilityDescriptions(String[] newAbilityDescriptions){
         abilityDescription = newAbilityDescriptions;
     }
 
     /*
-     * 
+     * The function allows for changing the weakness value
+     * @param newWeakness a string value
+     * @return none
      */
     public void setWeakness(String newWeakness){
         weakness = newWeakness;
     }
 
     /*
-     * 
+     * The function allows for changing the retreatCost value
+     * @param newRetreat an array of energy objects
+     * @return none
      */
     public void setReatreatCost(Energy[] newRetreatCost){
         retreatCost = newRetreatCost;
     }
 
     /*
-     * 
+     * The function allows for changing the elementType value
+     * @param newElementType a string value
+     * @return none
      */
     public void setElementType(String newElementType){
         elementType = newElementType;
@@ -137,44 +143,60 @@ public class Charmander extends Pokemon{
 
 
     /*
-     * 
+     * The fucntion returns the basicAttack value
+     * @param none
+     * @return basicAttack an int value
      */
     public int getBasic(){
         return basicAttack;
     }
 
     /*
-     * 
+     * The fucntion returns the specialAttack value
+     * @param none
+     * @return specialAttack an int value
      */
     public int getSpecial(){
         return specialAttack;
     }
 
     /*
-     * 
+     * The fucntion returns the abilityDescription value
+     * @param none
+     * @return abilityDescription an array of strings
      */
+    @Override
     public String[] getAbilityDescriptions(){
         return abilityDescription;
     }
 
     /*
-     * 
+     * The fucntion returns the weakness value
+     * @param none
+     * @return weakness a string value
      */
+    @Override
     public String getWeakness(){
         return weakness;
     }
 
     /*
-     * 
+     * The fucntion returns the retreatCost value
+     * @param none
+     * @return retreatCost an array of energy objects
      */
+    @Override
     public Energy[] getRetreatCost(){
         return retreatCost;
     }
 
 
     /*
-     * 
+     * The fucntion returns the elementType value
+     * @param none
+     * @return elementType a string value
      */
+    @Override
     public String getElementType(){
         return elementType;
     }

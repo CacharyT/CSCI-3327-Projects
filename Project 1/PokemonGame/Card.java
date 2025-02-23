@@ -1,8 +1,7 @@
 /*
  * Cachary Tolentino
- * The Card class will be an object that contains a card type.
+ * The Card class will be an abstract object that contains a card type.
  */
-
 
 abstract class Card {
 
@@ -45,7 +44,7 @@ abstract class Card {
         return cardType;
     }
 
-    //Abstract methods
+    //Abstract methods (used primarily for the children objects of Card)
     public abstract String getName();
     public abstract Energy[] getEnergies();
     public abstract void setEnergies(Energy[] newEnergies);

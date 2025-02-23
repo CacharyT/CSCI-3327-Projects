@@ -34,6 +34,288 @@ public class Player {
     /*
      * 
      */
+    public Boolean playerTurn(Player player1, Player player2, Boolean turnOne){
+
+        Scanner scan = new Scanner(System.in);
+
+        System.out.println("Current player draws a card!");
+        Card drawnCard = player1.drawCard();
+        player1.addCardToHand(drawnCard);
+        System.out.println("You have drawn a " + drawnCard.getName() + "!");
+
+        //Turn restrictors
+        Boolean endTurn = false;
+        Boolean doneEnergy = false;
+        Boolean doneRetreat = false;
+
+        while(!endTurn){
+
+            if(!checkIfPokemonWinCondition(player1, player2)){
+                return false;
+            }
+
+            Card[] currentHand = player1.getHand();
+
+            System.out.print("This is your current hand: [");
+            for(Card card : currentHand){
+                System.out.print(card.getName() + " ");
+            }
+            System.out.print("]\n");
+
+            System.out.println("What would you like to do (enter the #): ");
+            System.out.println("1) Play 1 energy for the turn (put the energy on a pokemon)");
+            System.out.println("2) Play a trainer card");
+            System.out.println("3) Bench a pokemon");
+            System.out.println("4) Retreat active pokemon/swap with a benched pokemon");
+            System.out.println("5) Attack with active pokemon (ends turn)");
+            System.out.println("6) End turn");
+            System.out.print("Player choice: ");
+
+            int decision = scan.nextInt();
+            
+
+            switch(decision){
+                case 1:
+                    if(!doneEnergy){
+
+                        Card[] newHandEnergy = player1.getHand();
+                        System.out.print("This is your current hand: [");
+                        for(Card card : newHandEnergy){
+                            System.out.print(card.getName() + " ");
+                        }
+                        System.out.print("]\n");
+
+                        System.out.print("Would you like to continue to add an energy? (Y or N): ");
+                        String continueOrNot = "";
+                        try {
+                            continueOrNot = scan.next().toLowerCase();
+                        } catch (Exception e) {
+                            System.out.println("Invalid input.");
+                        }
+
+                        if(continueOrNot.equals("y") || continueOrNot.equals("yes")){
+                            System.out.print("Pick an energy card to place on the current active pokemon (0 - N; position in array): ");
+                            int arrayPositionEnergy = scan.nextInt();
+                            doneEnergy = player1.addEnergyToPokemon(arrayPositionEnergy);
+                        }
+
+                        if(doneEnergy){
+                            Card activePokemon = player1.getActiveField();
+                            System.out.print("\nYour active pokemon " + activePokemon.getName() + " now has [");
+                            Energy[] pokemonEnergies = activePokemon.getEnergies();
+                            for(Energy energy: pokemonEnergies){
+                                System.out.print(energy.getName() + " ");
+                            }
+                            System.out.println("]");
+                        } else{
+                            System.out.println("Adding energy failed.");
+                        }
+
+                    } else{
+                        System.out.println("You can not add anymore energy this turn.");
+                    }
+                    
+                    
+                    break;
+                case 2:
+                    Boolean trainerDone = false;
+
+                    while(!trainerDone){
+
+                        Card[] newHand = player1.getHand();
+                        System.out.print("This is your current hand: [");
+                        for(Card card : newHand){
+                            System.out.print(card.getName() + " ");
+                        }
+                        System.out.print("]\n");
+                        System.out.print("Pick a trainer card to play (0 - N; position in array; if done then enter -1): ");
+                        int arrayPosition = scan.nextInt();
+
+
+                        if(arrayPosition == -1){
+                            trainerDone = true;
+                        } else{
+
+                            player1.useTrainerCard(player1, arrayPosition);
+
+                        }
+                    }
+
+                    break;
+                case 3:
+
+                    beginningPokemonBench(player1);
+
+                    break;
+                case 4:
+
+                    if(!doneRetreat){
+                        doneRetreat = player1.allowRetreatPokemon();
+                    } else{
+                        System.out.println("You can not perform a retreat again for this turn.");
+                    }
+
+                    break;
+                case 5:
+                    if(!turnOne){
+                        Boolean state = player1.allowPokemonAttack(player2);
+                        if(state){
+                            System.out.println("Current player has ended their turn!");
+                            endTurn = true;
+                        } 
+                    } else{
+                        System.out.println("You can not attack during the first turn.");
+                    }
+                    break;
+                case 6:
+                    System.out.println("\nCurrent player has ended their turn!");
+                    endTurn = true;
+                    break;
+                default:
+                    System.out.println("Invalid option. Retry");
+                    break;
+            }
+        }
+        return false;
+    }
+
+    /*
+     * 
+     */
+    public void beginningPokemonBench(Player player){ //NOTE: MIGHT NEED TO MOVE TO PLAYER
+
+        Scanner scan = new Scanner(System.in);
+        Card[] currentHand = player.getHand();
+
+        int filledSpots = 0;
+        for(Card card : currentHand){
+            if(card != null){
+                filledSpots++;
+            }
+        }
+
+        //Check first if there are enough space (can not bench more than 6)
+        if(filledSpots != 6){
+            System.out.print("This is your current hand: ");
+            System.out.print("[");
+            for(Card card : currentHand){
+                System.out.print(card.getName() + " ");
+            }
+            System.out.print("]\n");
+
+            Boolean benchDone = false;
+
+            System.out.print("Would you like to bench any pokemon? (if applicable; Y or N): ");
+            String decision = "";
+            try {
+                decision = scan.next().toLowerCase();
+            } catch (Exception e) {
+                System.out.println("Invalid input.");
+            }
+
+            if(decision.equals("y")){
+
+                while(!benchDone){
+                    System.out.print("Which pokemon would you like to bench? (0 - N; position in array; if done then enter -1): ");
+                    int position = scan.nextInt();
+
+                    if(position == -1){
+                        break;
+                    } else{
+
+                        benchPokemonFromHand(player, position);
+                        Card[] newHand = player.getHand();
+
+                        System.out.print("This is your new current hand: ");
+                        System.out.print("[");
+                        for(Card card : newHand){
+                            System.out.print(card.getName() + " ");
+                        }
+                        System.out.print("]\n");
+
+                    }
+                }
+
+            } else if(decision.equals("n")){
+                //Does nothing
+            } else{
+                System.out.println("Invalid option. Retry.");
+                beginningPokemonBench(player);
+            }
+        } else{
+            System.out.println("Your bench is full!");
+        }
+
+    }
+
+
+    /*
+     * 
+     */
+    public void benchPokemonFromHand(Player player, int arrayPosition){
+
+        //Get the pokemon from the hand, but check first if of type pokemon, otherwise not allowed
+        Card[] currentHand = player.getHand();
+        Card pokemonCard = currentHand[arrayPosition];
+
+        if(pokemonCard.getCardType().equals("Pokemon")){
+
+            //Remove from the hand and update hand
+            Card[] newHand = new Card[currentHand.length - 1];
+            int newIndex = 0; //Allows for shifting the skipped values down
+            for(int i = 0; i < currentHand.length; i++){
+                if(i != arrayPosition){
+                    newHand[newIndex++] = currentHand[i];
+                }
+            }
+            player.setHand(newHand);
+
+
+            //Add on the newBench and update the bench
+            Card[] currentBench = player.getbench();
+            Card[] newBench = new Card[currentBench.length];
+            Boolean benchHasSpace = false;
+
+            //Check first if the bench is already full
+            for(Card card : currentBench){
+                if(card == null){
+                    benchHasSpace = true;
+                }
+            }
+
+            if(benchHasSpace){
+
+                for(int i = 0; i < currentBench.length; i++){
+
+                    if(currentBench[i] != null){
+                        newBench[i] = currentBench[i];
+                    } else{
+                        newBench[i] = pokemonCard;
+                        break;
+                    }
+    
+                }
+    
+                player.setBench(newBench);
+
+            } else{
+
+                System.out.println("There are no more space left in the bench.");
+
+            }
+
+        } else{
+
+            System.out.println("Chosen card is not a pokemon. Pick again.");
+
+        }
+
+    }
+
+
+    /*
+     * 
+     */
     public Card[] createDeck(){
 
         Random random = new Random();
@@ -436,6 +718,7 @@ public class Player {
 
     }
 
+    
     /*
      * 
      */
@@ -775,6 +1058,64 @@ public class Player {
             }
         } else {
             System.out.println("Error: Active Pokemon is not a valid Pokemon instance.");
+        }
+
+        return true;
+    }
+
+    /*
+     * 
+     */
+    public Boolean checkIfPokemonWinCondition(Player player1, Player player2){
+
+        //At the start of each turn, check if active pokemon still alive, otherwise make the player add one to the active zone
+        //if no pokemon available, end game
+        Pokemon activePokemon1 = (Pokemon) player1.getActiveField();
+
+        if(activePokemon1.getHP() <= 0){
+
+            //Check if bench contains a pokemon, if so, get the arrayposition for auto switch
+            Card[] currentBenchPokemon = player1.getHand();
+            int arrayPosition = 0;
+            for(int i = 0; i < currentBenchPokemon.length; i++){ 
+                
+                if(currentBenchPokemon[i].getCardType().equals("Pokemon")){
+                    arrayPosition = i;
+                    break;
+                }
+                
+            }
+
+            //check bench if any pokemon, if not then game over
+            if(arrayPosition == 0){ 
+
+                return false;
+
+            } else{
+
+                //move benched pokemon to the active field
+                Card benchPokemon = currentBenchPokemon[arrayPosition];
+                player1.setActiveField(benchPokemon);
+
+                //move the dead pokemon to the discard pile and its any energy attached to it
+                Card fallenPokemon = player1.getActiveField();
+                Card[] currentDiscardPile = player1.getDiscardPile();
+                Energy[] fallenPokemonEnergies = fallenPokemon.getEnergies();
+                Card[] newDiscardPile = new Card[fallenPokemonEnergies.length + 1];
+
+                for(int i = 0; i < currentDiscardPile.length; i++){
+                    newDiscardPile[i] = currentDiscardPile[i];
+                }
+
+                int index = 0;
+                for(int i = currentDiscardPile.length; i < newDiscardPile.length - 1; i++){
+                    newDiscardPile[i] = fallenPokemonEnergies[index++];
+                }
+                newDiscardPile[newDiscardPile.length - 1] = fallenPokemon;
+
+                player1.setDiscardPile(newDiscardPile);
+            }
+
         }
 
         return true;

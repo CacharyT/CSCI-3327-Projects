@@ -1,18 +1,20 @@
 /*
  * Cachary Tolentino
- * 
+ * This class emulates the effects of the Recycle card which allows the player to picka a card from the discard pile and return it into their deck
  */
 
+//Imports
 import java.util.*;
 
 public class Recylce extends Trainer{
-
 
     //Global Variable(s)
     private String trainerDescription;
 
     /*
      * Default Constructor
+     * @param none
+     * @return none
      */
     public Recylce(){
         super.setCardType("Trainer");
@@ -20,10 +22,12 @@ public class Recylce extends Trainer{
         trainerDescription = "Flip a coin. If heads, put a card in your discard pile on top of your deck.";
     }
 
-
     /*
-     * 
+     * This functions allows the player to move a card from the discard pile into their deck
+     * @param player a player object
+     * @return none
      */
+    @Override
     public void activateEffect(Player player){
 
         Scanner scan = new Scanner(System.in);
@@ -51,10 +55,15 @@ public class Recylce extends Trainer{
             }
             System.out.print("]\n");
             System.out.print("Pick a card (0 - N; position in array; if none then enter -1): ");
-            int arrayPosition = scan.nextInt();
+            int arrayPosition = 0;
+            try {
+                arrayPosition = scan.nextInt();
+            } catch (Exception e) {
+                System.out.println("Invalid Option");
+            }
 
             if(arrayPosition == -1){
-
+                //Does nothing
             } else{
 
                 //Add card to top of deck
@@ -90,14 +99,18 @@ public class Recylce extends Trainer{
     }
 
     /*
-     * 
+     * The function allows for changing the card description
+     * @param newDescription a string
+     * @return none
      */
     public void setTrainerDescription(String newDescription){
         trainerDescription = newDescription;
     }
 
     /*
-     * 
+     * The function returns the card description
+     * @param none
+     * @return trainerDescription a string value
      */
     public String getTrainerDescription(){
         return trainerDescription;
