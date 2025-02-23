@@ -1,5 +1,6 @@
 /*
- * 
+ * Cachary Tolentino
+ * The Player class emulates what a player would contain and be able to do in Pokemon TCG
  */
 
 //Imports
@@ -16,7 +17,6 @@ public class Player {
     private Card[] discardPile;
     private Card activeField;
 
-
     /*
      * Default Constructor (random mix of card types)
      * @param none
@@ -30,9 +30,12 @@ public class Player {
         discardPile = new Card[0];
     }
 
-
     /*
-     * 
+     * The function emulates a turn for a player (gives the player options)
+     * @param player1 a player object
+     * @param player2 a player object
+     * @param turnOne a boolean value
+     * @return boolean value indicating if the player has no more pokemon available to play (defeat)
      */
     public Boolean playerTurn(Player player1, Player player2, Boolean turnOne){
 
@@ -50,6 +53,7 @@ public class Player {
 
         while(!endTurn){
 
+            //Checks if the player has any playable pokemon
             if(!checkIfPokemonWinCondition(player1, player2)){
                 return false;
             }
@@ -62,6 +66,7 @@ public class Player {
             }
             System.out.print("]\n");
 
+            //Player options
             System.out.println("What would you like to do (enter the #): ");
             System.out.println("1) Play 1 energy for the turn (put the energy on a pokemon)");
             System.out.println("2) Play a trainer card");
@@ -70,12 +75,10 @@ public class Player {
             System.out.println("5) Attack with active pokemon (ends turn)");
             System.out.println("6) End turn");
             System.out.print("Player choice: ");
-
             int decision = scan.nextInt();
             
-
             switch(decision){
-                case 1:
+                case 1: //player can player a single energy per turn (add to the active pokemon)
                     if(!doneEnergy){
 
                         Card[] newHandEnergy = player1.getHand();
@@ -93,10 +96,11 @@ public class Player {
                             System.out.println("Invalid input.");
                         }
 
+                        //Adds energy to the active pokemon
                         if(continueOrNot.equals("y") || continueOrNot.equals("yes")){
                             System.out.print("Pick an energy card to place on the current active pokemon (0 - N; position in array): ");
                             int arrayPositionEnergy = scan.nextInt();
-                            doneEnergy = player1.addEnergyToPokemon(arrayPositionEnergy);
+                            doneEnergy = player1.addEnergyToPokemon(arrayPositionEnergy); //after adding energy, returned value signifies true to ensure can not add anymore during the current turn
                         }
 
                         if(doneEnergy){
@@ -114,12 +118,9 @@ public class Player {
                     } else{
                         System.out.println("You can not add anymore energy this turn.");
                     }
-                    
-                    
                     break;
-                case 2:
+                case 2: //allow player to play a trainer card (unlimited)
                     Boolean trainerDone = false;
-
                     while(!trainerDone){
 
                         Card[] newHand = player1.getHand();
@@ -131,32 +132,24 @@ public class Player {
                         System.out.print("Pick a trainer card to play (0 - N; position in array; if done then enter -1): ");
                         int arrayPosition = scan.nextInt();
 
-
                         if(arrayPosition == -1){
                             trainerDone = true;
                         } else{
-
-                            player1.useTrainerCard(player1, arrayPosition);
-
+                            player1.useTrainerCard(player1, arrayPosition); //activates the chosen card's effect
                         }
                     }
-
                     break;
-                case 3:
-
+                case 3: //allows the player to bench a pokemon from the hand (unlimited)
                     beginningPokemonBench(player1);
-
                     break;
-                case 4:
-
+                case 4: //allows the player to retreat their active pokemon once per turn
                     if(!doneRetreat){
                         doneRetreat = player1.allowRetreatPokemon();
                     } else{
                         System.out.println("You can not perform a retreat again for this turn.");
                     }
-
                     break;
-                case 5:
+                case 5: //allows the player to attack with active pokemon
                     if(!turnOne){
                         Boolean state = player1.allowPokemonAttack(player2);
                         if(state){
@@ -167,7 +160,7 @@ public class Player {
                         System.out.println("You can not attack during the first turn.");
                     }
                     break;
-                case 6:
+                case 6: //ends turn
                     System.out.println("\nCurrent player has ended their turn!");
                     endTurn = true;
                     break;
@@ -180,13 +173,16 @@ public class Player {
     }
 
     /*
-     * 
+     * The function allows the current player to bench any number of pokemon
+     * @param player a player object
+     * @return none
      */
-    public void beginningPokemonBench(Player player){ //NOTE: MIGHT NEED TO MOVE TO PLAYER
+    public void beginningPokemonBench(Player player){
 
         Scanner scan = new Scanner(System.in);
         Card[] currentHand = player.getHand();
 
+        //Count the number of filled spots
         int filledSpots = 0;
         for(Card card : currentHand){
             if(card != null){
@@ -215,7 +211,7 @@ public class Player {
 
             if(decision.equals("y")){
 
-                while(!benchDone){
+                while(!benchDone){ // allow player to bench as many pokemon as they want
                     System.out.print("Which pokemon would you like to bench? (0 - N; position in array; if done then enter -1): ");
                     int position = scan.nextInt();
 
@@ -237,8 +233,8 @@ public class Player {
                 }
 
             } else if(decision.equals("n")){
-                //Does nothing
-            } else{
+                //Does nothing (denies benching)
+            } else{ //restarts the function
                 System.out.println("Invalid option. Retry.");
                 beginningPokemonBench(player);
             }
@@ -248,73 +244,65 @@ public class Player {
 
     }
 
-
     /*
-     * 
+     * The function is a helper function for the beginningPokemonBench function which allows it bench any pokemon from the current player hand
+     * @param player a player object
+     * @param arrayposition an int value 
+     * @return none
      */
     public void benchPokemonFromHand(Player player, int arrayPosition){
 
-        //Get the pokemon from the hand, but check first if of type pokemon, otherwise not allowed
+        //Get the pokemon from the hand, 
         Card[] currentHand = player.getHand();
         Card pokemonCard = currentHand[arrayPosition];
 
-        if(pokemonCard.getCardType().equals("Pokemon")){
-
-            //Remove from the hand and update hand
-            Card[] newHand = new Card[currentHand.length - 1];
-            int newIndex = 0; //Allows for shifting the skipped values down
-            for(int i = 0; i < currentHand.length; i++){
-                if(i != arrayPosition){
-                    newHand[newIndex++] = currentHand[i];
-                }
-            }
-            player.setHand(newHand);
-
-
-            //Add on the newBench and update the bench
-            Card[] currentBench = player.getbench();
-            Card[] newBench = new Card[currentBench.length];
-            Boolean benchHasSpace = false;
+        if(pokemonCard.getCardType().equals("Pokemon")){ //check first if of type pokemon, otherwise not allowed
 
             //Check first if the bench is already full
+            Card[] currentBench = player.getbench();
+            Boolean benchHasSpace = false;
             for(Card card : currentBench){
                 if(card == null){
                     benchHasSpace = true;
                 }
             }
-
             if(benchHasSpace){
 
-                for(int i = 0; i < currentBench.length; i++){
+                //Remove from the hand and update hand
+                Card[] newHand = new Card[currentHand.length - 1];
+                int newIndex = 0; //Allows for shifting the skipped values down
+                for(int i = 0; i < currentHand.length; i++){
+                    if(i != arrayPosition){
+                        newHand[newIndex++] = currentHand[i];
+                    }
+                }
+                player.setHand(newHand);
 
+                //Add on the newBench and update the bench
+                Card[] newBench = new Card[currentBench.length];
+                for(int i = 0; i < currentBench.length; i++){
                     if(currentBench[i] != null){
                         newBench[i] = currentBench[i];
                     } else{
                         newBench[i] = pokemonCard;
                         break;
                     }
-    
                 }
-    
+
                 player.setBench(newBench);
-
             } else{
-
                 System.out.println("There are no more space left in the bench.");
-
             }
-
         } else{
-
             System.out.println("Chosen card is not a pokemon. Pick again.");
-
         }
-
     }
 
 
     /*
-     * 
+     * The function creates a default allocation deck (16 pokemon - 16 trainer - 28 energy)
+     * @param none
+     * @return an array of card objects
      */
     public Card[] createDeck(){
 
@@ -328,6 +316,7 @@ public class Player {
         int trainerCount = 16;
         int energyCount = 28;
 
+        //Randomly chooses which pokemon type to create
         for(int i = 0; i < pokemonCount; i++){
             int pokemonType = random.nextInt(4);
             switch(pokemonType){
@@ -346,6 +335,7 @@ public class Player {
             }
         }
 
+        //Randomly chooses which energy type to create
         for(int i = pokemonCount; i < energyCount + pokemonCount; i++){
             int energyType = random.nextInt(5);
             switch(energyType){
@@ -367,6 +357,7 @@ public class Player {
             }
         }
 
+        //Randomly chooses which trainer card to make
         for(int i = pokemonCount + energyCount; i < energyCount + pokemonCount + trainerCount; i++){
             int trainerType = random.nextInt(4);
             switch(trainerType){
@@ -387,20 +378,22 @@ public class Player {
 
         //Update the deck
         setDeck(newDeck);
-
         return newDeck;
-
     }
 
-
     /*
-     * 
+     * The function creates the player deck based on a given allocation of each card
+     * @param pokemonCount an int value
+     * @param trainerCount an int value
+     * @param energyCount an int value
+     * @return an array of card objects
      */
     public Card[] createDeck(int pokemonCount, int trainerCount, int energyCount){
         
         Random random = new Random();
 
-        if(trainerCount > 16 || pokemonCount > 16 || (trainerCount + pokemonCount + energyCount) < 60 || (trainerCount + pokemonCount + energyCount) > 60){ //To ensure that the player does not exceed 4 cards per card type
+        //To ensure that the player does not exceed 4 cards per card type
+        if(trainerCount > 16 || pokemonCount > 16 || (trainerCount + pokemonCount + energyCount) < 60 || (trainerCount + pokemonCount + energyCount) > 60){
             System.out.println("Invalid allocation sizes. Please try again.");
             return null;
         }
@@ -408,6 +401,7 @@ public class Player {
         int totalCards = 60;
         Card[] newDeck = new Card[totalCards];
 
+        //Randomly chooses which pokemon type to create
         for(int i = 0; i < pokemonCount; i++){
             int pokemonType = random.nextInt(4);
             switch(pokemonType){
@@ -426,6 +420,7 @@ public class Player {
             }
         }
 
+        //Randomly chooses which energy type to create
         for(int i = pokemonCount; i < energyCount + pokemonCount; i++){
             int energyType = random.nextInt(5);
             switch(energyType){
@@ -447,7 +442,7 @@ public class Player {
             }
         }
 
-        // NEEDS TO BE CAPPED AT 4 PER SAME TRAINER CARD (SO 4 DIFFERENT CARDS = 16 TOTAL TRAINER OF 4 TYPES)
+        //Randomly chooses which trainer card to make
         for(int i = pokemonCount + energyCount; i < energyCount + pokemonCount + trainerCount; i++){
             int trainerType = random.nextInt(4);
             switch(trainerType){
@@ -468,14 +463,14 @@ public class Player {
 
         //Update the deck
         setDeck(newDeck);
-
         return newDeck;
-
     }
 
 
     /*
-     * 
+     * The function moves the hand card to the deck
+     * @parma none
+     * @return none
      */
     public void reAddHandToDeck(){
 
@@ -483,29 +478,22 @@ public class Player {
 
         //Re adding hand cards to deck
         for(int i = 0; i < getDeck().length; i++){
-            
             updatedDeck[i] = getDeck()[i];
-
         }
 
         for(int i = deck.length; i < updatedDeck.length; i++){
-
             updatedDeck[i] = getDeck()[i - deck.length];
-
         }
-
-        //Update the deck
-        setDeck(updatedDeck);
-
-        //Update hand (empty)
-        setHand(new Card[7]);
+        
+        setDeck(updatedDeck); //Update the deck
+        setHand(new Card[7]); //Update hand (empty)
 
     }
 
-
-
     /*
-     * 
+     * The function draws a card from the deck and returns it
+     * @param none
+     * @return drawnCard a card object
      */
     public Card drawCard(){
         Card drawnCard = deck[deck.length - 1];
@@ -521,7 +509,9 @@ public class Player {
     }
 
     /*
-     * 
+     * The function moves a given card to the player hand
+     * @param newCard a card object
+     * @return none
      */
     public void addCardToHand(Card newCard){
 
@@ -533,11 +523,12 @@ public class Player {
         newHand[newHand.length - 1] = newCard;
 
         setHand(newHand);
-
     }
 
     /*
-     * 
+     * The function draws seven cards (a hand) and updates the current player's hand
+     * @param none
+     * @return an array of card objects
      */
     public Card[] fillHand(){
         Card[] newHand = new Card[7];
@@ -546,61 +537,53 @@ public class Player {
         for(int i = 0; i < newHand.length; i++){
             newHand[i] = drawCard();
         }
-
-        //Update hand
         setHand(newHand);
 
         return newHand;
     }
 
-
     /*
-     * 
+     * The function fills the prize pile of the current player with cards from the deck
+     * @param none
+     * @return an array of car dobjects
      */
     public Card[] fillPrize(){
-        Card[] newPrizePile = new Card[6];
 
-        for(int i = 0; i < newPrizePile.length; i++){
+        Card[] newPrizePile = new Card[6];
+        for(int i = 0; i < newPrizePile.length; i++){ //get cards then update prize pile
             newPrizePile[i] = drawCard();
         }
-
         setPrizePile(newPrizePile);
 
         return newPrizePile;
-
     }
 
     /*
-     * 
+     * The function checks the current hand if it contains any pokemon
+     * @param none
+     * @return a boolean value
      */
     public Boolean checkPokemonInHand(){
-
         Card[] currentHand = getHand();
-
         for(Card card :currentHand){
             if(card.getCardType().equals("Pokemon")){
                 return true;
             }
         }
-
         return false;
-
     }
 
-
     /*
-     * 
+     * The function takes a card from the prize pile and add it to the current player's hand
+     * @param none
+     * @return none
      */
     public void getPrizeCard(){
 
         Card[] currentPrizePile = getPrizePile();
         Card[] currentHand = getHand();
-
-        //Get card from the prize pile
-        Card wonCard = currentPrizePile[currentPrizePile.length - 1];
-
-        //Notify Player of Card won
-        System.out.println("You won a card from the prize pile! It is a " + wonCard.getName());
+        Card wonCard = currentPrizePile[currentPrizePile.length - 1]; //Get card from the prize pile
+        System.out.println("You won a card from the prize pile! It is a " + wonCard.getName());//Notify Player of Card won
 
         //Remove card from prize pile, update prize pile
         Card[] newPrizePile = new Card[currentPrizePile.length - 1];
@@ -616,27 +599,30 @@ public class Player {
         }
         newHand[newHand.length - 1] = wonCard;
         setHand(newHand);
-
     }
 
 
     /*
      * Uses Fisher-Yates Algorithm CITE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+     * The function uses the Fisher-Yates shuffle algorithm to shuffle th current player deck 
+     * @Source: https://www.geeksforgeeks.org/shuffle-a-given-array-using-fisher-yates-shuffle-algorithm/
+     * @param none
+     * @return none
      */
     public void shuffleDeck(){
         Random random = new Random();
-
         for(int i = deck.length - 1; i > 0; i--){
             int j = random.nextInt(i + 1);
             Card tempCard = deck[i];
             deck[i] = deck[j];
             deck[j] = tempCard;
         }
-
     }
 
     /*
-     * 
+     * The function adds an energy card to the active pokemon
+     * @param none
+     * @return a boolean value
      */
     public Boolean addEnergyToPokemon(int arrayPosition){
 
@@ -651,11 +637,10 @@ public class Player {
             newEnergies[i] = currentEnergies[i];
         }
 
-        if(currentHand[arrayPosition].getCardType().equals("Energy")){
+        if(currentHand[arrayPosition].getCardType().equals("Energy")){ //ensures card chose n is an energy card
 
             newEnergies[newEnergies.length - 1] = (Energy) currentHand[arrayPosition];
             activePokemon.setEnergies(newEnergies);
-
 
             //Remove energy card from hand and update hand
             Card[] newHand = new Card[currentHand.length - 1];
@@ -673,29 +658,25 @@ public class Player {
             System.out.println("Chosen card is not an energy card.");
             return false;
         }
-
     }
 
     /*
-     * 
+     * The function activates the trainer card's effect
+     * @param player a player object
+     * @parm arrayPosition an int value
+     * @return none
      */
     public void useTrainerCard(Player player, int arrayPosition){
 
         Card[] currentHand = getHand();
-
-        //Get trainer card
-        Trainer trainerCard = (Trainer) currentHand[arrayPosition];
-
-        //Activate effect
-        trainerCard.activateEffect(player);
+        Trainer trainerCard = (Trainer) currentHand[arrayPosition]; //Get trainer card
+        trainerCard.activateEffect(player); //Activate effect
 
         if(trainerCard instanceof ProfessorOak){
-
-            //Do nothing, ProfessorOak handles the updating
-            
+            //Do nothing; the trainer card handles the effect
         } else{
 
-            //Remove card from hand (add to discard pile)
+            //Remove card from hand 
             Card[] updatedHand = getHand();
             Card[] newHand = new Card[updatedHand.length - 1];
             int newIndex = 0;
@@ -708,6 +689,7 @@ public class Player {
 
         }
 
+        //Rmoved card gets moved to the discard pile
         Card[] currentDiscardPile = getDiscardPile();
         Card[] newDiDiscardPile = new Card[currentDiscardPile.length + 1];
         for(int i = 0; i < currentDiscardPile.length; i++){
@@ -715,19 +697,18 @@ public class Player {
         }
         newDiDiscardPile[newDiDiscardPile.length - 1] = trainerCard;
         setDiscardPile(newDiDiscardPile);
-
     }
 
-    
     /*
-     * 
+     * The function allows the current player to retreat a pokemon
+     * @param none
+     * @return a boolean value
      */
     public Boolean allowRetreatPokemon(){
 
         Scanner scan = new Scanner(System.in);
 
         Boolean doneSwap = false;
-
         while(!doneSwap){
 
             Card currentActivePokemon = getActiveField();
@@ -746,11 +727,8 @@ public class Player {
 
             if(swapOrNot.equals("y") || swapOrNot.equals("yes")){
 
-
                 //Check first if pokemon has enough energy and correct types of energy
                 Energy[] currentRetreatCost = currentActivePokemon.getRetreatCost();
-
-                //Checks if active pokemon has enough energy
                 int correctCounter = currentRetreatCost.length;
                 for(Energy retreatEnergy : currentRetreatCost){
                     for(Energy activeEnergy : activeEnergies){
@@ -774,12 +752,14 @@ public class Player {
                     }
                     System.out.print("]\n");
 
-                    System.out.print("Choose a pokemon to swap with the active pokemon (0 - N; position in array; if done then enter -1): ");
-                    int arrayPosition = scan.nextInt();
-
-
-                    //Get chosen pokemon to swap with
-                    Card newActivePokemon = currentBench[arrayPosition];
+                    System.out.print("Choose a pokemon to swap with the active pokemon (0 - N; position in array): ");
+                    int arrayPosition = 0;
+                    try {
+                        arrayPosition = scan.nextInt();
+                    } catch (Exception e) {
+                        System.out.println("Invalid option");
+                    }
+                    Card newActivePokemon = currentBench[arrayPosition]; //Get chosen pokemon to swap with
 
                     //Swap pokemon
                     Card[] newBench = new Card[currentBench.length];
@@ -794,7 +774,6 @@ public class Player {
                     }
                     setBench(newBench);
                     setActiveField(newActivePokemon);
-
 
                     //Move the used active energy to the discard pile
                     Card[] newDiscardPile = new Card[currentDiscardPile.length + activeEnergies.length];
@@ -821,12 +800,13 @@ public class Player {
 
 
     /*
-     * 
+     * The function allows the current player to attack with their active pokemon
+     * @param opponentPlayer a player object
+     * @return a boolean value
      */
     public Boolean allowPokemonAttack(Player opponentPlayer){
 
         Scanner scan = new Scanner(System.in);
-
         System.out.println("Player has chosen to attack!");
 
         Card currentActivePokemon = getActiveField();
@@ -847,25 +827,28 @@ public class Player {
         }
         System.out.print("] abilities \n");
 
-
         System.out.print("Choose an ability to perform (0 - N; position in array; if done then enter -1): ");
-        int arrayPosition = scan.nextInt();
+        int arrayPosition = 0;
+        try {
+            arrayPosition = scan.nextInt();
+        } catch (Exception e) {
+            System.out.println("Invalid option");
+        }
 
-        if(arrayPosition == -1){
+        if(arrayPosition == -1){ //cancel attack
             return false;
         } else{
 
-            String abilityChosen = abilityList[arrayPosition];
-
-            if (currentActivePokemon instanceof Pokemon) {
+            String abilityChosen = abilityList[arrayPosition]; //get the ability chosen from the list
+            if (currentActivePokemon instanceof Pokemon) { //check first that the current card (active zone) is a pokemon card
                 Pokemon activePokemon = (Pokemon) currentActivePokemon;
 
                 try {
-                    // Find the method for the chosen ability dynamically
+                    //Find the method for the chosen ability dynamically using the given string name with Java's reflect method
                     Method method = activePokemon.getClass().getMethod(abilityChosen, Energy[].class);
                     Object result = method.invoke(activePokemon, (Object) activeEnergies); //Need casting for correct resolution
 
-                    if (result instanceof Boolean) {
+                    if (result instanceof Boolean) { //specified output for charmander Collect ability
                         Boolean collected = (Boolean) result;
                         if (collected) {
                             System.out.println("\nYour " + currentActivePokemon.getName() + " performs " + abilityChosen);
@@ -873,53 +856,41 @@ public class Player {
                             Card drawnCard = drawCard();
                             System.out.println("You got a " + drawnCard.getName() + "!");
                         }
-                    } else if (result instanceof Integer) {
-                        //Check element types and give damage multiplier if applicable
-                        Pokemon opponentActivePokemon = (Pokemon) opponentPlayer.getActiveField();
+                    } else if (result instanceof Integer) { //general output for other pokemon abilities
 
+                        Pokemon opponentActivePokemon = (Pokemon) opponentPlayer.getActiveField();
                         String activeElement = activePokemon.getElementType();
                         String opponentWeakness = opponentActivePokemon.getWeakness();
-                        if(activeElement.equals(opponentWeakness)){
-
+                        if(activeElement.equals(opponentWeakness)){ //Check element types and give damage multiplier if applicable
                             int damageDone = (int) result * 2;
                             if(damageDone > 0){
-
                                 System.out.println("\n" + opponentActivePokemon.getName() + " is weak against " + opponentWeakness + "! 2X damage applied!");
                                 System.out.println("\nYour " + currentActivePokemon.getName() + " has attacked with " + abilityChosen + " causing " + damageDone + " damage to " + opponentActivePokemon.getName() + "!");
-    
                             } else{
-    
                                 System.out.println("\nYour " + currentActivePokemon.getName() + " dealt no damage.");
-    
                             }
                             
                             // Update health based on damage dealt
                             int currentOpponentHP = opponentActivePokemon.getHP();
                             int newOpponentHp = currentOpponentHP - damageDone;
                             opponentActivePokemon.setHP(newOpponentHp);
-    
+
                             System.out.println("Enemy's " + opponentActivePokemon.getName() + " health is now " + opponentActivePokemon.getHP());
     
-                            if(newOpponentHp <= 0){
+                            if(newOpponentHp <= 0){ //if fell enemy pokemon, then award a card from the prize pile
     
                                 //Allow current player to draw from the prize pile
                                 System.out.println("\nThe enemy's " + opponentActivePokemon.getName() + " has fallen. You may draw from the prize pile!");
                                 getPrizeCard();
-    
                             }
     
-                        } else {
+                        } else { //dealt no damage output
     
                             int damageDone = (int) result;
-
                             if(damageDone > 0){
-
                                 System.out.println("\nYour " + currentActivePokemon.getName() + " has attacked with " + abilityChosen + " causing " + damageDone + " damage to " + opponentActivePokemon.getName() + "!");
-    
                             } else{
-    
                                 System.out.println("\nYour " + currentActivePokemon.getName() + " dealt no damage.");
-    
                             }
                             
                             // Update health based on damage dealt
@@ -934,11 +905,8 @@ public class Player {
                                 //Allow current player to draw from the prize pile
                                 System.out.println("\nThe enemy's " + opponentActivePokemon.getName() + " has fallen. You may draw from the prize pile!");
                                 getPrizeCard();
-    
                             }
-    
                         }
-
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -946,19 +914,16 @@ public class Player {
             } else {
                 System.out.println("Error: Active Pokemon is not a valid Pokemon instance.");
             }
-
         }
-
         return true;
     }
 
     /*
-     * 
+     * The function allows the AI to randomly choose what kind of attack to perform
      */
     public Boolean allowPokemonAttackAI(Player opponentPlayer){
 
         Random random = new Random();
-
         Card currentActivePokemon = getActiveField();
         Energy[] activeEnergies = currentActivePokemon.getEnergies();
 
@@ -986,25 +951,18 @@ public class Player {
 
                     //Check element types and give damage multiplier if applicable
                     Pokemon opponentActivePokemon = (Pokemon) opponentPlayer.getActiveField();
-
                     String activeElement = activePokemon.getElementType();
                     String opponentWeakness = opponentActivePokemon.getWeakness();
 
                     if(activeElement.equals(opponentWeakness)){
 
                         int damageDone = (int) result * 2;
-
                         if(damageDone > 0){
-
                             System.out.println("\n" + opponentActivePokemon.getName() + " is weak against " + opponentWeakness + "! 2X damage applied!");
                             System.out.println("\nYour " + currentActivePokemon.getName() + " has attacked with " + abilityChosen + " causing " + damageDone + " damage to " + opponentActivePokemon.getName() + "!");
-
                         } else{
-
                             System.out.println("\nYour " + currentActivePokemon.getName() + " dealt no damage.");
-
                         }
-                        
                         
                         // Update health based on damage dealt
                         int currentOpponentHP = opponentActivePokemon.getHP();
@@ -1018,23 +976,15 @@ public class Player {
                             //Allow current player to draw from the prize pile
                             System.out.println("\nThe enemy's " + opponentActivePokemon.getName() + " has fallen. You may draw from the prize pile!");
                             getPrizeCard();
-
                         }
-
                     } else {
 
                         int damageDone = (int) result;
-
                         if(damageDone > 0){
-
                             System.out.println("\nYour " + currentActivePokemon.getName() + " has attacked with " + abilityChosen + " causing " + damageDone + " damage to " + opponentActivePokemon.getName() + "!");
-
                         } else{
-
                             System.out.println("\nYour " + currentActivePokemon.getName() + " dealt no damage.");
-
                         }
-
 
                         // Update health based on damage dealt
                         int currentOpponentHP = opponentActivePokemon.getHP();
@@ -1048,9 +998,7 @@ public class Player {
                             //Allow current player to draw from the prize pile
                             System.out.println("\nThe enemy's " + opponentActivePokemon.getName() + " has fallen. You may draw from the prize pile!");
                             getPrizeCard();
-
                         }
-
                     }
                 }
             } catch (Exception e) {
@@ -1059,38 +1007,35 @@ public class Player {
         } else {
             System.out.println("Error: Active Pokemon is not a valid Pokemon instance.");
         }
-
         return true;
     }
 
     /*
-     * 
+     * The function checks the current player whether they have an active pokemon, if not then pokemon in bench, if not then pokemon in hand, else the game is over
+     * @param player1 a player object
+     * @param player2 a player object
+     * @return a boolean value (win or lose)
      */
     public Boolean checkIfPokemonWinCondition(Player player1, Player player2){
 
         //At the start of each turn, check if active pokemon still alive, otherwise make the player add one to the active zone
         //if no pokemon available, end game
         Pokemon activePokemon1 = (Pokemon) player1.getActiveField();
-
         if(activePokemon1.getHP() <= 0){
 
             //Check if bench contains a pokemon, if so, get the arrayposition for auto switch
             Card[] currentBenchPokemon = player1.getHand();
             int arrayPosition = 0;
             for(int i = 0; i < currentBenchPokemon.length; i++){ 
-                
                 if(currentBenchPokemon[i].getCardType().equals("Pokemon")){
                     arrayPosition = i;
                     break;
                 }
-                
             }
 
             //check bench if any pokemon, if not then game over
             if(arrayPosition == 0){ 
-
                 return false;
-
             } else{
 
                 //move benched pokemon to the active field
@@ -1112,108 +1057,117 @@ public class Player {
                     newDiscardPile[i] = fallenPokemonEnergies[index++];
                 }
                 newDiscardPile[newDiscardPile.length - 1] = fallenPokemon;
-
                 player1.setDiscardPile(newDiscardPile);
             }
-
         }
-
         return true;
     }
 
-
     /*
-     * 
+     * Changes the hand value
+     * @param newHand an array of cards
+     * @return none
      */
     public void setHand(Card[] newHand){
         hand = newHand;
     }
 
-
     /*
-     * 
+     * Changes the deck value
+     * @param newDeck an array of cards
+     * @return none
      */
     public void setDeck(Card[] newDeck){
         deck = newDeck;
     }
 
-
     /*
-     * 
+     * Changes the bench value
+     * @param newBench an array of cards
+     * @return none
      */
     public void setBench(Card[] newBench){
         bench = newBench;
     }
 
-
     /*
-     * 
+     * Changes the prize pile value
+     * @param newPrizePile an array of cards
+     * @return none
      */
     public void setPrizePile(Card[] newPrizePile){
         prizePile = newPrizePile;
     }
 
-
     /*
-     * 
+     * Changes the discard pile value
+     * @param newDiscardPile an array of cards
+     * @return none
      */
     public void setDiscardPile(Card[] newDiscardPile){
         discardPile = newDiscardPile;
     }
 
     /*
-     * 
+     * Changes the hand value
+     * @param newPokemonCard a card object
+     * @return none
      */
     public void setActiveField(Card newPokemonCard){
         activeField = newPokemonCard;
     }
 
-
     /*
-     * 
+     * Returns the hand value
+     * @param none
+     * @return hand an array of card objects
      */
     public Card[] getHand(){
         return hand;
     }
 
-
     /*
-     * 
+     * Returns the deck value
+     * @param none
+     * @return deck an array of card objects
      */
     public Card[] getDeck(){
         return deck;
     }
 
-
     /*
-     * 
+     * Returns the bench value
+     * @param none
+     * @return bench an array of card objects
      */
     public Card[] getbench(){
         return bench;
     }
 
-
     /*
-     * 
+     * Returns the prize pile value
+     * @param none
+     * @return prizePile an array of card objects
      */
     public Card[] getPrizePile(){
         return prizePile;
     }
 
-
     /*
-     * 
+     * Returns the discard pile value
+     * @param none
+     * @return discardPile an array of card objects
      */
     public Card[] getDiscardPile(){
         return discardPile;
     }
 
     /*
-     * 
+     * Returns the active field value
+     * @param none
+     * @return activeFiled a card object
      */
     public Card getActiveField(){
         return activeField;
     }
-
-
 }

@@ -1,12 +1,15 @@
 /*
- * 
+ * Cachary Tolentino
+ * The GameSetup class is a helper class for the PokemonGame. It provides all the necessary functions to initiate a game state.
  */
 
+//Imports
 import java.util.Scanner;
 
 public class GameSetup {
 
     //Global Variables
+    //None
 
     /*
      * Default Constructor 
@@ -14,7 +17,7 @@ public class GameSetup {
      * @return none
      */
     public GameSetup(){
-
+        //No variables to intiialize
     }
 
     /*
@@ -57,12 +60,13 @@ public class GameSetup {
     }
 
     /*
-     * 
+     * The function will ask th user for inputs about the deck and then creates the deck filled with card objects.
+     * @param player1 a player object
+     * @return none
      */
     public void setupPlayerDecks(Player player1){
 
         Scanner scan = new Scanner (System.in);
-
         System.out.println("Note: Total # of Cards must add up to 60.");
         System.out.println("Note: The database contains 4 types of pokemons, 4 types of trainer cards, and 5 types of energy cards.");
         System.out.println("Note: Upon entering desired allocation, card types will be evenly distributed based on given amount. (i.e 16 pokemon = 4 charmander, 4 squirtle, etc...)");
@@ -79,12 +83,10 @@ public class GameSetup {
         System.out.print("Enter the # of energies: ");
         energyCount = scan.nextInt();
 
-        //GAME SETUP PHASE---------------
-
-        //Create players deck
+        //Create player deck based on the user inputs
         Boolean status = createPlayerDeck(player1, pokemonCount, trainerCount, energyCount);
 
-        while(!status){ //ensures player inputs correcting allocation of the deck
+        while(!status){ //ensures player inputs are correct allocation of the deck, otherwise repeat the process until true
 
             System.out.print("\nEnter the # of pokemons (maximum: 16): ");
             pokemonCount = scan.nextInt();
@@ -95,70 +97,53 @@ public class GameSetup {
 
             status = createPlayerDeck(player1, pokemonCount, trainerCount, energyCount);
         }
-
     }
 
     /*
-     * 
+     * The function will automatically draws a starting hand for both players, will automatically reshuffle and redraw given a mulligan found
+     * @param player1 a player object
+     * @param player2 a player object
+     * @return none
      */
     public void setupPlayerHand(Player player1, Player player2){
 
-        //Boolean round1Identifier = true;
-        //Boolean winnerFound = false;
+        //Counter for how many redraws to perform due to mulligan found
         int player1Redraws = 0;
         int player2Redraws = 0;
 
-        //Let Player 1 and 2 perform start phase
+        //Automatica redrawn and reshuffle given mulligan found
         //Player 1 phase:
-        fillPlayerHand(player1);
-
-        while(!checkIfPokemonInHand(player1)){
+        fillPlayerHand(player1); //adds 7 cards to the hand
+        while(!checkIfPokemonInHand(player1)){ //checks if current hand is a mulligan
 
             //Reveal hand
             System.out.println("\nPlayer 1 did not have a pokemon on hand. Reveal, shuffle, and redraw.");
             Card[] currentHand = player1.getHand();
-
             for(Card card : currentHand){
                 System.out.println("You are revealing a: " + card.getName());
             }
 
-            //Put back the hand into the deck
-            player1.reAddHandToDeck();
-
-            //Shuffle deck
-            player1.shuffleDeck();
-
-            //Draw 7 again
-            fillPlayerHand(player1);
-
-            //Allow for player 2 to draw 1 extra
-            player2Redraws++;
+            player1.reAddHandToDeck(); //Put back the hand into the deck
+            player1.shuffleDeck(); //Shuffle deck
+            fillPlayerHand(player1); //Draw 7 again
+            player2Redraws++; //Allow for player 2 to draw 1 extra
         }
 
-        //Player 1 phase:
-        fillPlayerHand(player2);
-
-        while(!checkIfPokemonInHand(player2)){
+        //Player 2 phase:
+        fillPlayerHand(player2); //adds 7 cards to the hand
+        while(!checkIfPokemonInHand(player2)){ //checks if current hand is a mulligan
 
             //Reveal hand
             System.out.println("\nPlayer 2 did not have a pokemon on hand. Reveal, shuffle, and redraw.");
             Card[] currentHand = player2.getHand();
-
             for(Card card : currentHand){
                 System.out.println("Player 2 is revealing a: " + card.getName());
             }
 
-            //Put back the hand into the deck
-            player2.reAddHandToDeck();
-
-            //Shuffle deck
-            player2.shuffleDeck();
-
-            //Draw 7 again
-            fillPlayerHand(player2);
-
-            //Allow for player 2 to draw 1 extra
-            player1Redraws++;
+            player2.reAddHandToDeck(); //Put back the hand into the deck
+            player2.shuffleDeck(); //Shuffle deck
+            fillPlayerHand(player2); //Draw 7 again
+            player1Redraws++; //Allow for player 2 to draw 1 extra
 
         }
 
@@ -176,16 +161,15 @@ public class GameSetup {
 
     }
 
-
     /*
-     * 
+     * The function allows the current player to choose the pokemon they want to start with and any pokemon card to bench
+     * @param player1 a player object
+     * @param player2 a player object
+     * @return none
      */
     public void setupPlayerFields(Player player1, Player player2){
 
         Scanner scan = new Scanner(System.in);
-
-        //Players put down a pokemon(allow player to add however many they want, Ai auto adds all)
-        //Player 1 placing pokemons (active zone minimum, bench optional)
         System.out.println("\nPlayer: Please place a pokemon in the active zone");
         Card[] currentHand = player1.getHand();
 
@@ -199,10 +183,8 @@ public class GameSetup {
         System.out.print("\nWhich pokemon would you like to place in the active zone? (O - n; position in array): ");
         int position = scan.nextInt();
 
-        placePokemonInActiveField(player1, position);
-
-        //optional allow user to bench any additional pokemon
-        beginningPokemonBench(player1); 
+        placePokemonInActiveField(player1, position); //Player 1 placing pokemons (active zone minimum)
+        beginningPokemonBench(player1);  //optional allow user to bench any additional pokemon
 
         //Fill prize piles
         fillPlayerPrize(player1);
@@ -217,14 +199,14 @@ public class GameSetup {
     }
 
     /*
-     * 
+     * The function allows the current player to choose the pokemon they want to start with and any pokemon card to bench but players are inverted
+     * @param player1 a player object
+     * @param player2 a player object
+     * @return none
      */
     public void setupPlayerFieldsInverted(Player player1, Player player2){
 
         Scanner scan = new Scanner(System.in);
-
-        //Players put down a pokemon(allow player to add however many they want, Ai auto adds all)
-        //Player 1 placing pokemons (active zone minimum, bench optional)
         System.out.println("\nPlayer: Please place a pokemon in the active zone");
         Card[] currentHand = player2.getHand();
 
@@ -238,10 +220,8 @@ public class GameSetup {
         System.out.print("\nWhich pokemon would you like to place in the active zone? (O - n; position in array): ");
         int position = scan.nextInt();
 
-        placePokemonInActiveField(player2, position);
-
-        //optional allow user to bench any additional pokemon
-        beginningPokemonBench(player2); 
+        placePokemonInActiveField(player2, position); //Player 1 placing pokemons (active zone minimum)
+        beginningPokemonBench(player2); //optional allow user to bench any additional pokemon
 
         //Fill prize piles
         fillPlayerPrize(player1);
@@ -256,14 +236,14 @@ public class GameSetup {
     }
 
     /*
-     * 
+     * The function allows the current player to choose the pokemon they want to start with and any pokemon card to bench (specific for self v. self)
+     * @param player1 a player object
+     * @param player2 a player object
+     * @return none
      */
     public void setupSoloPlayerFields(Player player1){
 
         Scanner scan = new Scanner(System.in);
-
-        //Players put down a pokemon(allow player to add however many they want, Ai auto adds all)
-        //Player 1 placing pokemons (active zone minimum, bench optional)
         System.out.println("\nPlayer: Please place a pokemon in the active zone");
         Card[] currentHand = player1.getHand();
 
@@ -277,10 +257,8 @@ public class GameSetup {
         System.out.print("\nWhich pokemon would you like to place in the active zone? (O - n; position in array): ");
         int position = scan.nextInt();
 
-        placePokemonInActiveField(player1, position);
-
-        //optional allow user to bench any additional pokemon
-        beginningPokemonBench(player1); 
+        placePokemonInActiveField(player1, position); //Player 1 placing pokemons (active zone minimum, bench optional)
+        beginningPokemonBench(player1); //optional allow user to bench any additional pokemon
 
         //Fill prize piles
         fillPlayerPrize(player1);
@@ -292,13 +270,16 @@ public class GameSetup {
     }
 
     /*
-     * 
+     * The function allows the current player to bench any number of pokemon
+     * @param player a player object
+     * @return none
      */
-    public void beginningPokemonBench(Player player){ //NOTE: MIGHT NEED TO MOVE TO PLAYER
+    public void beginningPokemonBench(Player player){
 
         Scanner scan = new Scanner(System.in);
         Card[] currentHand = player.getHand();
 
+        //Count the number of filled spots
         int filledSpots = 0;
         for(Card card : currentHand){
             if(card != null){
@@ -318,11 +299,16 @@ public class GameSetup {
             Boolean benchDone = false;
 
             System.out.print("Would you like to bench any pokemon? (if applicable; Y or N): ");
-            String decision = scan.next().toLowerCase();
+            String decision = "";
+            try {
+                decision = scan.next().toLowerCase();
+            } catch (Exception e) {
+                System.out.println("Invalid input.");
+            }
 
             if(decision.equals("y")){
 
-                while(!benchDone){
+                while(!benchDone){ // allow player to bench as many pokemon as they want
                     System.out.print("Which pokemon would you like to bench? (0 - N; position in array; if done then enter -1): ");
                     int position = scan.nextInt();
 
@@ -344,8 +330,8 @@ public class GameSetup {
                 }
 
             } else if(decision.equals("n")){
-                //Does nothing
-            } else{
+                //Does nothing (denies benching)
+            } else{ //restarts the function
                 System.out.println("Invalid option. Retry.");
                 beginningPokemonBench(player);
             }
@@ -355,87 +341,77 @@ public class GameSetup {
 
     }
 
-
     /*
-     * 
+     * The function is a helper function for the beginningPokemonBench function which allows it bench any pokemon from the current player hand
+     * @param player a player object
+     * @param arrayposition an int value 
+     * @return none
      */
     public void benchPokemonFromHand(Player player, int arrayPosition){
 
-        //Get the pokemon from the hand, but check first if of type pokemon, otherwise not allowed
+        //Get the pokemon from the hand, 
         Card[] currentHand = player.getHand();
         Card pokemonCard = currentHand[arrayPosition];
 
-        if(pokemonCard.getCardType().equals("Pokemon")){
-
-            //Remove from the hand and update hand
-            Card[] newHand = new Card[currentHand.length - 1];
-            int newIndex = 0; //Allows for shifting the skipped values down
-            for(int i = 0; i < currentHand.length; i++){
-                if(i != arrayPosition){
-                    newHand[newIndex++] = currentHand[i];
-                }
-            }
-            player.setHand(newHand);
-
-
-            //Add on the newBench and update the bench
-            Card[] currentBench = player.getbench();
-            Card[] newBench = new Card[currentBench.length];
-            Boolean benchHasSpace = false;
+        if(pokemonCard.getCardType().equals("Pokemon")){ //check first if of type pokemon, otherwise not allowed
 
             //Check first if the bench is already full
+            Card[] currentBench = player.getbench();
+            Boolean benchHasSpace = false;
             for(Card card : currentBench){
                 if(card == null){
                     benchHasSpace = true;
                 }
             }
-
             if(benchHasSpace){
 
-                for(int i = 0; i < currentBench.length; i++){
+                //Remove from the hand and update hand
+                Card[] newHand = new Card[currentHand.length - 1];
+                int newIndex = 0; //Allows for shifting the skipped values down
+                for(int i = 0; i < currentHand.length; i++){
+                    if(i != arrayPosition){
+                        newHand[newIndex++] = currentHand[i];
+                    }
+                }
+                player.setHand(newHand);
 
+                //Add on the newBench and update the bench
+                Card[] newBench = new Card[currentBench.length];
+                for(int i = 0; i < currentBench.length; i++){
                     if(currentBench[i] != null){
                         newBench[i] = currentBench[i];
                     } else{
                         newBench[i] = pokemonCard;
                         break;
                     }
-    
                 }
-    
+
                 player.setBench(newBench);
-
             } else{
-
                 System.out.println("There are no more space left in the bench.");
-
             }
-
         } else{
-
             System.out.println("Chosen card is not a pokemon. Pick again.");
-
         }
-
     }
 
-
     /*
-     * 
+     * The function will allow for the current player to place a pokemon into their active zone
+     * @param player a player object
+     * @param arrayPosition an int value
+     * @return none
      */                                                                         
     public void placePokemonInActiveField(Player player, int arrayPosition){
 
         Scanner scan = new Scanner(System.in);
 
-        Card[] currentHand = player.getHand();
-
         //Get the pokemon from the hand
+        Card[] currentHand = player.getHand();
         Card pokemonCard = currentHand[arrayPosition];
 
         Boolean done = false;
-
         while(!done){
-
+            //Check first if the chosen card is of type pokemon, otherwise invalid
             if(pokemonCard.getName().equals("Pikachu") || pokemonCard.getName().equals("Bulbasaur") || pokemonCard.getName().equals("Charmander") || pokemonCard.getName().equals("Squirtle")){
 
                 //Remove from the hand, update hand
@@ -452,67 +428,65 @@ public class GameSetup {
                 player.setActiveField(pokemonCard);
                 done = true;
     
-            } else{
-    
+            } else{//restart for invalid choice
                 System.out.print("Non-pokemon chosen. Pick again: ");
                 int newChoice = scan.nextInt();
                 System.out.print("\n");
                 placePokemonInActiveField(player, newChoice);
                 done = true;
-    
             }
-
         }
     }
 
     /*
-     * 
+     * The function is a helper function that calls on the createDeck function of player objects
+     * @param player a player object
+     * @return none
      */
     public void createPlayerDeck(Player player){
-
         player.setDeck(player.createDeck());
-
     }
 
     /*
-     * 
+     * The function is a helper function that calls on the createDeck function of player objects using the given parameters
+     * @param player a player object
+     * @param pokemonCount an int value
+     * @param trainerCount an int value
+     * @param energyCount an int value
+     * @return a boolan value
      */
     public Boolean createPlayerDeck(Player player, int pokemonCount, int trainerCount, int energyCount){
-
         Card[] value = player.createDeck(pokemonCount, trainerCount, energyCount);
-
         if(value == null){
             return false; //invalid inputs, must redo
         } 
-
         return true;
-
     }
 
     /*
-     * 
+     * The function is a helper function that calls on the player object fillhand method
+     * @param player a player object
+     * @return newHand an array of card objects
      */
     public static Card[] fillPlayerHand(Player player){
-
         Card[] newHand = player.fillHand();
-
         return newHand;
     }
 
-
     /*
-     * 
+     * The function is a helper function that callson the player's fillPrize function
+     * @param player a player object
+     * @return a boolean value
      */
     public Boolean fillPlayerPrize(Player player){
-
         player.fillPrize();
-
         return true;
-
     }
 
     /*
-     * 
+     * The function is a helper function that callson the player's checkIfPokemonInHand function
+     * @param player a player object
+     * @return a boolean value
      */
     public Boolean checkIfPokemonInHand(Player player){ 
 
