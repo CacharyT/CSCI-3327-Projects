@@ -12,7 +12,7 @@ public class PokemonGame {
     
     //Global Variable(s)
     private Player[] players;
-    Boolean turnOne;
+    private Boolean turnOne;
 
     /*
      * Default Constructor (creates two player objects)
