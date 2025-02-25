@@ -1059,6 +1059,8 @@ public class Player {
                 newDiscardPile[newDiscardPile.length - 1] = fallenPokemon;
                 player1.setDiscardPile(newDiscardPile);
             }
+        } else{
+            return false;
         }
         return true;
     }
