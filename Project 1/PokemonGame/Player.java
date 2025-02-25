@@ -603,7 +603,7 @@ public class Player {
 
 
     /*
-     * Uses Fisher-Yates Algorithm CITE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+     * Uses Fisher-Yates Algorithm to shuffle an array of items
      * The function uses the Fisher-Yates shuffle algorithm to shuffle th current player deck 
      * @Source: https://www.geeksforgeeks.org/shuffle-a-given-array-using-fisher-yates-shuffle-algorithm/
      * @param none
@@ -1021,6 +1021,10 @@ public class Player {
         //At the start of each turn, check if active pokemon still alive, otherwise make the player add one to the active zone
         //if no pokemon available, end game
         Pokemon activePokemon1 = (Pokemon) player1.getActiveField();
+        // if(activePokemon1 != null){
+            
+
+        // }
         if(activePokemon1.getHP() <= 0){
 
             //Check if bench contains a pokemon, if so, get the arrayposition for auto switch
@@ -1046,7 +1050,7 @@ public class Player {
                 Card fallenPokemon = player1.getActiveField();
                 Card[] currentDiscardPile = player1.getDiscardPile();
                 Energy[] fallenPokemonEnergies = fallenPokemon.getEnergies();
-                Card[] newDiscardPile = new Card[fallenPokemonEnergies.length + 1];
+                Card[] newDiscardPile = new Card[currentDiscardPile.length + fallenPokemonEnergies.length + 1];
 
                 for(int i = 0; i < currentDiscardPile.length; i++){
                     newDiscardPile[i] = currentDiscardPile[i];

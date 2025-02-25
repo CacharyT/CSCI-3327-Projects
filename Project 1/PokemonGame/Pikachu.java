@@ -1,3 +1,5 @@
+
+
 /*
  * Cachary Tolentino
  * This class represents a Pikachu card. It contains various stats that a Pikachu would have.
@@ -55,6 +57,9 @@ public class Pikachu extends Pokemon{
 
             if(coin == 0){ //if head then deal extra damage
                 System.out.println("You rolled a head! Quick attack will deal an extra 10 damage!");
+                return getBasic() + 10;
+            } else{
+                System.out.println("You rolled a tail! Quick attack will deal no extra damage!");
                 return getBasic() + 10;
             }
 
