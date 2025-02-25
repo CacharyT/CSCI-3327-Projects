@@ -1021,10 +1021,6 @@ public class Player {
         //At the start of each turn, check if active pokemon still alive, otherwise make the player add one to the active zone
         //if no pokemon available, end game
         Pokemon activePokemon1 = (Pokemon) player1.getActiveField();
-        // if(activePokemon1 != null){
-            
-
-        // }
         if(activePokemon1.getHP() <= 0){
 
             //Check if bench contains a pokemon, if so, get the arrayposition for auto switch
