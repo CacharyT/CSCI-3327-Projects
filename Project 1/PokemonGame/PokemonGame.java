@@ -26,6 +26,17 @@ public class PokemonGame {
         turnOne = true;
     }
 
+    // public void runGame(){
+    //     playOrNot();
+    //     typeOfGameMode();
+    //     initialPlayer();
+    // }
+
+    // public Boolean getTurnOnet(){
+    //     System.out.print("Turn One:" + turnOne);
+    //     return turnOne;
+    // }
+
     /*
      * The main game mechanic that starts the game for the player to play (player chooses their game mode)
      * @param none

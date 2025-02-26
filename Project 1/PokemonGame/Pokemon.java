@@ -3,7 +3,7 @@
  * This class is a child class of card. It frames the necessary data of more specified pokemon cards.
  */
 
-public class Pokemon extends Card{
+public class Pokemon extends Card implements Attackable{
     
     //Global Variable(s)
     private int hp;
@@ -49,6 +49,7 @@ public class Pokemon extends Card{
      * @param newEnergies an array of energy objects
      * @return none
      */
+    @Override
     public void setEnergies(Energy[] newEnergies){
         energies = newEnergies;
     }
@@ -79,6 +80,27 @@ public class Pokemon extends Card{
      */
     public int getHP(){
         return hp;
+    }
+
+    //Interface Method Implementations
+    /*
+     * 
+     */
+    @Override
+    public int reduceHealth(int damage){
+        this.hp -= damage;
+        return this.hp;
+    }
+
+    /*
+     * 
+     */
+    @Override
+    public Boolean knockedOut(){
+        if(this.hp <= 0){
+            return true;
+        }
+        return false;
     }
 
 

@@ -871,13 +871,11 @@ public class Player {
                             }
                             
                             // Update health based on damage dealt
-                            int currentOpponentHP = opponentActivePokemon.getHP();
-                            int newOpponentHp = currentOpponentHP - damageDone;
-                            opponentActivePokemon.setHP(newOpponentHp);
+                            opponentActivePokemon.reduceHealth(damageDone);
 
                             System.out.println("Enemy's " + opponentActivePokemon.getName() + " health is now " + opponentActivePokemon.getHP());
     
-                            if(newOpponentHp <= 0){ //if fell enemy pokemon, then award a card from the prize pile
+                            if(opponentActivePokemon.knockedOut()){ //if fell enemy pokemon, then award a card from the prize pile
     
                                 //Allow current player to draw from the prize pile
                                 System.out.println("\nThe enemy's " + opponentActivePokemon.getName() + " has fallen. You may draw from the prize pile!");
@@ -893,14 +891,13 @@ public class Player {
                                 System.out.println("\nYour " + currentActivePokemon.getName() + " dealt no damage.");
                             }
                             
-                            // Update health based on damage dealt
-                            int currentOpponentHP = opponentActivePokemon.getHP();
-                            int newOpponentHp = currentOpponentHP - damageDone;
-                            opponentActivePokemon.setHP(newOpponentHp);
+                            // Update health based on damage dealt (interface utilized)
+                            opponentActivePokemon.reduceHealth(damageDone);
     
                             System.out.println("Enemy's " + opponentActivePokemon.getName() + " health is now " + opponentActivePokemon.getHP());
     
-                            if(newOpponentHp <= 0){
+                            //(interface utilized)
+                            if(opponentActivePokemon.knockedOut()){
     
                                 //Allow current player to draw from the prize pile
                                 System.out.println("\nThe enemy's " + opponentActivePokemon.getName() + " has fallen. You may draw from the prize pile!");
@@ -964,14 +961,12 @@ public class Player {
                             System.out.println("\nYour " + currentActivePokemon.getName() + " dealt no damage.");
                         }
                         
-                        // Update health based on damage dealt
-                        int currentOpponentHP = opponentActivePokemon.getHP();
-                        int newOpponentHp = currentOpponentHP - damageDone;
-                        opponentActivePokemon.setHP(newOpponentHp);
+                        // Update health based on damage dealt (interface utilized)
+                        opponentActivePokemon.reduceHealth(damageDone);
 
                         System.out.println("Enemy's " + opponentActivePokemon.getName() + " health is now " + opponentActivePokemon.getHP());
 
-                        if(newOpponentHp <= 0){
+                        if(opponentActivePokemon.knockedOut()){
 
                             //Allow current player to draw from the prize pile
                             System.out.println("\nThe enemy's " + opponentActivePokemon.getName() + " has fallen. You may draw from the prize pile!");
@@ -986,14 +981,12 @@ public class Player {
                             System.out.println("\nYour " + currentActivePokemon.getName() + " dealt no damage.");
                         }
 
-                        // Update health based on damage dealt
-                        int currentOpponentHP = opponentActivePokemon.getHP();
-                        int newOpponentHp = currentOpponentHP - damageDone;
-                        opponentActivePokemon.setHP(newOpponentHp);
+                        // Update health based on damage dealt (interface utilized)
+                        opponentActivePokemon.reduceHealth(damageDone);
 
                         System.out.println("Enemy's " + opponentActivePokemon.getName() + " health is now " + opponentActivePokemon.getHP());
 
-                        if(newOpponentHp <= 0){
+                        if(opponentActivePokemon.knockedOut()){
 
                             //Allow current player to draw from the prize pile
                             System.out.println("\nThe enemy's " + opponentActivePokemon.getName() + " has fallen. You may draw from the prize pile!");
