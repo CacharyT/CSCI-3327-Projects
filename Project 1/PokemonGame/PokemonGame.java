@@ -81,7 +81,7 @@ public class PokemonGame {
                         playerCoin = scan.nextInt();
                     } catch (Exception e) {
                         System.out.println("Invalid Option");
-                        break;
+                        startGame();
                     }
                     int coinFlipped = flipACoin();
 
