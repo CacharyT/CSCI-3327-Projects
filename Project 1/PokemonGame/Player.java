@@ -1021,50 +1021,44 @@ public class Player {
         //At the start of each turn, check if active pokemon still alive, otherwise make the player add one to the active zone
         //if no pokemon available, end game
         Pokemon activePokemon1 = (Pokemon) player1.getActiveField();
-        if(activePokemon1 != null){
-            if(activePokemon1.getHP() <= 0){
+        if(activePokemon1.getHP() <= 0){
 
-                //Check if bench contains a pokemon, if so, get the arrayposition for auto switch
-                Card[] currentBenchPokemon = player1.getHand();
-                int arrayPosition = 0;
-                for(int i = 0; i < currentBenchPokemon.length; i++){ 
-                    if(currentBenchPokemon[i].getCardType().equals("Pokemon")){
-                        arrayPosition = i;
-                        break;
-                    }
-                }
-    
-                //check bench if any pokemon, if not then game over
-                if(arrayPosition == 0){ 
-                    return false;
-                } else{
-    
-                    //move benched pokemon to the active field
-                    Card benchPokemon = currentBenchPokemon[arrayPosition];
-                    player1.setActiveField(benchPokemon);
-    
-                    //move the dead pokemon to the discard pile and its any energy attached to it
-                    Card fallenPokemon = player1.getActiveField();
-                    Card[] currentDiscardPile = player1.getDiscardPile();
-                    Energy[] fallenPokemonEnergies = fallenPokemon.getEnergies();
-                    Card[] newDiscardPile = new Card[currentDiscardPile.length + fallenPokemonEnergies.length + 1];
-    
-                    for(int i = 0; i < currentDiscardPile.length; i++){
-                        newDiscardPile[i] = currentDiscardPile[i];
-                    }
-    
-                    int index = 0;
-                    for(int i = currentDiscardPile.length; i < newDiscardPile.length - 1; i++){
-                        newDiscardPile[i] = fallenPokemonEnergies[index++];
-                    }
-                    newDiscardPile[newDiscardPile.length - 1] = fallenPokemon;
-                    player1.setDiscardPile(newDiscardPile);
-                }
-            } else{
-                return false;
+            //Check if bench contains a pokemon, if so, get the arrayposition for auto switch
+            Card[] currentBenchPokemon = player1.getHand();
+            int arrayPosition = 0;
+            for(int i = 0; i < currentBenchPokemon.length; i++){ 
+                if(currentBenchPokemon[i].getCardType().equals("Pokemon")){
+                    arrayPosition = i;
+                    break;
+                }   
             }
-        } else{
-            return false;
+
+            //check bench if any pokemon, if not then game over
+            if(arrayPosition == 0){ 
+                return false;
+            } else{
+
+                //move benched pokemon to the active field
+                Card benchPokemon = currentBenchPokemon[arrayPosition];
+                player1.setActiveField(benchPokemon);
+
+                //move the dead pokemon to the discard pile and its any energy attached to it
+                Card fallenPokemon = player1.getActiveField();
+                Card[] currentDiscardPile = player1.getDiscardPile();
+                Energy[] fallenPokemonEnergies = fallenPokemon.getEnergies();
+                Card[] newDiscardPile = new Card[currentDiscardPile.length + fallenPokemonEnergies.length + 1];
+
+                for(int i = 0; i < currentDiscardPile.length; i++){
+                    newDiscardPile[i] = currentDiscardPile[i];
+                }
+
+                int index = 0;
+                for(int i = currentDiscardPile.length; i < newDiscardPile.length - 1; i++){
+                    newDiscardPile[i] = fallenPokemonEnergies[index++];
+                }
+                newDiscardPile[newDiscardPile.length - 1] = fallenPokemon;
+                player1.setDiscardPile(newDiscardPile);
+            }
         }
         return true;
     }
