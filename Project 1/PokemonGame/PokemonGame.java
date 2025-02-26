@@ -29,7 +29,9 @@ public class PokemonGame {
     // public void runGame(){
     //     playOrNot();
     //     typeOfGameMode();
-    //     initialPlayer();
+    //     initialPlayer(); --> check who go 
+    //     customDeckOrNot(); 
+    //     gameModeSetup();
     // }
 
     // public Boolean getTurnOnet(){

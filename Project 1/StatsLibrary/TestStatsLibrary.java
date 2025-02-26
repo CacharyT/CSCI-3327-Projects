@@ -7,6 +7,7 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 
+
 public class TestStatsLibrary {
 
 
@@ -119,6 +120,9 @@ public class TestStatsLibrary {
 
         double notExclusiveResult = tester.calculateExclusiveOrNotExclusiveunion(notEA, notEB, notEAAndB);
 
+
+        //Checking binomial distribution (class example)
+        System.out.println("The result is " + tester.binomialDistribution(0.8, 0.2, 10, 7));
 
     }
 

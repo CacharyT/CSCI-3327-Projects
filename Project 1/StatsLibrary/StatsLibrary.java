@@ -5,6 +5,7 @@
  */
 
 //Imports
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
 
@@ -544,6 +545,20 @@ public class StatsLibrary {
 
         }
 
+    }
+
+
+    /*
+     * The function will will calculate the binomial distribution
+     * @param p the probability of success (double)
+     * @param q the probability of failure (double)
+     * @param n the number of trials (int)
+     * @param y the number of success (int)
+     */
+    public BigDecimal binomialDistribution(double p, double q, int n, int y){
+        double exponent1 = Math.pow(p,y);
+        double exponent2 = Math.pow(q, (n-y));
+        return new BigDecimal(combination(n, y)).multiply(BigDecimal.valueOf(exponent1)).multiply(BigDecimal.valueOf(exponent2));
     }
 
 

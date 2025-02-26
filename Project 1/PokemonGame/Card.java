@@ -3,7 +3,7 @@
  * The Card class will be an abstract object that contains a card type.
  */
 
-abstract class Card { //CHANGEEEEEEEEEEEEEEEEEE
+abstract class Card { //CHANGEEEEEEEEEEEEEEEEEE TO INHERTIANCE
 
     //Global Variable(s)
     private String cardType;
