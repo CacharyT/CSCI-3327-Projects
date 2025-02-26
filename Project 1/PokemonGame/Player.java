@@ -79,86 +79,19 @@ public class Player {
             
             switch(decision){
                 case 1: //player can player a single energy per turn (add to the active pokemon)
-                    if(!doneEnergy){
-
-                        Card[] newHandEnergy = player1.getHand();
-                        System.out.print("This is your current hand: [");
-                        for(Card card : newHandEnergy){
-                            System.out.print(card.getName() + " ");
-                        }
-                        System.out.print("]\n");
-
-                        System.out.print("Would you like to continue to add an energy? (Y or N): ");
-                        String continueOrNot = "";
-                        try {
-                            continueOrNot = scan.next().toLowerCase();
-                        } catch (Exception e) {
-                            System.out.println("Invalid input.");
-                        }
-
-                        //Adds energy to the active pokemon
-                        if(continueOrNot.equals("y") || continueOrNot.equals("yes")){
-                            System.out.print("Pick an energy card to place on the current active pokemon (0 - N; position in array): ");
-                            int arrayPositionEnergy = scan.nextInt();
-                            doneEnergy = player1.addEnergyToPokemon(arrayPositionEnergy); //after adding energy, returned value signifies true to ensure can not add anymore during the current turn
-                        }
-
-                        if(doneEnergy){
-                            Card activePokemon = player1.getActiveField();
-                            System.out.print("\nYour active pokemon " + activePokemon.getName() + " now has [");
-                            Energy[] pokemonEnergies = activePokemon.getEnergies();
-                            for(Energy energy: pokemonEnergies){
-                                System.out.print(energy.getName() + " ");
-                            }
-                            System.out.println("]");
-                        } else{
-                            System.out.println("Adding energy failed.");
-                        }
-
-                    } else{
-                        System.out.println("You can not add anymore energy this turn.");
-                    }
+                    doneEnergy = playerPlayEnergy(doneEnergy, player1);
                     break;
                 case 2: //allow player to play a trainer card (unlimited)
-                    Boolean trainerDone = false;
-                    while(!trainerDone){
-
-                        Card[] newHand = player1.getHand();
-                        System.out.print("This is your current hand: [");
-                        for(Card card : newHand){
-                            System.out.print(card.getName() + " ");
-                        }
-                        System.out.print("]\n");
-                        System.out.print("Pick a trainer card to play (0 - N; position in array; if done then enter -1): ");
-                        int arrayPosition = scan.nextInt();
-
-                        if(arrayPosition == -1){
-                            trainerDone = true;
-                        } else{
-                            player1.useTrainerCard(player1, arrayPosition); //activates the chosen card's effect
-                        }
-                    }
+                    playerPlayTrainer(player1);
                     break;
                 case 3: //allows the player to bench a pokemon from the hand (unlimited)
                     beginningPokemonBench(player1);
                     break;
                 case 4: //allows the player to retreat their active pokemon once per turn
-                    if(!doneRetreat){
-                        doneRetreat = player1.allowRetreatPokemon();
-                    } else{
-                        System.out.println("You can not perform a retreat again for this turn.");
-                    }
+                    doneRetreat = playerPlayRetreat(doneRetreat, player1);
                     break;
                 case 5: //allows the player to attack with active pokemon
-                    if(!turnOne){
-                        Boolean state = player1.allowPokemonAttack(player2);
-                        if(state){
-                            System.out.println("Current player has ended their turn!");
-                            endTurn = true;
-                        } 
-                    } else{
-                        System.out.println("You can not attack during the first turn.");
-                    }
+                    endTurn = playerPlayAttack(turnOne, player1, player2, endTurn);
                     break;
                 case 6: //ends turn
                     System.out.println("\nCurrent player has ended their turn!");
@@ -168,6 +101,120 @@ public class Player {
                     System.out.println("Invalid option. Retry");
                     break;
             }
+        }
+        return false;
+    }
+
+    /*
+     * The function will allow a player to attach an energy to the active pokemon
+     * @param
+     */
+    public Boolean playerPlayEnergy(Boolean doneEnergy, Player player1){
+        Scanner scan = new Scanner(System.in);
+        if(!doneEnergy){
+
+            Card[] newHandEnergy = player1.getHand();
+            System.out.print("This is your current hand: [");
+            for(Card card : newHandEnergy){
+                System.out.print(card.getName() + " ");
+            }
+            System.out.print("]\n");
+
+            System.out.print("Would you like to continue to add an energy? (Y or N): ");
+            String continueOrNot = "";
+            try {
+                continueOrNot = scan.next().toLowerCase();
+            } catch (Exception e) {
+                System.out.println("Invalid input.");
+            }
+
+            //Adds energy to the active pokemon
+            if(continueOrNot.equals("y") || continueOrNot.equals("yes")){
+                System.out.print("Pick an energy card to place on the current active pokemon (0 - N; position in array): ");
+                int arrayPositionEnergy = scan.nextInt();
+                doneEnergy = player1.addEnergyToPokemon(arrayPositionEnergy); //after adding energy, returned value signifies true to ensure can not add anymore during the current turn
+            }
+
+            if(doneEnergy){
+                Card activePokemon = player1.getActiveField();
+                System.out.print("\nYour active pokemon " + activePokemon.getName() + " now has [");
+                Energy[] pokemonEnergies = activePokemon.getEnergies();
+                for(Energy energy: pokemonEnergies){
+                    System.out.print(energy.getName() + " ");
+                }
+                System.out.println("]");
+                return doneEnergy;
+            } else{
+                System.out.println("Adding energy failed.");
+            }
+
+        } else{
+            System.out.println("You can not add anymore energy this turn.");
+        }
+        return false;
+    }
+
+    /*
+     * The function will allow the player to activate a trainer card effect
+     * @param lplayer1 a player object
+     * @return none
+     */
+    public void playerPlayTrainer(Player player1){
+        Scanner scan = new Scanner(System.in);
+        Boolean trainerDone = false;
+        while(!trainerDone){
+
+            Card[] newHand = player1.getHand();
+            System.out.print("This is your current hand: [");
+            for(Card card : newHand){
+                System.out.print(card.getName() + " ");
+            }
+            System.out.print("]\n");
+            System.out.print("Pick a trainer card to play (0 - N; position in array; if done then enter -1): ");
+            int arrayPosition = scan.nextInt();
+
+            if(arrayPosition == -1){
+                trainerDone = true;
+            } else{
+                player1.useTrainerCard(player1, arrayPosition); //activates the chosen card's effect
+            }
+        }
+    }
+
+    /*
+     * The function allow  the player top retreat their active pokemon
+     * @param doneRetreat a boolean value
+     * @param player1 a player object
+     * @return a boolean value
+     */
+    public Boolean playerPlayRetreat(Boolean doneRetreat, Player player1){
+        if(!doneRetreat){
+            doneRetreat = player1.allowRetreatPokemon();
+            return doneRetreat;
+        } else{
+            System.out.println("You can not perform a retreat again for this turn.");
+        }
+        return false;
+    }
+
+    /*
+     * The function allow the player to attack with their active pokemon
+     * @param turnOne a boolean value
+     * @param player1 a player object
+     * @param player2 a player object
+     * @param endTurn a boolean value
+     * @return a boolean value
+     */
+    public Boolean playerPlayAttack(Boolean turnOne, Player player1, Player player2, Boolean endTurn){
+        if(!turnOne){
+            Boolean state = player1.allowPokemonAttack(player2);
+            if(state){
+                System.out.println("Current player has ended their turn!");
+                endTurn = true;
+                return endTurn;
+            } 
+        } else{
+            System.out.println("You can not attack during the first turn.");
         }
         return false;
     }
@@ -911,94 +958,6 @@ public class Player {
             } else {
                 System.out.println("Error: Active Pokemon is not a valid Pokemon instance.");
             }
-        }
-        return true;
-    }
-
-    /*
-     * The function allows the AI to randomly choose what kind of attack to perform
-     */
-    public Boolean allowPokemonAttackAI(Player opponentPlayer){
-
-        Random random = new Random();
-        Card currentActivePokemon = getActiveField();
-        Energy[] activeEnergies = currentActivePokemon.getEnergies();
-
-        //Randomly choose an ability to perform (with our without knowing if enough energy)
-        String[] abilityList = currentActivePokemon.getAbilityDescriptions();
-        String abilityChosen = abilityList[random.nextInt(2)];
-
-        if (currentActivePokemon instanceof Pokemon) {
-            Pokemon activePokemon = (Pokemon) currentActivePokemon;
-
-            try {
-                // Find the method for the chosen ability dynamically
-                Method method = activePokemon.getClass().getMethod(abilityChosen, Energy[].class);
-                Object result = method.invoke(activePokemon, (Object) activeEnergies); //Need casting for correct resolution
-
-                if (result instanceof Boolean) {
-                    Boolean collected = (Boolean) result;
-                    if (collected) {
-                        System.out.println("\nYour " + currentActivePokemon.getName() + " performs " + abilityChosen);
-                        System.out.println("You draw 1 extra card!");
-                        Card drawnCard = drawCard();
-                        System.out.println("You got a " + drawnCard.getName() + "!");
-                    }
-                } else if (result instanceof Integer) {
-
-                    //Check element types and give damage multiplier if applicable
-                    Pokemon opponentActivePokemon = (Pokemon) opponentPlayer.getActiveField();
-                    String activeElement = activePokemon.getElementType();
-                    String opponentWeakness = opponentActivePokemon.getWeakness();
-
-                    if(activeElement.equals(opponentWeakness)){
-
-                        int damageDone = (int) result * 2;
-                        if(damageDone > 0){
-                            System.out.println("\n" + opponentActivePokemon.getName() + " is weak against " + opponentWeakness + "! 2X damage applied!");
-                            System.out.println("\nYour " + currentActivePokemon.getName() + " has attacked with " + abilityChosen + " causing " + damageDone + " damage to " + opponentActivePokemon.getName() + "!");
-                        } else{
-                            System.out.println("\nYour " + currentActivePokemon.getName() + " dealt no damage.");
-                        }
-                        
-                        // Update health based on damage dealt (interface utilized)
-                        opponentActivePokemon.reduceHealth(damageDone);
-
-                        System.out.println("Enemy's " + opponentActivePokemon.getName() + " health is now " + opponentActivePokemon.getHP());
-
-                        if(opponentActivePokemon.knockedOut()){
-
-                            //Allow current player to draw from the prize pile
-                            System.out.println("\nThe enemy's " + opponentActivePokemon.getName() + " has fallen. You may draw from the prize pile!");
-                            getPrizeCard();
-                        }
-                    } else {
-
-                        int damageDone = (int) result;
-                        if(damageDone > 0){
-                            System.out.println("\nYour " + currentActivePokemon.getName() + " has attacked with " + abilityChosen + " causing " + damageDone + " damage to " + opponentActivePokemon.getName() + "!");
-                        } else{
-                            System.out.println("\nYour " + currentActivePokemon.getName() + " dealt no damage.");
-                        }
-
-                        // Update health based on damage dealt (interface utilized)
-                        opponentActivePokemon.reduceHealth(damageDone);
-
-                        System.out.println("Enemy's " + opponentActivePokemon.getName() + " health is now " + opponentActivePokemon.getHP());
-
-                        if(opponentActivePokemon.knockedOut()){
-
-                            //Allow current player to draw from the prize pile
-                            System.out.println("\nThe enemy's " + opponentActivePokemon.getName() + " has fallen. You may draw from the prize pile!");
-                            getPrizeCard();
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            System.out.println("Error: Active Pokemon is not a valid Pokemon instance.");
         }
         return true;
     }

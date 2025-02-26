@@ -7,6 +7,7 @@ public class Trainer extends Card{
     
     //Global Variable(s)
     private String cardName;
+    private String trainerDescription;
 
     /*
      * Default Constructor
@@ -16,6 +17,7 @@ public class Trainer extends Card{
     public Trainer(){
         super.setCardType("Trainer");
         cardName = "";
+        trainerDescription = "";
     }
 
     /*
@@ -35,6 +37,24 @@ public class Trainer extends Card{
     @Override
     public String getName(){
         return cardName;
+    }
+
+    /*
+     * The function allows trainerDescription to be changed
+     * @param newTrainerDecription a string value
+     * @return none
+     */
+    public void setTrainerDescription(String newTrainerDescription){
+        trainerDescription = newTrainerDescription;
+    }
+
+    /*
+     * Returns the trainer description
+     * @param none
+     * @return trainerDescription a string value
+     */
+    public String getTrainerDescription(){
+        return trainerDescription;
     }
 
     /*

@@ -6,7 +6,6 @@
 public class ProfessorOak extends Trainer{
 
     //Global Variable(s)
-    private String trainerDescription;
 
     /*
      * Default Constructor
@@ -16,7 +15,7 @@ public class ProfessorOak extends Trainer{
     public ProfessorOak(){
         super.setCardType("Trainer");
         super.setName("ProfessorOak");
-        trainerDescription = "Discard your hand and draw 7 cards.";
+        super.setTrainerDescription("Discard your hand and draw 7 cards.");
     }
 
 
@@ -28,7 +27,7 @@ public class ProfessorOak extends Trainer{
     @Override
     public void activateEffect(Player player){
 
-        System.out.println("You have activated a ProfessorOak trainer card! The card's effect is: " + trainerDescription);
+        System.out.println("You have activated a ProfessorOak trainer card! The card's effect is: " + getTrainerDescription());
 
         //Discard hand to discard pile
         Card[] currentHand = player.getHand();
@@ -53,24 +52,6 @@ public class ProfessorOak extends Trainer{
         System.out.print("]\n");
         player.setHand(newHand);
 
-    }
-
-    /*
-     * The function allows for changing the card description
-     * @param newDescription a string
-     * @return none
-     */
-    public void setTrainerDescription(String newDescription){
-        trainerDescription = newDescription;
-    }
-
-    /*
-     * The function returns the card description
-     * @param none
-     * @return trainerDescription a string value
-     */
-    public String getTrainerDescription(){
-        return trainerDescription;
     }
     
 }

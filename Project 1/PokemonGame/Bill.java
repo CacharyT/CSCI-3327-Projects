@@ -6,7 +6,6 @@
 public class Bill extends Trainer{
     
     //Global Variable(s)
-    private String trainerDescription;
 
     /*
      * Default Constructor
@@ -16,7 +15,7 @@ public class Bill extends Trainer{
     public Bill(){
         super.setCardType("Trainer");
         super.setName("Bill");
-        trainerDescription = "Draw 2 cards.";
+        super.setTrainerDescription("Draw 2 cards.");
     }
 
     /*
@@ -42,26 +41,8 @@ public class Bill extends Trainer{
         newHand[currentHand.length + 1] = drawnCard[1];
         player.setHand(newHand);
 
-        System.out.println("You have activated a Bill trainer card! The card's effect is: " + trainerDescription);
+        System.out.println("You have activated a Bill trainer card! The card's effect is: " + getTrainerDescription());
         System.out.println("You have drawn a " + drawnCard[0].getName() + " and a " + drawnCard[1].getName());
-    }
-
-    /*
-     * The function allows for changing the card description
-     * @param newDescription a string
-     * @return none
-     */
-    public void setTrainerDescription(String newDescription){
-        trainerDescription = newDescription;
-    }
-
-    /*
-     * The function returns the card description
-     * @param none
-     * @return trainerDescription a string value
-     */
-    public String getTrainerDescription(){
-        return trainerDescription;
     }
 
 }

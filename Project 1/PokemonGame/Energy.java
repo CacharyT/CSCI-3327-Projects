@@ -15,8 +15,8 @@ public class Energy extends Card{
      * @return none
      */
     public Energy(){
-        energyType = "";
         super.setCardType("Energy");
+        energyType = "";
         cardName = "";
     }
 
@@ -26,8 +26,8 @@ public class Energy extends Card{
      * @return none
      */
     public Energy(String type){
-        energyType = type;
         super.setCardType("Energy");
+        energyType = type;
         cardName = "";
     }
     

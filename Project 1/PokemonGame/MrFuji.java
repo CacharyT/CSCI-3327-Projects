@@ -9,7 +9,6 @@ import java.util.Scanner;
 public class MrFuji extends Trainer{
 
     //Global Variable(s)
-    private String trainerDescription;
 
     /*
      * Default Constructor
@@ -19,7 +18,7 @@ public class MrFuji extends Trainer{
     public MrFuji(){
         super.setCardType("Trainer");
         super.setName("Mr.Fuji");
-        trainerDescription = "Choose a pokemon on your bench. Shuffle it and any cards attached to it into your deck.";
+        super.setTrainerDescription("Choose a pokemon on your bench. Shuffle it and any cards attached to it into your deck.");
     }
 
     /*
@@ -30,7 +29,7 @@ public class MrFuji extends Trainer{
     @Override
     public void activateEffect(Player player){
 
-        System.out.println("You have activated a Mr.Fuji trainer card! The card's effect is: " + trainerDescription);
+        System.out.println("You have activated a Mr.Fuji trainer card! The card's effect is: " + getTrainerDescription());
         Scanner scan = new Scanner(System.in);
 
         //Allow for user to choose a pokemon from the bench
@@ -94,22 +93,5 @@ public class MrFuji extends Trainer{
 
     }
 
-    /*
-     * The function allows for changing the card description
-     * @param newDescription a string
-     * @return none
-     */
-    public void setTrainerDescription(String newDescription){
-        trainerDescription = newDescription;
-    }
 
-    /*
-     * The function returns the card description
-     * @param none
-     * @return trainerDescription a string value
-     */
-    public String getTrainerDescription(){
-        return trainerDescription;
-    }
-    
 }

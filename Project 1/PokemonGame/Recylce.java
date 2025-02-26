@@ -9,7 +9,6 @@ import java.util.*;
 public class Recylce extends Trainer{
 
     //Global Variable(s)
-    private String trainerDescription;
 
     /*
      * Default Constructor
@@ -19,7 +18,7 @@ public class Recylce extends Trainer{
     public Recylce(){
         super.setCardType("Trainer");
         super.setName("Recycle");
-        trainerDescription = "Flip a coin. If heads, put a card in your discard pile on top of your deck.";
+        super.setTrainerDescription("Flip a coin. If heads, put a card in your discard pile on top of your deck.");
     }
 
     /*
@@ -32,7 +31,7 @@ public class Recylce extends Trainer{
 
         Scanner scan = new Scanner(System.in);
 
-        System.out.println("You have activated a Recycle trainer card! The card's effect is: " + trainerDescription);
+        System.out.println("You have activated a Recycle trainer card! The card's effect is: " + getTrainerDescription());
         System.out.println("Flipping a coin...");
 
         //Flip a coin (o - heads, 1 - tails)
@@ -92,29 +91,8 @@ public class Recylce extends Trainer{
             //Update discard pile
             player.setDiscardPile(newDiscardPile);
 
-
         } else{
             System.out.println("Unfortunately, it landed on tails. No effect will be granted.");
         }
     }
-
-    /*
-     * The function allows for changing the card description
-     * @param newDescription a string
-     * @return none
-     */
-    public void setTrainerDescription(String newDescription){
-        trainerDescription = newDescription;
-    }
-
-    /*
-     * The function returns the card description
-     * @param none
-     * @return trainerDescription a string value
-     */
-    public String getTrainerDescription(){
-        return trainerDescription;
-    }
-
-
 }
