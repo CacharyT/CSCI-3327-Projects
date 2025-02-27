@@ -8,7 +8,6 @@ public class Pokemon extends Card implements Attackable{
     //Global Variable(s)
     private int hp;
     private Energy[] energies;
-    private String cardName;
     private int basicAttack;
     private int specialAttack;
     String[] abilityDescription;
@@ -23,9 +22,9 @@ public class Pokemon extends Card implements Attackable{
      */
     public Pokemon(){
         super.setCardType("Pokemon");
+        super.setName("");
         hp = 0;
         energies = new Energy[0];
-        cardName = "";
         basicAttack = 0;
         specialAttack = 0;
         abilityDescription = new String[0];
@@ -61,28 +60,17 @@ public class Pokemon extends Card implements Attackable{
      * @param newEnergies an array of energy objects
      * @return none
      */
-    @Override
     public void setEnergies(Energy[] newEnergies){
         energies = newEnergies;
     }
 
     /*
-     * The function allows cardName to be changed
-     * @param newName a string value
-     * @return none
-     */
-    public void setName(String newName){
-        cardName = newName;
-    }
-
-    /*
-     * Returns the cardName
+     * Returns the energies (abstract implementation
      * @param none
-     * @return cardName a string value
+     * @return energies an array of energy ojects
      */
-    @Override
-    public String getName(){
-        return cardName;
+    public Energy[] getEnergies(){
+        return energies;
     }
 
     /*
@@ -171,7 +159,6 @@ public class Pokemon extends Card implements Attackable{
      * @param none
      * @return abilityDescription an array of strings
      */
-    @Override
     public String[] getAbilityDescriptions(){
         return abilityDescription;
     }
@@ -181,7 +168,6 @@ public class Pokemon extends Card implements Attackable{
      * @param none
      * @return weakness a string value
      */
-    @Override
     public String getWeakness(){
         return weakness;
     }
@@ -191,25 +177,24 @@ public class Pokemon extends Card implements Attackable{
      * @param none
      * @return retreatCost an array of energy objects
      */
-    @Override
     public Energy[] getRetreatCost(){
         return retreatCost;
     }
-
 
     /*
      * The fucntion returns the elementType value
      * @param none
      * @return elementType a string value
      */
-    @Override
     public String getElementType(){
         return elementType;
     }
 
     //Interface Method Implementations
     /*
-     * 
+     * The function will allow the pokemon to take damage, it will update the damage and return the new hp
+     * @param damage an int value
+     * @return hp an int value
      */
     @Override
     public int reduceHealth(int damage){
@@ -218,7 +203,9 @@ public class Pokemon extends Card implements Attackable{
     }
 
     /*
-     * 
+     * The function will check if the pokemon has fallen if so return true, otherwise false
+     * @param none
+     * @return a boolean value
      */
     @Override
     public Boolean knockedOut(){
@@ -227,66 +214,5 @@ public class Pokemon extends Card implements Attackable{
         }
         return false;
     }
-
-
-    /*
-     * Returns the energies (abstract implementation
-     * @param none
-     * @return energies an array of energy ojects
-     */
-    @Override
-    public Energy[] getEnergies(){
-        return energies;
-    }
-
-    /*
-     * Implementation of the abstract method (mandatory implementation)
-     * @param none
-     * @return none
-     */
-    @Override
-    public void activateEffect(Player player){
-        //Does nothing
-    }
-
-    // /*
-    //  * Implementation of the abstract method (mandatory implementation)
-    //  * @param none
-    //  * @return an array of energy objects
-    //  */
-    // @Override
-    // public Energy[] getRetreatCost(){
-    //     return new Energy[0];
-    // }
-
-    // /*
-    //  * Implementation of the abstract method (mandatory implementation)
-    //  * @param none
-    //  * @return an array of strings
-    //  */
-    // @Override
-    // public String[] getAbilityDescriptions(){
-    //     return new String[0];
-    // }
-
-    // /*
-    //  * Implementation of the abstract method (mandatory implementation)
-    //  * @param none
-    //  * @return a string
-    //  */
-    // @Override
-    // public String getWeakness(){
-    //     return null;
-    // }
-
-    // /*
-    //  * Implementation of the abstract method (mandatory implementation)
-    //  * @param none
-    //  * @return a string
-    //  */
-    // @Override
-    // public String getElementType(){
-    //     return null;
-    // }
 
 }

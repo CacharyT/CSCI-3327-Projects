@@ -135,8 +135,9 @@ public class Player {
                 doneEnergy = player1.addEnergyToPokemon(arrayPositionEnergy); //after adding energy, returned value signifies true to ensure can not add anymore during the current turn
             }
 
+            //Print result
             if(doneEnergy){
-                Card activePokemon = player1.getActiveField();
+                Pokemon activePokemon = (Pokemon) player1.getActiveField();
                 System.out.print("\nYour active pokemon " + activePokemon.getName() + " now has [");
                 Energy[] pokemonEnergies = activePokemon.getEnergies();
                 for(Energy energy: pokemonEnergies){
@@ -674,7 +675,7 @@ public class Player {
     public Boolean addEnergyToPokemon(int arrayPosition){
 
         Card[] currentHand = getHand();
-        Card activePokemon = getActiveField();
+        Pokemon activePokemon = (Pokemon) getActiveField();
 
         //Add energy card to pokemon and update pokemon energy
         Energy[] currentEnergies = activePokemon.getEnergies();
@@ -758,7 +759,7 @@ public class Player {
         Boolean doneSwap = false;
         while(!doneSwap){
 
-            Card currentActivePokemon = getActiveField();
+            Pokemon currentActivePokemon = (Pokemon) getActiveField();
             Energy[] activeEnergies = currentActivePokemon.getEnergies();
 
             System.out.print("Your " + currentActivePokemon.getName() + " has [");
@@ -856,7 +857,7 @@ public class Player {
         Scanner scan = new Scanner(System.in);
         System.out.println("Player has chosen to attack!");
 
-        Card currentActivePokemon = getActiveField();
+        Pokemon currentActivePokemon = (Pokemon) getActiveField();
         Energy[] activeEnergies = currentActivePokemon.getEnergies();
 
         System.out.print("Your " + currentActivePokemon.getName() + " has [");
@@ -995,7 +996,7 @@ public class Player {
                 player1.setActiveField(benchPokemon);
 
                 //move the dead pokemon to the discard pile and its any energy attached to it
-                Card fallenPokemon = player1.getActiveField();
+                Pokemon fallenPokemon = (Pokemon) player1.getActiveField();
                 Card[] currentDiscardPile = player1.getDiscardPile();
                 Energy[] fallenPokemonEnergies = fallenPokemon.getEnergies();
                 Card[] newDiscardPile = new Card[currentDiscardPile.length + fallenPokemonEnergies.length + 1];

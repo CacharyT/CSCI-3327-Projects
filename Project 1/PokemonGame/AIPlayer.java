@@ -277,7 +277,7 @@ public class AIPlayer extends Player{
             if(fulfilled){
 
                 player1.addEnergyToPokemon(energyPosition);
-                Card activePokemon = player1.getActiveField();
+                Pokemon activePokemon = (Pokemon) player1.getActiveField();
                 System.out.print("\nYour active pokemon " + activePokemon.getName() + " now has [");
                 Energy[] pokemonEnergies = activePokemon.getEnergies();
                 for(Energy energy: pokemonEnergies){
@@ -384,7 +384,7 @@ public class AIPlayer extends Player{
         if(!doneRetreat){
 
             //Get Active Pokemon
-            Card currentPokemon = player1.getActiveField();
+            Pokemon currentPokemon = (Pokemon) player1.getActiveField();
             Energy[] activeEnergies = currentPokemon.getEnergies();
 
             //Check first if pokemon has enough energy and correct types of energy
@@ -464,7 +464,7 @@ public class AIPlayer extends Player{
 
                 Boolean state = false;
                 Random random = new Random();
-                Card currentActivePokemon = getActiveField();
+                Pokemon currentActivePokemon = (Pokemon) getActiveField();
                 Energy[] activeEnergies = currentActivePokemon.getEnergies();
 
                 //Randomly choose an ability to perform (with our without knowing if enough energy)

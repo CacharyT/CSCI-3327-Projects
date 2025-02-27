@@ -26,19 +26,6 @@ public class PokemonGame {
         turnOne = true;
     }
 
-    // public void runGame(){
-    //     playOrNot();
-    //     typeOfGameMode();
-    //     initialPlayer(); --> check who go 
-    //     customDeckOrNot(); 
-    //     gameModeSetup();
-    // }
-
-    // public Boolean getTurnOnet(){
-    //     System.out.print("Turn One:" + turnOne);
-    //     return turnOne;
-    // }
-
     /*
      * The main game mechanic that starts the game for the player to play (player chooses their game mode)
      * @param none
@@ -59,7 +46,9 @@ public class PokemonGame {
     }
 
     /*
-     * 
+     * The function will allow the player to choose if they want to play or not
+     * @param none
+     * @return a boolean value
      */
     public Boolean playOrNot(){
         Scanner scan = new Scanner(System.in);
@@ -95,7 +84,9 @@ public class PokemonGame {
     }
 
     /*
-     * 
+     * The function will allow the player to choose what game mode they want to play
+     * @param none
+     * @return a string value
      */
     public String typeOfGameMode(){
         Scanner scan = new Scanner(System.in);
@@ -111,7 +102,9 @@ public class PokemonGame {
     }
 
     /*
-     * 
+     * The function will find who will be the first player in the game by flipping a coin
+     * @param none
+     * @return an int value
      */
     public int initialPlayer(){
         Scanner scan = new Scanner(System.in);
@@ -135,7 +128,9 @@ public class PokemonGame {
     }
 
     /*
-     * 
+     * The function will allow the player to choose if they want to customize their deck or not
+     * @param none
+     * @return a boolean value
      */
     public Boolean customDeckOrNot(){
         Scanner scan = new Scanner(System.in);
@@ -159,7 +154,12 @@ public class PokemonGame {
     }
 
     /*
-     * 
+     * The function will initialize the players and all the ncessary components of each player to start the game
+     * @param play a boolean value
+     * @param gameType a string value
+     * @param coin a int value
+     * @param customized a boolean value
+     * @return none
      */
     public void gameModeSetup(Boolean play, String gameType, int coin, Boolean customized){
 

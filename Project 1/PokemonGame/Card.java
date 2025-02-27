@@ -7,6 +7,7 @@ abstract class Card { //CHANGEEEEEEEEEEEEEEEEEE TO INHERTIANCE
 
     //Global Variable(s)
     private String cardType;
+    private String cardName;
 
     /*
      * Default Constructor
@@ -44,14 +45,22 @@ abstract class Card { //CHANGEEEEEEEEEEEEEEEEEE TO INHERTIANCE
         return cardType;
     }
 
-    //Abstract methods (used primarily for the children objects of Card)
-    public abstract String getName();
-    public abstract Energy[] getEnergies();
-    public abstract void setEnergies(Energy[] newEnergies);
-    public abstract void activateEffect(Player player);
-    public abstract Energy[] getRetreatCost();
-    public abstract String[] getAbilityDescriptions();
-    public abstract String getWeakness();
-    public abstract String getElementType();
+    /*
+     * The function allows cardName to be changed
+     * @param newName a string value
+     * @return none
+     */
+    public void setName(String newName){
+        cardName = newName;
+    }
+
+    /*
+     * Returns the cardName
+     * @param none
+     * @return cardName a string value
+     */
+    public String getName(){
+        return cardName;
+    }
     
 }

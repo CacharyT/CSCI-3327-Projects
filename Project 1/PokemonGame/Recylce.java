@@ -42,8 +42,9 @@ public class Recylce extends Trainer{
 
             System.out.println("It landed on head!");
 
-            //Allow user to choose what card to take from the pile
             Card[] currentDiscardPile = player.getDiscardPile();
+
+            //Allow user to choose what card to take from the pile
             System.out.print("This is your current discard pile: [");
             for(Card card : currentDiscardPile){
                 if(card == null){

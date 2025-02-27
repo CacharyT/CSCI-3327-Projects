@@ -52,7 +52,8 @@ public class MrFuji extends Trainer{
         } catch (Exception e) {
         }
 
-        Card cardPicked = playerBench[benchSpot];
+        //Assuming the player picked a pokemon
+        Pokemon cardPicked = (Pokemon) playerBench[benchSpot];
         Energy[] cardPickedEnergies = cardPicked.getEnergies();
 
         //Remove pokemon from bench and update bench
