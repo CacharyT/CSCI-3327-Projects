@@ -112,14 +112,13 @@ public class StatsLibrary {
         return modes;
     }
 
-
     /*
-     * The function will return the standard deviation (sample) of the provided array of integers
+     * The function will return the variance of the given set of numbers
      * @param: userInputNumber an array of integers
-     * @return: std the standard deviation (sample) of the array of integers
+     * @return: variance the variance of the (sample) of the array of integers
      */
-    public double getStandardDeviation(int[] userInputNumber){
-        
+    public double getVariance(int[] userInputNumber){
+
         //Calculate the count
         int count = userInputNumber.length;
 
@@ -149,6 +148,21 @@ public class StatsLibrary {
 
         //Calculate variance
         double variance = deviationSum/(count - 1);
+
+        return variance;
+
+    }
+
+
+    /*
+     * The function will return the standard deviation (sample) of the provided array of integers
+     * @param: userInputNumber an array of integers
+     * @return: std the standard deviation (sample) of the array of integers
+     */
+    public double getStandardDeviation(int[] userInputNumber){
+
+        //Calculate variance
+        double variance = getVariance(userInputNumber);
 
         //Calculate standard deviation
         double std = Math.sqrt(variance);
@@ -239,93 +253,6 @@ public class StatsLibrary {
 
         return complementList;
     }
-
-
-    /*
-     * This function calculates the combination value of the given n and r values
-     * @param n an int value
-     * @param r an int value
-     * @return BigInteger value of the combination
-     */
-    public BigInteger combination(int n, int r){
-
-        BigInteger factN = factorial(n);
-        BigInteger factR = factorial(r);
-        BigInteger factNMinusR = factorial(n - r);
-        BigInteger combinationValue = factN.divide(factR.multiply(factNMinusR));
-
-        return combinationValue;
-
-    }
-
-    /*
-     * This function will calculate the permutation value of the given n and r values
-     * @param n an int value
-     * @param r an int value
-     * @return BigInteger value of the permutation
-     */
-    public BigInteger permutation(int n, int r){
-        
-        BigInteger factN = factorial(n);
-        BigInteger factNMinusR = factorial(n - r);
-        BigInteger permutationValue = factN.divide(factNMinusR);
-
-        return permutationValue;
-
-    }
-
-    /*
-     * The function will retun the factorial value of the given number
-     * @param num the number to find the factorial for
-     * @return factorial value as a BigInteger type
-     */
-    public BigInteger factorial(int num){
-        
-        //Checks if the current num is 0, if so, can return (base case)
-        if(num == 0){
-            return BigInteger.ONE;
-        }
-
-        return BigInteger.valueOf(num).multiply(factorial(num - 1)); //recursion case (decrease num each call)
-    }
-
-
-    /*
-     * The function will compute the given value based on the mn rule
-     * @param m an int value
-     * @param n an int value
-     * @return: the value (m * n)
-     */
-    public double getMNRule(int m, int n){
-
-        //Return the value (m * n)
-        return (double) (m * n);
-
-    }
-
-
-    /*
-     * This function will compute the given value based on the multinomial coefficient formula
-     * @param n an int value
-     * @param nums an array of int values
-     * @return: the value of the multinomial coefficient
-     */
-    public BigInteger getMultinomialCoefficient(int n, int[] nums){
-
-        //Numerator
-        BigInteger numerator = factorial(n);
-
-        //deonominator
-        BigInteger denominator = BigInteger.ONE;
-        for(int num : nums){
-            denominator = denominator.multiply(factorial(num));
-        }
-
-        return numerator.divide(denominator);
-
-    }
-
-
 
     /*
     * This function will allow the user to check if a given subset/event fulfills the probability axiom 1
@@ -429,6 +356,135 @@ public class StatsLibrary {
     }
 
     /*
+     * The function will calculate the probability of mutually exclusive events
+     * @param
+     * @return
+     */
+    public double probMutualExclusive(String[] A, String[] B, double probA, double probB){
+
+        //Check first if the events are mutually exclusive (A AND B = empty set; no same values)
+        int correctCounter = 0;
+        for(String itemA : A){
+            for(String itemB : B){
+                if(itemA.equals(itemB)){
+                    correctCounter++;
+                    break;
+                }
+            }
+        }
+
+        //If all item are found, then add probabilites
+        if(correctCounter == 0){
+            return probA + probB;
+        } else{
+            return 0; //not mutually exclusive
+        }
+
+    }
+
+    /*
+     * This function calculates the combination value of the given n and r values
+     * @param n an int value
+     * @param r an int value
+     * @return BigInteger value of the combination
+     */
+    public BigInteger combination(int n, int r){
+
+        BigInteger factN = factorial(n);
+        BigInteger factR = factorial(r);
+        BigInteger factNMinusR = factorial(n - r);
+        BigInteger combinationValue = factN.divide(factR.multiply(factNMinusR));
+
+        return combinationValue;
+
+    }
+
+    /*
+     * This function will calculate the permutation value of the given n and r values
+     * @param n an int value
+     * @param r an int value
+     * @return BigInteger value of the permutation
+     */
+    public BigInteger permutation(int n, int r){
+        
+        BigInteger factN = factorial(n);
+        BigInteger factNMinusR = factorial(n - r);
+        BigInteger permutationValue = factN.divide(factNMinusR);
+
+        return permutationValue;
+
+    }
+
+    /*
+     * The function will retun the factorial value of the given number
+     * @param num the number to find the factorial for
+     * @return factorial value as a BigInteger type
+     */
+    public BigInteger factorial(int num){
+        
+        //Checks if the current num is 0, if so, can return (base case)
+        if(num == 0){
+            return BigInteger.ONE;
+        }
+
+        return BigInteger.valueOf(num).multiply(factorial(num - 1)); //recursion case (decrease num each call)
+    }
+
+    /*
+     * The function will compute the given value based on the mn rule
+     * @param m an int value
+     * @param n an int value
+     * @return: the value (m * n)
+     */
+    public double getMNRule(int m, int n){
+
+        //Return the value (m * n)
+        return (double) (m * n);
+
+    }
+
+    /*
+     * This function will compute the given value based on the multinomial coefficient formula
+     * @param n an int value
+     * @param nums an array of int values
+     * @return: the value of the multinomial coefficient
+     */
+    public BigInteger getMultinomialCoefficient(int n, int[] nums){
+
+        //Numerator
+        BigInteger numerator = factorial(n);
+
+        //deonominator
+        BigInteger denominator = BigInteger.ONE;
+        for(int num : nums){
+            denominator = denominator.multiply(factorial(num));
+        }
+
+        return numerator.divide(denominator);
+
+    }
+
+    /*
+     * The function will calculate the condtional probability (P(A|B))
+     * @param probAB a double value representing the probability of A and B
+     * @param probB a double value representing the probability of B
+     * @return a double value which is the condtional probability
+     */
+    public double conditionalProbabilityAB(double probAB, double probB){
+        return probAB/probB;
+    }
+
+    /*
+     * The function will calculate the condtional probability (P(B|A))
+     * @param probAB a double value representing the probability of A and B
+     * @param probB a double value representing the probability of A
+     * @return a double value which is the condtional probability
+     */
+    public double conditionalProbabilityBA(double probAB, double probA){
+        return probAB/probA;
+    }
+
+    /*
      * The function will allow the user to check if the given events, A and B are independent
      * @param eventAProbabilities an array of double
      * @param eventBProbabilities an array of double
@@ -479,6 +535,7 @@ public class StatsLibrary {
     }
 
     /*
+     * Multiplicative Law of Probability
      * This function will calculate the intersection of given events, depending on if it is dependent or independent
      * @param eventAProbabilities an array of double
      * @param eventBProbabilities an array of double
@@ -511,8 +568,8 @@ public class StatsLibrary {
 
     }
 
-
     /*
+     * General Addition Rule
      * The function will allow users to calculate the exclusive or not exclusive union of the given events
      * @param eventAProbabilities an array of double
      * @param eventBProbabilities an array of double
@@ -547,6 +604,111 @@ public class StatsLibrary {
 
     }
 
+    /*
+     * The function will check if the partition of a set is part of a sample space (Definition 2.11)
+     * @param space an arraylist of string represting all possible values
+     * @param setsOfValues an arraylist of arraylist of strings which is the subsets of the space
+     * @return a boolean value which decides if it its a partition of s
+     */
+    public Boolean partitionOfSpace(ArrayList<String> space, ArrayList<ArrayList<String>> setsOfValue){
+
+        //Order them first
+        Collections.sort(space);
+
+        //Union all of the given set values
+        ArrayList<String> unioned = new ArrayList<>();
+        for(ArrayList<String> set : setsOfValue){
+            for(String value : set){
+                if(!unioned.contains(value)){
+                    unioned.add(value);
+                }
+            }
+        }
+        Collections.sort(unioned);
+
+        //First check if part of s when unioned
+        if(space.equals(unioned)){
+            Boolean empty = true;
+            //Check if intersect are empty sets
+            for(int i = 0; i < setsOfValue.size() - 1; i++){
+                if(setsOfValue.get(i).equals(setsOfValue.get(i+1))){
+                    empty = false;
+                    break;
+                }
+            }
+            if(empty){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /*
+     * The function will calculate the value for the theorem of total probability
+     * @param probAB a double array containing the probabilities of each A given B 
+     * @param probB a double array containing the probabilities of each B
+     * @return totalProbability a double value of the total probability
+     */
+    public double theoremOfTotalProbability(double[] probAB, double[] probB){
+
+        double totalProbability = 0;
+        for(int i = 0; i < probAB.length; i++){
+            totalProbability += probAB[i] * probB[i];
+        }
+
+        return totalProbability;
+    }
+
+
+    /*
+     * The function will calculate the porbability based on Baye's theorem
+     * @param probA a double value which is the probability of A
+     * @param probB a double value which is the probability of B
+     * @return the probabilty of P(B|A)
+     */
+    public double bayesTheorem(double probA, double probB){
+        double probAB = conditionalProbabilityAB(probA, probB);
+        return (probAB*probB)/probA;
+    }
+
+    /*
+     * The function will caclulate the expected value of a random variable or function of a random variable
+     * @param y an array of double (random variable)
+     * @param probabiltiies an array of double (probability for each random variable)
+     * @return the expected random value (double)
+     */
+    public double expectedRandom(double[] y, double[] probabilites){
+        double totalProbability = 0;
+        for(int i = 0; i < y.length; i++){
+            totalProbability += y[i]*probabilites[i];
+        }
+        return totalProbability;
+    }
+
+    /*
+     * The function will caclulate the variance of a random variable
+     * @param y an array of double (random variable)
+     * @param probabiltiies an array of double (probability for each random variable)
+     * @return the varaince of the random value (double)
+     */
+    public double varianceRandom(double[] y, double[] probabilites){
+        double expected = expectedRandom(y, probabilites);
+        double totalProbability = 0;
+        for(int i = 0; i < y.length; i++){
+            totalProbability += Math.pow(y[i],2)*probabilites[i];
+        }
+        return totalProbability - Math.pow(expected,2);
+    }
+
+    /*
+     * The function will calculate the standard deviation for a random variable
+     * @param y an array of double (random variable)
+     * @param probabiltiies an array of double (probability for each random variable)
+     * @return the standard deviation the random value (double)
+     */
+    public double standardDeviationRandom(double[] y, double[] probabilites){
+        return Math.sqrt(varianceRandom(y, probabilites));
+    }
 
     /*
      * The function will will calculate the binomial distribution
@@ -561,5 +723,74 @@ public class StatsLibrary {
         return new BigDecimal(combination(n, y)).multiply(BigDecimal.valueOf(exponent1)).multiply(BigDecimal.valueOf(exponent2));
     }
 
+    /*
+     * The function will calculate the expected value for a binomial distribution
+     * @param n the number of trials (int)
+     * @param p the probability of success (double)
+     * @return a double value (the expected value)
+     */
+    public double expectedBinomial(double n, double p){
+        return n*p;
+    }
+
+    /*
+     * The function will calculate the variance for a binomial distribution
+     * @param n the number of trials (int)
+     * @param p the probability of success (double)
+     * @param q the probability of failure (double)
+     * @return a double value (the variance)
+     */
+    public double varianceBinomial(double n, double p, double q){
+        return n*p*q;
+    }
+
+    /*
+     * The function will calculate the standard deviation for a binomial distribution
+     * @param n the number of trials (int)
+     * @param p the probability of success (double)
+     * @param q the probability of failure (double)
+     * @return a double value (the standard deviation value)
+     */
+    public double standardDeviationBinomial(double n, double p, double q){
+        return Math.sqrt(varianceBinomial(n, p, q));
+    }
+
+    /*
+     * The function will calculate the geometric probability distribution
+     * @param p a double value (probability of failure)
+     * @param y a double value (# of trials)
+     * @param q a double value (probability of success)
+     * @return the geometric probability distribution (double)
+     */
+    public double geometricDistribution(double p, double y, double q){
+        return Math.pow(q, y-1)*p;
+    }
+
+    /*
+     * The function will calculate expected of the geometric probability distribution
+     * @param p a double value (probability of failure)
+     * @return the expected of the geometric probability distribution (double)
+     */
+    public double geometricExpected(double p){
+        return 1/p;
+    }
+
+    /*
+     * The function will calculate variance of the geometric probability distribution
+     * @param p a double value (probability of failure)
+     * @return the variance of the geometric probability distribution (double)
+     */
+    public double geometricVariance(double p){
+        return (1 - p)/Math.pow(p,2);
+    }
+
+    /*
+     * The function will calculate the standard deviation geometric probability distribution
+     * @param p a double value (probability of failure)
+     * @return the standard deviation of the geometric probability distribution (double)
+     */
+    public double geometricStandardDeviation(double p){
+        return Math.sqrt(geometricVariance(p));
+    }
 
 }
