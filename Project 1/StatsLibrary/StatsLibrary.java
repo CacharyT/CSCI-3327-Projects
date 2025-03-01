@@ -1,7 +1,6 @@
 /*
  * Cachary Tolentino
  * StatsLibrary is a collection of statistical functions
- * Last updatded: 1/25/2025
  */
 
 //Imports
@@ -29,7 +28,6 @@ public class StatsLibrary {
 
         return result;
     }
-
 
     /*
      * The function will return the median value of the provided array of integers
@@ -68,7 +66,6 @@ public class StatsLibrary {
             }
         }
     }
-
 
     /*
      * The function will return the mode value(s) of the provided array of integers
@@ -153,7 +150,6 @@ public class StatsLibrary {
 
     }
 
-
     /*
      * The function will return the standard deviation (sample) of the provided array of integers
      * @param: userInputNumber an array of integers
@@ -170,7 +166,6 @@ public class StatsLibrary {
         //Return the value
         return std;
     }
-
 
     /*
      * The function will return the union of the given pair arraylists
@@ -283,7 +278,7 @@ public class StatsLibrary {
                 totalProbability+=num;
             }
 
-            //Check if sum equals to one, return true
+            //Check if positive, return true
             if(totalProbability >= 0){
                 return true;
             }
@@ -406,13 +401,11 @@ public class StatsLibrary {
      * @return BigInteger value of the permutation
      */
     public BigInteger permutation(int n, int r){
-        
         BigInteger factN = factorial(n);
         BigInteger factNMinusR = factorial(n - r);
         BigInteger permutationValue = factN.divide(factNMinusR);
 
         return permutationValue;
-
     }
 
     /*
@@ -437,10 +430,8 @@ public class StatsLibrary {
      * @return: the value (m * n)
      */
     public double getMNRule(int m, int n){
-
         //Return the value (m * n)
         return (double) (m * n);
-
     }
 
     /*

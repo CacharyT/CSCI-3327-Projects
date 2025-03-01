@@ -64,7 +64,7 @@ public class TestSetOperations{
         someArrayList4.add("Wednesday");
         someArrayList4.add("bored");
 
-
+        //Results
         System.out.println("The union: " + operator.Union(someArrayList1, someArrayList2));
         System.out.println("The intersect: " + operator.Intersect(someArrayList1, someArrayList2));
         System.out.println("The complement of list4: " + operator.Complement(someArrayList3, someArrayList4));
