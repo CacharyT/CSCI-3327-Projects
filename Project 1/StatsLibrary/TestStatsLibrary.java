@@ -174,7 +174,7 @@ public class TestStatsLibrary {
         System.out.println("Binomial Distribution Variance: " + tester.varianceBinomial(n, p, q));
         System.out.println("Binomial Distribution Standard Deviation: " + tester.standardDeviationBinomial(n, p, q));
 
-        //Testing geometric distribution, variance, and standard deviation
+        //Testing geometric distribution, expected, variance, and standard deviation (and extra formulas)
         double p2 = 0.2;
         double q2 = 0.8;
         double y2 = 3;
@@ -182,6 +182,30 @@ public class TestStatsLibrary {
         System.out.println("Geometric Distribution Expected: " + tester.geometricExpected(p));
         System.out.println("Geometric Distribution Variance: " + tester.geometricVariance(p));
         System.out.println("Geometric Distribution Standard Deviation: " + tester.geometricStandardDeviation(p));
+        System.out.println("Geometric Distribution On or Before 3rd trial: " + tester.onBeforeGeometric(p, 3));
+        System.out.println("Geometric Distribution Before 3rd trial: " + tester.beforeGeometric(p, 3));
+        System.out.println("Geometric Distribution On or After 3rd trial: " + tester.onAfterGeometric(p, 3));
+        System.out.println("Geometric Distribution After 3rd trial: " + tester.afterGeometric(p, 3));
+
+        //Testing hyper geometric distribution, expected, variance, and standard deviation
+        int n3 = 5;
+        int y3 = 4;
+        int r3 = 6;
+        int N3 = 20;
+        System.out.println("Hyper Geometric Distribution: " + tester.hyperGeometricDistribution(n3, y3, r3, N3));
+        System.out.println("Hyper Geometric Distribution Expected: " + tester.hyperExpected(n3, r3, N3));
+        System.out.println("Hyper Geometric Distribution Variance: " + tester.hyperVariance(n3, r3, N3));
+        System.out.println("Hyper Geometric Distribution Standard Deviation: " + tester.hyperStandardDeviation(n3, r3, N3));
+
+        //Testing negative binomial distribution, expected, variance, and standard deviation
+        int y4 = 5;
+        int r4 = 3;
+        double p4 = 0.2;
+        double q4 = 0.8;
+        System.out.println("Negative Binomial Distribution: " + tester.negativeBinomialDistribution(y4, r4, p4, q4));
+        System.out.println("Negative Binomial Distribution Expected: " + tester.expectedNegativeBinomial(r4, p4));
+        System.out.println("Negative Binomial Distribution Variance: " + tester.varianceNegativeBinomial(r4, p4));
+        System.out.println("Negative Binomial Distribution Standard Deviation: " + tester.standardDeviationNegativeBinomial(r4, p4));
 
     }
     

@@ -6,6 +6,7 @@
 //Imports
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.util.*;
 
 public class StatsLibrary {
@@ -782,6 +783,164 @@ public class StatsLibrary {
      */
     public double geometricStandardDeviation(double p){
         return Math.sqrt(geometricVariance(p));
+    }
+
+    /*
+     * The function will calculate the geometric probability distribution for a success that occurs on or before the nth trial
+     * @param p a double value (probability of failure)
+     * @param n an int value (number of trials)
+     * @return the probability 
+     */
+    public double onBeforeGeometric(double p, int n){
+        return 1 - Math.pow((1 - p),n);
+    }
+
+    /*
+     * The function will calculate the geometric probability distribution for a success that occurs before the nth trial
+     * @param p a double value (probability of failure)
+     * @param n an int value (number of trials)
+     * @return the probability 
+     */
+    public double beforeGeometric(double p, int n){
+        return 1 - Math.pow((1 - p), n - 1);
+    }
+
+    /*
+     * The function will calculate the geometric probability distribution for a success that occurs on or after the nth trial
+     * @param p a double value (probability of failure)
+     * @param n an int value (number of trials)
+     * @return the probability 
+     */
+    public double onAfterGeometric(double p, int n){
+        return Math.pow((1 - p), n - 1);
+    }
+
+    /*
+     * The function will calculate the geometric probability distribution for a success that occurs after the nth trial
+     * @param p a double value (probability of failure)
+     * @param n an int value (number of trials)
+     * @return the probability 
+     */
+    public double afterGeometric(double p, int n){
+        return Math.pow((1 - p), n);
+    }
+
+    /*
+     * The function will calculate the hyper geometric probability distribution 
+     * @param n an int value (number of selected)
+     * @param y an int value (number desired)
+     * @param r an int value (total number of desired kind)
+     * @param N an int value (total size)
+     * @return a BigInteger value of the probability
+     */
+    public BigDecimal hyperGeometricDistribution(int n, int y, int r, int N){
+
+        //Calculate the numerator
+        BigInteger selectFromR = combination(r, y); //# of ways to select from r
+        BigInteger selectFromNMinusR = combination(N-r, n-y); //#of ways to select from N-r
+        BigInteger numerator = selectFromR.multiply(selectFromNMinusR);
+
+        //Calculate denominator
+        BigInteger denominator = combination(N, n);
+
+        if(denominator.equals(BigInteger.ZERO)){
+            System.out.println("Denominator is zero.");
+            return null;
+        } else{
+            return new BigDecimal(numerator).divide(new BigDecimal(denominator), 5, RoundingMode.HALF_UP);
+        }
+    }
+
+    /*
+     * The function will calculate the expected value for a hyper geometric distribution
+     * @param n an int value (number of selected)
+     * @param r an int value (total number of desired kind)
+     * @param N an int value (total size)
+     * @return the expected value
+     */
+    public BigDecimal hyperExpected(int n, int r, int N){
+
+        return new BigDecimal((double) (n*r) / (double) N);
+
+    }
+
+    /*
+     * The function will calculate the variance value for a hyper geometric distribution
+     * @param n an int value (number of selected)
+     * @param r an int value (total number of desired kind)
+     * @param N an int value (total size)
+     * @return the variance value
+     */
+    public BigDecimal hyperVariance(int n, int r, int N){
+
+        return new BigDecimal((double) n * ((double) r / (double) N) * ((double) (N-r)/ (double) N) * ((double) (N-n) / (double) (N-1)));
+
+    }
+
+    /*
+     * The function will calculate the standard deviation value for a hyper geometric distribution
+     * @param n an int value (number of selected)
+     * @param r an int value (total number of desired kind)
+     * @param N an int value (total size)
+     * @return the standard deviation value
+     */
+    public BigDecimal hyperStandardDeviation(int n, int r, int N){
+
+        return new BigDecimal(Math.sqrt(hyperVariance(n, r, N).doubleValue()));
+
+    }
+
+    /*
+     * The function will calculate the negative binomial probability distribution 
+     * @param y an int value (amount of action)
+     * @param r an int value (amount of trial)
+     * @param p a double value (success)
+     * @param q a double value (failure)
+     * @return the probability
+     */
+    public BigDecimal negativeBinomialDistribution(int y, int r, double p, double q){
+
+        double exponent1 = Math.pow(p,r);
+        double exponent2 = Math.pow(q, y-r);
+        BigInteger combined = combination(y-1, r-1);
+        return new BigDecimal(combined).multiply(BigDecimal.valueOf(exponent1)).multiply(BigDecimal.valueOf(exponent2));
+
+    }
+
+    /*
+     * The function will calculate the expected value for a negative binomial probability distribution 
+     * @param r an int value (amount of trial)
+     * @param p a double value (success)
+     * @return the expected value
+     */
+    public double expectedNegativeBinomial(int r, double p){
+        
+        return (double) r / p;
+
+    }
+
+     /*
+     * The function will calculate the variance value for a negative binomial probability distribution 
+     * @param r an int value (amount of trial)
+     * @param p a double value (success)
+     * @return the variance 
+     */
+    public double varianceNegativeBinomial(int r, double p){
+
+        return ((double) r*(1-p))/Math.pow(p,2);
+
+    }
+
+     /*
+     * The function will calculate the standard deviation value for a negative binomial probability distribution 
+     * @param r an int value (amount of trial)
+     * @param p a double value (success)
+     * @return the standard deviation
+     */
+    public double standardDeviationNegativeBinomial(int r, double p){
+
+        return Math.sqrt(varianceNegativeBinomial(r, p));
+
     }
 
 }
