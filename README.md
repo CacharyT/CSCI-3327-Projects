@@ -14,3 +14,4 @@ This contains Project 1 and Project 2, denoting the first half of the semester a
 - PokemonGame (pseudo-emulation of Pokemon TCG)
 - RareCandyStats (Probability of having a bricked prize pile)
 - SetOperations
+- DealOrNoDeal (Emulation of DealOrNoDeal Game with Conditional Probability)
