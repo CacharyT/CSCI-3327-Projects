@@ -152,16 +152,18 @@ public class DealOrNoDeal{
 
     /*
      * The function will calculate the conditional probability of the current case having the highest value
-     * @param
-     * @return
+     * @param none
+     * @return a double value 
      */
     public double conditionalProbability(){
         return (double) highValueCount / cases.size();
     }
 
     /*
-     * The function will allow the user to make a choice with their case (also gives recommendation based on conditional probability)
-     * @param
+     * The function will allow the user to make a choice with their case (also gives conditional probability of thier current case having a high value)
+     * @param bankOffer a double value
+     * @param finalRound a boolean value
+     * @param currentPlayerCase a case object
      * @return
      */
     public int playerChoice(double bankOffer, boolean finalRound, Case currentPlayerCase){
@@ -206,9 +208,9 @@ public class DealOrNoDeal{
     }
 
     /*
-     * The function will emulate a Deal Or No Deal game, it will give the user based on the given scenario if they should switch or not.
-     * @param
-     * @return
+     * The function will emulate a Deal Or No Deal game.
+     * @param none
+     * @return none
      */
     public void gameShowSimulation(){
 
