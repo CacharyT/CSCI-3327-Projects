@@ -10,8 +10,9 @@ This contains Project 1 and Project 2, denoting the first half of the semester a
 - Combination&Permutation
 - DoorGame (Monte Carlo Hall Emulation)
 - MulliganStats (Probability of a mulligan hand)
-- PokemonBattler (basic implementation of a pokemon battle)
+- PokemonBattler (basic implementation of a Pokemon battle)
 - PokemonGame (pseudo-emulation of Pokemon TCG)
 - RareCandyStats (Probability of having a bricked prize pile)
 - SetOperations
 - DealOrNoDeal (Emulation of DealOrNoDeal Game with Conditional Probability)
+- StatsLibrary (Collection of formulas in code)
