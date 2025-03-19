@@ -17,6 +17,6 @@ This contains Project 1 and Project 2, denoting the first half of the semester a
 - DealOrNoDeal (Emulation of DealOrNoDeal Game with Conditional Probability)
 - StatsLibrary (Collection of formulas in code)
 
-##Project 2
+## Project 2
 - FunctionPlotter (generates a csv file for the quadratic function)
 - StatsLibrary (Collection of formulas in code)
