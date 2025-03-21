@@ -4,7 +4,6 @@
  */
 
 //Imports
-import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -37,13 +36,12 @@ public class QuadraticPlotter {
     /*
      * The function will export the x and y values of the quadratic function given the user's a, b, and c values to a csv file
      * @param none
-     * @return none
+     * @return fileName a string value
      */
-    public void generateCSVFile(){
+    public String generateCSVFile(){
         //Declared variables
         Scanner scan = new Scanner(System.in);
         ArrayList<String> values = new ArrayList<>();
-        values.add("X, Y"); //header value
 
         //Get user input for x, a, b, c values
         System.out.println("Please enter the following values (number)");
@@ -65,14 +63,9 @@ public class QuadraticPlotter {
         }
 
         //Export the data structure to a CSV file
-        try {
-            FileWriter writer = new FileWriter(fileName + ".csv");
-            for(String dataLine : values){
-                writer.write(dataLine + "\n"); //each data pair gets their own row
-            }
-            writer.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        DataExporter exporter = new DataExporter();
+        exporter.exporter(values, fileName);
+
+        return fileName; //return the name used
     }
 }
