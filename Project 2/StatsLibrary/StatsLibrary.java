@@ -52,4 +52,13 @@ public class StatsLibrary {
         return lambda;
     }
 
+    /*
+     * The function will return the calculate for the Tchebysheff's theorem
+     * @param k an int value
+     * @return a double value
+     */
+    public double tchebysheff(int k){
+        return (1 - (1/(Math.pow(k,2))));
+    }
+
 }
