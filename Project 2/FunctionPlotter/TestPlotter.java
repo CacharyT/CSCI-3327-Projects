@@ -9,12 +9,13 @@ import java.io.File;
 public class TestPlotter {
     public static void main(String[] args) {
         QuadraticPlotter plot = new QuadraticPlotter();
-        String fileName = plot.generateCSVFile();
+        String fileName = plot.plotData();
 
-        Salter salt = new Salter(new File(fileName), 100, 500); //add a file name getter for reuSe
-        String saltedFile = salt.saltData();
+        Salter salt = new Salter(new File(fileName), 1000, 5000);
+        String saltedFile = salt.salterData();
 
         Smoother smooth = new Smoother(new File(saltedFile), 3);
         smooth.smoothenData();
     }
+
 }

@@ -6,7 +6,6 @@
 //Imports
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Smoother {
 
@@ -36,18 +35,22 @@ public class Smoother {
 
         //Calculate the average based on the window value
         for (int i = 0; i < data.size(); i++) {
-            int start = (int) Math.max(0, i - windowValue); //get value for left side
-            int end = (int) Math.min(data.size() - 1, i + windowValue); //get value for right side
-            double total = 0;
-            int count = 0;
+            if(i%2 != 0){ //ignore x
+                int start = (int) Math.max(0, i - windowValue); //leftmost value position (can't go lower than 0)
+                int end = (int) Math.min(data.size() - 1, i + windowValue); //rightmost value position (can't go beyond size of data)
+                double total = 0;
+                int count = 0;
+    
+                //total the values starting from the left to the right (including focus point/value meant to be changed with average)
+                for (int j = start; j <= end; j++) {
+                    total += data.get(j);
+                    count++;
+                }
+                newData.add(total / count); //replace old value with the average value
 
-            //total the value within the left, middle(data point), and right side
-            for (int j = start; j <= end; j++) {
-                total += data.get(j);
-                count++;
+            } else{
+                newData.add(data.get(i));
             }
-
-            newData.add(total / count); //replce old value with the average value
         }
         return newData;
     }
@@ -58,55 +61,18 @@ public class Smoother {
      * @return none
      */
     public void smoothenData(){
+
         //Declared variables
-        ArrayList<Double> data = new ArrayList<>();
-        ArrayList<Integer> xData = new ArrayList<>();
+        DataHandler handler = new DataHandler(); 
+        ArrayList<Double> data = handler.parser(dataFile); //parsed data from string to double
 
-        //Add x and y values seperately as int or double
-        try{
-            Scanner scan = new Scanner(new File(dataFile.getPath() + ".csv"));
-            while(scan.hasNextLine()){
+        //The smoothened and stringed data
+        ArrayList<Double> smoothenData = smoother(data);
+        ArrayList<String> stringedValue;
 
-                //X,Y and Line values
-                int x = 0;
-                double y = 0;
-                String line = scan.nextLine();
-                String[] seperated = line.split(",");
-
-                //Parse the data into seperate ints
-                x = Integer.parseInt(seperated[0].trim());
-                y = Double.parseDouble(seperated[1].trim());
-
-                //Add data into the data structure
-                xData.add(x);
-                data.add((double) x);
-                data.add(y);
-            }
-
-        } catch(Exception e){
-            e.printStackTrace();
-        }
-
-        //The smoothened data
-        ArrayList<Double> saltedData = smoother(data);
-
-        //stringed data
-        ArrayList<String> stringedValue = new ArrayList<>();
-
-        //Revert salted data into strings
-        for (int i = 0; i < saltedData.size(); i += 2) {
-            int xValue = 0;
-            if(i == 0){
-                xValue = xData.get(i);
-            } else{
-                xValue = xData.get(i/2);
-            }
-            double yValue = saltedData.get(i + 1);
-            stringedValue.add(xValue + ", " + yValue);
-        }
-
-        //Exports the data
-        DataExporter exporter = new DataExporter();
-        exporter.exporter(stringedValue, dataFile.toString() + "Smoothened");
+        //Write and Exports the data
+        stringedValue = handler.writer(smoothenData); //convert data to string and added to data structure of type string 
+        handler.exporter(stringedValue, dataFile.toString() + "Smoothened");
     }
+
 }

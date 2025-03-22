@@ -33,13 +33,14 @@ public class Salter {
      * @return newData an array list of double values
      */
     public ArrayList<Double> salter(ArrayList<Double> data){
+
         //Declared variabales
         Random random = new Random();
         ArrayList<Double> newData = new ArrayList<>();
 
         for(int i = 0; i < data.size(); i++){
             if(i%2 != 0){ //skip x values
-                int saltValue = lowerBound + random.nextInt(upperBound - lowerBound);
+                int saltValue = lowerBound + random.nextInt(upperBound - lowerBound); //ensures different salt value per y value
                 int operation = random.nextInt(2);
                 if(operation == 0){ //add
                     newData.add(data.get(i) + saltValue);
@@ -58,58 +59,21 @@ public class Salter {
      * @param none
      * @return a String value
      */
-    public String saltData(){
-        //Declared variables
-        ArrayList<Double> data = new ArrayList<>();
-        ArrayList<Integer> xData = new ArrayList<>();
+    public String salterData(){
 
-        //Add x and y values seperately as int or double
-        try{
-            Scanner scan = new Scanner(new File(dataFile.getPath() + ".csv"));
-            while(scan.hasNextLine()){
+        //Parsed data
+        DataHandler handler = new DataHandler(); 
+        ArrayList<Double> data = handler.parser(dataFile); //parsed data from string to double;
 
-                //X,Y and Line values
-                int x = 0;
-                double y = 0;
-                String line = scan.nextLine();
-                String[] seperated = line.split(",");
-
-                //Parse the data into seperate ints
-                x = Integer.parseInt(seperated[0].trim());
-                y = Double.parseDouble(seperated[1].trim());
-
-                //Add data into the data structure
-                xData.add(x);
-                data.add((double) x);
-                data.add(y);
-            }
-
-        } catch(Exception e){
-            e.printStackTrace();
-        }
-
-        //The salted data
+        //salted data and stringed data
         ArrayList<Double> saltedData = salter(data);
+        ArrayList<String> stringedValue;
 
-        //stringed data
-        ArrayList<String> stringedValue = new ArrayList<>();
+        //Write and Exports the data
+        stringedValue = handler.writer(saltedData); //convert data to string and added to data structure of type string
+        handler.exporter(stringedValue, dataFile.toString() + "Salted");
 
-        //Revert salted data into strings
-        for (int i = 0; i < saltedData.size(); i += 2) {
-            int xValue = 0;
-            if(i == 0){
-                xValue = xData.get(i);
-            } else{
-                xValue = xData.get(i/2);
-            }
-            double yValue = saltedData.get(i + 1);
-            stringedValue.add(xValue + ", " + yValue);
-        }
-
-        //Exports the data
-        DataExporter exporter = new DataExporter();
-        exporter.exporter(stringedValue, dataFile.toString() + "Salted");
-
-        return dataFile.toString() + "Salted";
+        return dataFile.toString() + "Salted"; //return file name
     }
+
 }

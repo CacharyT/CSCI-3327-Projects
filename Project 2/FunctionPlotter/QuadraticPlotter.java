@@ -38,14 +38,14 @@ public class QuadraticPlotter {
      * @param none
      * @return fileName a string value
      */
-    public String generateCSVFile(){
+    public String plotData(){
         //Declared variables
         Scanner scan = new Scanner(System.in);
         ArrayList<String> values = new ArrayList<>();
 
         //Get user input for x, a, b, c values
         System.out.println("Please enter the following values (number)");
-        System.out.print("Trial Amount: ");
+        System.out.print("Trial Amount (start at 0 and end at trial amount for x): ");
         double trial = scan.nextDouble();
         System.out.print("a: ");
         double a = scan.nextDouble();
@@ -55,6 +55,7 @@ public class QuadraticPlotter {
         double c = scan.nextDouble();
         System.out.print("Name of file: ");
         String fileName = scan.next();
+        scan.close();
 
         //Add all x and y value to the data structure
         for(int x = 0; x < trial; x++){
@@ -63,9 +64,10 @@ public class QuadraticPlotter {
         }
 
         //Export the data structure to a CSV file
-        DataExporter exporter = new DataExporter();
-        exporter.exporter(values, fileName);
+        DataHandler handler = new DataHandler();
+        handler.exporter(values, fileName);
 
         return fileName; //return the name used
     }
+    
 }

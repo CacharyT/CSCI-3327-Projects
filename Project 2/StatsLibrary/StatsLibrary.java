@@ -55,10 +55,15 @@ public class StatsLibrary {
     /*
      * The function will return the calculate for the Tchebysheff's theorem
      * @param k an int value
+     * @param greaterThanOrEqual to a boolean value
      * @return a double value
      */
-    public double tchebysheff(int k){
-        return (1 - (1/(Math.pow(k,2))));
+    public double tchebysheff(int k, boolean greatThanOrEqualTo){
+        if(greatThanOrEqualTo){
+            return (1 - (1/(Math.pow(k,2))));
+        } else{
+            return 1/(Math.pow(k,2));
+        }
     }
 
 }
