@@ -14,7 +14,7 @@ public class TestPlotter {
         Salter salt = new Salter(new File(fileName), 1000, 5000);
         String saltedFile = salt.salterData();
 
-        Smoother smooth = new Smoother(new File(saltedFile), 3);
+        Smoother smooth = new Smoother(new File(saltedFile), 10);
         smooth.smoothenData();
     }
 
