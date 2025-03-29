@@ -1,0 +1,24 @@
+#Cachary Tolentino
+
+#The function will smoothen the given salted data
+#Param: data - the data containing the salted values
+#Param: windowValue - the number of values to average around
+#Return: newData - the smoothened data
+function [newData] = smootherFunction(data, windowValue)
+  #Declared Variables
+  xValues = data(:, 1);
+  yValues = data(:, 2);
+
+  #Loop the entire data
+  for i = 1:length(data)
+    startVal = max(1, i - windowValue); #leftmost value position; can't go lower than 0
+    endVal = min(length(yValues), i + windowValue); #rightmost value position; can't go beyond size of data
+
+    #Replace current value with the average of the windowValue
+    yValues(i) = mean(yValues(startVal:endVal));
+  endfor
+
+  #Return the combined values together
+  newData = [xValues, yValues];
+  return;
+endfunction
