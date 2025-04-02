@@ -65,5 +65,4 @@ public class StatsLibrary {
             return 1/(Math.pow(k,2));
         }
     }
-
 }

@@ -20,3 +20,4 @@ This contains Project 1 and Project 2, denoting the first half of the semester a
 ## Project 2
 - FunctionPlotter (generates a csv file for the quadratic function)
 - StatsLibrary (Collection of formulas in code)
+- HashLecture (A custom HashMap implementation)
