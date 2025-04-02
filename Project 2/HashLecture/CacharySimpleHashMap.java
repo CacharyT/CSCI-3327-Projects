@@ -70,7 +70,7 @@ public class CacharySimpleHashMap{
     }
 
     /*
-     * The function will return a boolean value if a the hashmap contains a certain string value
+     * The function will return a boolean value if the hashmap contains a certain string value
      * @param input - a string value
      * @return a boolean value
      */
