@@ -55,5 +55,10 @@ public class CacharyHashMapTester {
         //Checking for a value that does not exist
         System.out.println("Does Map 1 contain Airplane? " + map1.contains("Airplane"));
         System.out.println("Does Map 2 contain Airplane? " + map2.contains("Airplane"));
+
+        //Check if map can remove a value
+        System.out.println("Does Map 1 contain Kiwi? " + map1.contains("Kiwi"));
+        map1.remove("Kiwi");
+        System.out.println("Does Map 1 contain Kiwi after removal? " + map1.contains("Kiwi"));
     }
 }

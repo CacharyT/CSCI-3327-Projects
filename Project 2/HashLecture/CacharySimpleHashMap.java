@@ -47,7 +47,7 @@ public class CacharySimpleHashMap{
      * @return value - an int value
      */
     public int dumbHash(String input){
-        return input.length() % dataSize; //necessary mod to ensure it does not go beyond the index of the array
+        return input.length();
     }
 
     /*
@@ -57,10 +57,11 @@ public class CacharySimpleHashMap{
      */
     public void put(String input){
         //Declared Variables
-        int index = dumbHash(input);
+        int index = dumbHash(input) % dataSize; //necessary mod to ensure it does not go beyond the index of the array
 
-        //Check first if the current array has enough space, if not then resize
-        if(currentCount == dataSize){
+        //Check first if the current array has enough space, if not then resize (uses load factor to check for density of content)
+        double loadFactor = (double) currentCount / dataSize;
+        if(loadFactor > 0.8){
             resize();
         }
 
@@ -76,7 +77,7 @@ public class CacharySimpleHashMap{
      */
     public boolean contains(String input){
         //Declared Variables
-        int index = dumbHash(input); //Need the key value based on the given value
+        int index = dumbHash(input) % dataSize; //Need the key value based on the given value
 
         return data[index].contains(input); //use built in contain function of LinkedList if the value exist in the LinkedList of the index
     }
@@ -104,6 +105,19 @@ public class CacharySimpleHashMap{
         //Update variables with new values
         data = newData;
         dataSize = newData.length;
+    }
+
+    /*
+     * The function will remove the value at the designated key
+     * @param input - a string value
+     * @return none
+     */
+    public void remove(String input){
+        int index = dumbHash(input) % dataSize; //hashed index
+
+        if(data[index].contains(input)){ //check first if the value even exist at the index, if so remove it
+            data[index].remove(input);
+        }
     }
 
     /*
