@@ -8,14 +8,13 @@ import java.io.File;
 
 public class TestPlotter {
     public static void main(String[] args) {
-        QuadraticPlotter plot = new QuadraticPlotter();
+        QuadraticPlotter plot = new QuadraticPlotter(); //plotter object
         String fileName = plot.plotData();
 
-        Salter salt = new Salter(new File(fileName), 1000, 5000);
+        Salter salt = new Salter(new File(fileName)); //salter object
         String saltedFile = salt.salterData();
 
-        Smoother smooth = new Smoother(new File(saltedFile), 10);
+        Smoother smooth = new Smoother(new File(saltedFile)); //smoother object
         smooth.smoothenData();
     }
-
 }

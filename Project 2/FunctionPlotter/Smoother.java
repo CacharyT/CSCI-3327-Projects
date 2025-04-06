@@ -6,30 +6,29 @@
 //Imports
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Smoother {
 
     //Global Variables
     private File dataFile;
-    private double windowValue;
 
     /*
      * Constructor with parameters
      * @param inputFile a file value
-     * @param value a double value
      * @return none
      */
-    public Smoother(File inputFile, double value){
+    public Smoother(File inputFile){
         dataFile = inputFile;
-        windowValue = value;
     }
 
     /*
      * The function will smoothen the data
      * @param data an arraylist of integers
+     * @param windowValue an int value
      * @return newData an array list of double values
      */
-    public ArrayList<Double> smoother(ArrayList<Double> data){
+    public ArrayList<Double> smoother(ArrayList<Double> data, int windowValue){
         //Declared variabales
         ArrayList<Double> newData = new ArrayList<>();
 
@@ -61,13 +60,18 @@ public class Smoother {
      * @return none
      */
     public void smoothenData(){
-
         //Declared variables
+        Scanner scan = new Scanner(System.in);
         DataHandler handler = new DataHandler(); 
         ArrayList<Double> data = handler.parser(dataFile); //parsed data from string to double
 
+        //Get the user window value
+        System.out.println("Please enter the following value (number)");
+        System.out.print("Window Value: ");
+        int windowValue = scan.nextInt();
+
         //The smoothened and stringed data
-        ArrayList<Double> smoothenData = smoother(data);
+        ArrayList<Double> smoothenData = smoother(data, windowValue);
         ArrayList<String> stringedValue;
 
         //Write and Exports the data

@@ -11,29 +11,24 @@ public class Salter {
 
     //Global Variables
     private File dataFile;
-    private int lowerBound;
-    private int upperBound;
 
     /*
      * Constructor with parameters
      * @param inputFile a file value
-     * @param lower an int value
-     * @param upper an int value
      * @return none
      */
-    public Salter(File inputFile, int lower, int upper){
+    public Salter(File inputFile){
         dataFile = inputFile;
-        lowerBound = lower;
-        upperBound = upper;
     }
 
     /*
      * The function will salt the data
      * @param data an arraylist of integers
+     * @param lowerBound an int value
+     * @param upperBound an int value
      * @return newData an array list of double values
      */
-    public ArrayList<Double> salter(ArrayList<Double> data){
-
+    public ArrayList<Double> salter(ArrayList<Double> data, int lowerBound, int upperBound){
         //Declared variabales
         Random random = new Random();
         ArrayList<Double> newData = new ArrayList<>();
@@ -60,13 +55,22 @@ public class Salter {
      * @return a String value
      */
     public String salterData(){
+        //Declared Variables
+        Scanner scan = new Scanner(System.in);
 
         //Parsed data
         DataHandler handler = new DataHandler(); 
         ArrayList<Double> data = handler.parser(dataFile); //parsed data from string to double;
 
+        //Get the user salting range
+        System.out.println("Please enter the following salting ranges (number; LowerBound < UpperBound)");
+        System.out.print("Lower Bound: ");
+        int lowerBound = scan.nextInt();
+        System.out.print("Upper Bound: ");
+        int upperBound = scan.nextInt();
+
         //salted data and stringed data
-        ArrayList<Double> saltedData = salter(data);
+        ArrayList<Double> saltedData = salter(data, lowerBound, upperBound);
         ArrayList<String> stringedValue;
 
         //Write and Exports the data
@@ -75,5 +79,4 @@ public class Salter {
 
         return dataFile.toString() + "Salted"; //return file name
     }
-
 }

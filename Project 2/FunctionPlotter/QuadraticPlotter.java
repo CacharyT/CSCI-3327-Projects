@@ -55,7 +55,6 @@ public class QuadraticPlotter {
         double c = scan.nextDouble();
         System.out.print("Name of file: ");
         String fileName = scan.next();
-        scan.close();
 
         //Add all x and y value to the data structure
         for(int x = 0; x < trial; x++){

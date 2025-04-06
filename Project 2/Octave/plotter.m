@@ -9,7 +9,7 @@ function [fileName] = plotter()
   yValues = [];
 
   #Get user input
-  disp("Please eneter the following values (number)");
+  disp("Please enter the following values (number)");
   trial = input("Trial Amount (start at 0 and end at trial amount for x): ");
   a = input("a: ");
   b = input("b: ");

@@ -30,7 +30,6 @@ public class DataHandler {
      * source(trim): https://www.w3schools.com/jsref/jsref_trim_string.asp
      */
     public ArrayList<Double> parser(File dataFile){
-
         //Declared Variable
         ArrayList<Double> data = new ArrayList<>();
 
@@ -67,7 +66,6 @@ public class DataHandler {
      * @return value an arraylist of strings
      */
     public ArrayList<String> writer(ArrayList<Double> data){
-
         //Declared Variable
         ArrayList<String> value = new ArrayList<>();
 
