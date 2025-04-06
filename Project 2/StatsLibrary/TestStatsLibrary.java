@@ -15,7 +15,7 @@ public class TestStatsLibrary {
         System.out.println("Given Lambda: 1 and Y: 0 the standard deviation of the poisson distribution is " + tester.poissonStandardDeviation(1));
 
         //Testing Tchebysheff
-        System.out.println("Given k: 2 and greater than or rqual to, the Tchebysheff value is " + tester.tchebysheff(2, true));
+        System.out.println("Given k: 2 and greater than or equal to, the Tchebysheff value is " + tester.tchebysheff(2, true));
         System.out.println("Given k: 2 and less than or equal to, the Tchebysheff value is " + tester.tchebysheff(2, false));
     }
 }

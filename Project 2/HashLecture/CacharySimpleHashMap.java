@@ -121,6 +121,25 @@ public class CacharySimpleHashMap{
     }
 
     /*
+     * The function will print out the current hash map
+     * @param none
+     * @return none
+     */
+    public void printMap(){
+        for(int i = 0; i < data.length; i++){
+            System.out.print("Node " + i + ": ");
+            if(data[i].isEmpty()){
+                System.out.println("Empty.");
+            } else{
+                for(String value : data[i]){
+                    System.out.print(value + " ");
+                }
+                System.out.println();
+            }
+        }
+    }
+
+    /*
      * The function will get the current data value
      * @param none
      * @return data - an array of linkedlist

@@ -26,6 +26,9 @@ public class CacharyHashMapTester {
         map1.put("Inconvenience");
         map1.put("Incompatibility");
 
+        System.out.println("Map 1 Allocation");
+        map1.printMap();
+
         map2.put("Kiwi");
         map2.put("Apple");
         map2.put("Mango"); //inserted same size value
@@ -37,6 +40,9 @@ public class CacharyHashMapTester {
         map2.put("Tan");
         map2.put("Inconvenience");
         map2.put("Incompatibility");
+
+        System.out.println("Map 2 Allocation");
+        map2.printMap();
 
         //Check current size of both maps after adding values
         System.out.println("Map 1 size after populating: " + map1.getSize());
