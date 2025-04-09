@@ -35,6 +35,15 @@ public class StatsLibrary {
     }
 
     /*
+     * The function will return the expected value of the poisson distribution
+     * @param lambda a double value
+     * @return lambda a double value (expected)
+     */
+    public double poissonExpected(double lambda){
+        return lambda;
+    }
+
+    /*
      * The function will return the expected variance of the poisson distribution
      * @param lambda a double value
      * @return lambda a double value (variance)
@@ -46,10 +55,10 @@ public class StatsLibrary {
     /*
      * The function will return the standard deviation of the poisson distribution
      * @param lambda a double value
-     * @return lambda a double value (variance)
+     * @return square root of lambda a double value (variance)
      */
     public double poissonStandardDeviation(double lambda){
-        return lambda;
+        return Math.sqrt(lambda);
     }
 
     /*
