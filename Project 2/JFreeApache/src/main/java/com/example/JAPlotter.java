@@ -1,10 +1,20 @@
-package com.example;
+/*
+ * Cachary Tolentino'
+ * The JAPlotter class is the same as the Quadratic Plotter, but will also use JFreeCharts to create graphs
+ */
 
+//Imports
+package com.example;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
+
 public class JAPlotter {
     //Global Variable(s)
+    private XYSeries graphData;
+    private XYSeriesCollection dataset;
     
     /*
      * Default COnstructor
@@ -12,7 +22,8 @@ public class JAPlotter {
      * @return none
      */
     public JAPlotter(){
-        //nothing to initalize
+        graphData = new XYSeries("Data");
+        dataset = new XYSeriesCollection();
     }
 
     /*
@@ -51,15 +62,20 @@ public class JAPlotter {
         System.out.print("Name of file: ");
         String fileName = scan.next();
 
-        //Add all x and y value to the data structure
+        //Add all x and y value to the data structure and series object
         for(int x = 0; x < trial; x++){
             double y = quadraticFunction(x, a, b, c);
             values.add(x + ", " + y);
+            graphData.add(x, y); //add x and y value to the series object
         }
+        dataset.addSeries(graphData); //add the series (data) to the dataset object
 
         //Export the data structure to a CSV file
         JADataHandler handler = new JADataHandler();
         handler.exporter(values, fileName);
+
+        //Graph the data
+        handler.grapher(fileName, dataset);
 
         return fileName; //return the name used
     }

@@ -36,17 +36,23 @@ public class Smoother {
         for (int i = 0; i < data.size(); i++) {
             if(i%2 != 0){ //ignore x
                 int start = (int) Math.max(0, i - windowValue); //leftmost value position (can't go lower than 0)
-                int end = (int) Math.min(data.size() - 1, i + windowValue); //rightmost value position (can't go beyond size of data)
+                int end = (int) Math.min(i + windowValue, data.size() - 1); //rightmost value position (can't go beyond size of data)
                 double total = 0;
                 int count = 0;
     
                 //total the values starting from the left to the right (including focus point/value meant to be changed with average)
                 for (int j = start; j <= end; j++) {
-                    total += data.get(j);
-                    count++;
+                    if(j % 2 != 0){ //Ignore X value (only want Y)
+                        total += data.get(j);
+                        count++;
+                    }
+                }
+
+                if(count == 0){ //handles cases where there are no values in the window (due to window size)
+                    total = 0;
+                    count = 1; //prevents issue with division with 0
                 }
                 newData.add(total / count); //replace old value with the average value
-
             } else{
                 newData.add(data.get(i));
             }

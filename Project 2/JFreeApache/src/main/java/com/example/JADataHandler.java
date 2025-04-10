@@ -1,9 +1,22 @@
+/*
+ * Cachary Tolentino'
+ * The JASmoother class is the same as the Smoother, but will be using JFreeCharts to create graphs
+ */
+
+//Imports
 package com.example;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import javax.swing.JFrame;
+
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.xy.XYSeriesCollection;
 
 public class JADataHandler {
     //Global Variable
@@ -91,5 +104,30 @@ public class JADataHandler {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /*
+     * The function will graph the constructed dataset using JfreeCharts
+     * @param fileName a string value
+     * @param dataset a XYSeriesCollection object 
+     * @return dataFrame a JFrame object
+     */
+    public JFrame grapher(String fileName, XYSeriesCollection dataset){
+        //Declared Variable(s)
+        JFreeChart dataChart;
+        ChartPanel dataPanel;
+        JFrame dataFrame;
+
+        //Create the Chart, Panel, and JFrame (allows for displaying) objects
+        dataChart = ChartFactory.createXYLineChart(fileName + " Graph", "X-Values", "Y-Values", dataset);
+        dataPanel = new ChartPanel(dataChart);
+        dataFrame = new JFrame(fileName + " Output");
+
+        //Display the graph
+        dataFrame.add(dataPanel);
+        dataFrame.pack();
+        dataFrame.setVisible(true);
+
+        return dataFrame; //return to allow for exiting
     }
 }

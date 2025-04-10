@@ -9,16 +9,22 @@ function [newData] = smootherFunction(data, windowValue)
   xValues = data(:, 1);
   yValues = data(:, 2);
 
+  #New Y values
+  newYValues = zeros(size(yValues));
+
   #Loop the entire data
   for i = 1:length(data)
-    startVal = max(1, i - windowValue); #leftmost value position; can't go lower than 0
-    endVal = min(length(yValues), i + windowValue); #rightmost value position; can't go beyond size of data
+    left = floor((windowValue - 1) / 2); #left side to count
+    right = ceil((windowValue - 1) / 2); #right side to count
+
+    startVal = max(1, i - left); #leftmost value position; can't go lower than 0
+    endVal = min(length(yValues), i + right); #rightmost value position; can't go beyond size of data
 
     #Replace current value with the average of the windowValue
-    yValues(i) = mean(yValues(startVal:endVal));
+    newYValues(i) = mean(yValues(startVal:endVal));
   endfor
 
   #Return the combined values together
-  newData = [xValues, yValues];
+  newData = [xValues, newYValues];
   return;
 endfunction

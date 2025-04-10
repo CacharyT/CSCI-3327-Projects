@@ -1,3 +1,9 @@
+/*
+ * Cachary Tolentino'
+ * The JASalter class is the same as the Salter, but will be using JFreeCharts to create graphs
+ */
+
+//Imports
 package com.example;
 
 import java.io.File;
@@ -5,9 +11,14 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
+
 public class JASalter {
     //Global Variables
     private File dataFile;
+    private XYSeries graphData;
+    private XYSeriesCollection dataset;
 
     /*
      * Constructor with parameters
@@ -16,6 +27,8 @@ public class JASalter {
      */
     public JASalter(File inputFile){
         dataFile = inputFile;
+        graphData = new XYSeries("Data");
+        dataset = new XYSeriesCollection();
     }
 
     /*
@@ -43,6 +56,13 @@ public class JASalter {
                 newData.add(data.get(i)); //x values remain unchanged
             }
         }
+
+        //add x and y value to the series object
+        for(int i = 0; i < newData.size() - 1; i+=2){
+            graphData.add(newData.get(i), newData.get(i + 1));
+        }
+        dataset.addSeries(graphData); //add the series (data) to the dataset object
+
         return newData;
     }
 
@@ -73,6 +93,9 @@ public class JASalter {
         //Write and Exports the data
         stringedValue = handler.writer(saltedData); //convert data to string and added to data structure of type string
         handler.exporter(stringedValue, dataFile.toString() + "Salted");
+
+        //Graph the data
+        handler.grapher(dataFile.toString() + " Salted", dataset);
 
         return dataFile.toString() + "Salted"; //return file name
     }

@@ -4,7 +4,6 @@
  */
 
 //Imports
-
 package com.example;
 
 import java.io.File;
