@@ -22,3 +22,4 @@ This contains Project 1 and Project 2, denoting the first half of the semester a
 - StatsLibrary (Collection of formulas in code)
 - Octave (GNU Octave variant of FunctionPlotter)
 - HashLecture (A custom HashMap implementation)
+- JFreeApache (PSS variant using JfreeCharts and Apache Commons Math)

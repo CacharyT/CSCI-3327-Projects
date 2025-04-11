@@ -74,4 +74,50 @@ public class StatsLibrary {
             return 1/(Math.pow(k,2));
         }
     }
+
+    /*
+     * The function will return the value for the uniform probability distribution
+     * @param a an int value
+     * @param b an int value
+     * @return a double value or zero
+     */
+    public double uniformDistribution(int a, int b){
+        if(a <= b){
+            return (1 / (double) (b - a));
+        } else{
+            return 0;
+        }
+    }
+
+    /*
+     * The function will return the value for the uniform probability distribution (alternate shortcut)
+     * @param a an int value
+     * @param b an int value
+     * @param c an int value
+     * @param d an int value
+     * @return a double value
+     */
+    public double uniformDistributionAlt(int a, int b, int c, int d){
+        return (double) (d-c) / (double) (b-a);
+    }
+
+    /*
+     * The function will return the expected value for the uniform probability distribution 
+     * @param theta1 an int value
+     * @param theta2 an int value
+     * @return a double value
+     */
+    public double uniformExpected(int theta1, int theta2){
+        return (double) (theta1 + theta2) / 2;
+    }
+
+    /*
+     * The function will return the variance value for the uniform probability distribution
+     * @param theta1 an int value
+     * @param theta2 an int value
+     * @return a double value
+     */
+    public double uniformVariance(int theta1, int theta2){
+        return (double) (Math.pow((theta2 - theta1),2)) / (double) 12;
+    }
 }

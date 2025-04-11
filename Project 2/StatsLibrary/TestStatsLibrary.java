@@ -18,5 +18,11 @@ public class TestStatsLibrary {
         //Testing Tchebysheff
         System.out.println("Given k: 2 and greater than or equal to, the Tchebysheff value is " + tester.tchebysheff(2, true));
         System.out.println("Given k: 2 and less than or equal to, the Tchebysheff value is " + tester.tchebysheff(2, false));
+
+        //Testing Uniform Distribution
+        System.out.println("Given a:0 and b:30 the uniform probability distribution is " + tester.uniformDistribution(0, 30));
+        System.out.println("Given a:0, b:40, c:0 and d:15 the uniform probability distribution is " + tester.uniformDistributionAlt(0, 40, 0, 15));
+        System.out.println("Given a:0 and b:30 the expected value of the uniform probability distribution is " + tester.uniformExpected(0, 30));
+        System.out.println("Given a:0 and b:30 the variance value of the uniform probability distribution is " + tester.uniformVariance(0, 30));
     }
 }
