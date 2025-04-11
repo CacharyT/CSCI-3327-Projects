@@ -21,4 +21,4 @@ jobs:
 
     - name: Build JFreeApache with Maven
       run: mvn clean install
-      working-directory: Project2/JFreeApache
+      working-directory: "Project 2/JFreeApache"
