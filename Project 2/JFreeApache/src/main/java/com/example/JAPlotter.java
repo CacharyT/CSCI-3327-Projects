@@ -1,6 +1,6 @@
 /*
  * Cachary Tolentino'
- * The JAPlotter class is the same as the Quadratic Plotter, but will also use JFreeCharts to create graphs
+ * The JAPlotter class is the same as the Quadratic Plotter, but will also use JFreeCharts to create graphs and Apache Commons Math for evaluating qaudratic functions
  */
 
 //Imports
@@ -8,6 +8,7 @@ package com.example;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
@@ -33,10 +34,12 @@ public class JAPlotter {
      * @param b a double value
      * @param c a double value
      * @return y the quadratic function value
+     * @source: https://commons.apache.org/proper/commons-math/commons-math-docs/apidocs/org/apache/commons/math4/legacy/analysis/polynomials/PolynomialFunction.html
      */
     public double quadraticFunction(double x, double a, double b, double c){
-        double y = (a * Math.pow(x, 2)) + (b * x) + c;
-        return y;
+        double[] coefficients = {c, b, a};
+        PolynomialFunction polynomialFunction = new PolynomialFunction(coefficients); //Apache quadratic formula given the coefficients
+        return polynomialFunction.value(x); //returns the quadratic value evaluated at the given x
     }
 
     /*

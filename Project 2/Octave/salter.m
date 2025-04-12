@@ -17,8 +17,9 @@ function [saltedName] = salter(fileName)
   #salted data
   saltedData = salterFunction(data, lowerBound, upperBound);
 
-  #Export the salted data as csv
+  #Export the salted data as csv and graph
   saltedName = [fileName, 'Salted'];
   exporter(saltedData, saltedName);
+  grapher(saltedData, saltedName);
   return;
 endfunction

@@ -1,6 +1,6 @@
 /*
  * Cachary Tolentino'
- * The JASalter class is the same as the Salter, but will be using JFreeCharts to create graphs
+ * The JASalter class is the same as the Salter, but will be using JFreeCharts to create graphs and Apache Commons Math for random generation
  */
 
 //Imports
@@ -8,9 +8,9 @@ package com.example;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.Scanner;
 
+import org.apache.commons.math3.random.RandomDataGenerator;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
@@ -37,16 +37,17 @@ public class JASalter {
      * @param lowerBound an int value
      * @param upperBound an int value
      * @return newData an array list of double values
+     * @source: https://commons.apache.org/proper/commons-math/javadocs/api-3.6.1/index.html
      */
     public ArrayList<Double> salter(ArrayList<Double> data, int lowerBound, int upperBound){
         //Declared variabales
-        Random random = new Random();
+        RandomDataGenerator random = new RandomDataGenerator(); //uses Apache built in random number generator
         ArrayList<Double> newData = new ArrayList<>();
 
         for(int i = 0; i < data.size(); i++){
             if(i%2 != 0){ //skip x values
-                int saltValue = lowerBound + random.nextInt(upperBound - lowerBound); //ensures different salt value per y value
-                int operation = random.nextInt(2);
+                int saltValue = random.nextInt(lowerBound, upperBound); //ensures different salt value per y value (Apache randomizer)
+                int operation = random.nextInt(0,1); //Apache randomizer
                 if(operation == 0){ //add
                     newData.add(data.get(i) + saltValue);
                 } else{ //subtract

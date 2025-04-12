@@ -15,6 +15,7 @@ import javax.swing.JFrame;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
+import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.xy.XYSeriesCollection;
 
@@ -107,7 +108,7 @@ public class JADataHandler {
     }
 
     /*
-     * The function will graph the constructed dataset using JfreeCharts
+     * The function will graph and save the constructed dataset using JfreeCharts 
      * @param fileName a string value
      * @param dataset a XYSeriesCollection object 
      * @return dataFrame a JFrame object
@@ -122,6 +123,15 @@ public class JADataHandler {
         dataChart = ChartFactory.createXYLineChart(fileName + " Graph", "X-Values", "Y-Values", dataset);
         dataPanel = new ChartPanel(dataChart);
         dataFrame = new JFrame(fileName + " Output");
+
+        //save the chart with the graph as PNG
+        try {
+            File image = new File(fileName + " Image.png");
+            ChartUtils.saveChartAsPNG(image, dataChart, 800, 800);
+            System.out.println("Image saved: " + image.getAbsolutePath());
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
 
         //Display the graph
         dataFrame.add(dataPanel);

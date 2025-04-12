@@ -23,8 +23,9 @@ function [fileName] = plotter()
     yValues = [yValues, y];
   endfor
 
-  #Combine X and Y values, export as csv
+  #Combine X and Y values, export as csv and graph
   values = [xValues', yValues'];
   exporter(values, fileName);
+  grapher(values, fileName);
   return;
 endfunction;

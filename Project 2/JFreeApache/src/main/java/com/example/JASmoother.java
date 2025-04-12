@@ -65,8 +65,11 @@ public class JASmoother {
 
     /*
     * The function will return the rolling average (uses Apache for mean)
-    * @param
-    * @return
+    * @param data - an arraylist od double
+    * @param middle - an int value
+    * @param windowValue - an int value
+    * @param stats - a descriptivestats object
+    * @return a double value
     */
     public double rollingAverage(ArrayList<Double> data, int middle, int windowValue, DescriptiveStatistics stats){
         //Array positioning

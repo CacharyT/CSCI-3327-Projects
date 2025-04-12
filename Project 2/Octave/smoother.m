@@ -15,8 +15,9 @@ function [] = smoother(fileName)
   #smoothened data
   smoothenedData = smootherFunction(data, windowValue);
 
-  #Export the salted data as csv
+  #Export the salted data as csv and graph
   smoothenedName = [fileName, 'Smoothened'];
   exporter(smoothenedData, smoothenedName);
+  grapher(smoothenedData, smoothenedName);
 endfunction
 
