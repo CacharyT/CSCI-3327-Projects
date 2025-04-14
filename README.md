@@ -23,3 +23,4 @@ This contains Project 1 and Project 2, denoting the first half of the semester a
 - Octave (GNU Octave variant of FunctionPlotter)
 - HashLecture (A custom HashMap implementation)
 - JFreeApache (PSS variant using JfreeCharts and Apache Commons Math)
+- ResearchReport (Programs needed for research analysis on a dataset)
