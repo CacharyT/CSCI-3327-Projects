@@ -24,5 +24,17 @@ public class TestStatsLibrary {
         System.out.println("Given a:0, b:40, c:0 and d:15 the uniform probability distribution is " + tester.uniformDistributionAlt(0, 40, 0, 15));
         System.out.println("Given a:0 and b:30 the expected value of the uniform probability distribution is " + tester.uniformExpected(0, 30));
         System.out.println("Given a:0 and b:30 the variance value of the uniform probability distribution is " + tester.uniformVariance(0, 30));
+
+        //Testing Gamma Expected and Variance
+        System.out.println("Given alpha:2 and beta:3, the expected value is " + tester.gammaExpected(2, 3));
+        System.out.println("Given alpha:2 and beta:3, the variance value is " + tester.gammaVariance(2, 3));
+
+        //Testing Chi-square Expected and Variance
+        System.out.println("Given v:2, the expected value is " + tester.chiSquareExpected(2));
+        System.out.println("Given v:2, the variance value is " + tester.chiSquareVariance(2));
+
+        //Testing Exponential Distribution for a Gamma Function Expected and Variance
+        System.out.println("Given beta:3, the expected value is " + tester.exponentialExpected(3));
+        System.out.println("Given beta:3, the variance value is " + tester.exponentialVariance(3));
     }
 }

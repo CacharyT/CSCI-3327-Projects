@@ -120,4 +120,60 @@ public class StatsLibrary {
     public double uniformVariance(int theta1, int theta2){
         return (double) (Math.pow((theta2 - theta1),2)) / (double) 12;
     }
+
+    /*
+     * The function will return the expected value for a gamma probability distribution
+     * @param alpha - an int value
+     * @param beta - an int value
+     * @return a double value
+     */
+    public double gammaExpected(int alpha, int beta){
+        return alpha * beta;
+    }
+
+    /*
+     * The function will return the variance value for a gamma probability distribution
+     * @param alpha - an int value
+     * @param beta - an int value
+     * @return a double value
+     */
+    public double gammaVariance(int alpha, int beta){
+        return alpha * Math.pow(beta, 2);
+    }
+
+    /*
+     * The function will return the expected value for a chi-square
+     * @param v - an int value
+     * @return a int value
+     */
+    public int chiSquareExpected(int v){
+        return v;
+    }
+
+    /*
+     * The function will return the variance value for a chi-square
+     * @param v - an int value
+     * @return a int value
+     */
+    public int chiSquareVariance(int v){
+        return 2 * v;
+    }
+
+    /*
+     * The function will return the expected value for a exponential distribution of a gamma function
+     * @param beta - a dobuel value
+     * @return a int value
+     */
+    public int exponentialExpected(int beta){
+        return beta;
+    }
+
+    /*
+     * The function will return the variance value for a exponential distribution of a gamma function
+     * @param beta - a dobuel value
+     * @return a double value
+     */
+    public double exponentialVariance(int beta){
+        return Math.pow(beta, 2);
+    }
 }
