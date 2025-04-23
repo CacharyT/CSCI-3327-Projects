@@ -18,9 +18,9 @@ This contains Project 1 and Project 2, denoting the first half of the semester a
 - StatsLibrary (Collection of formulas in code)
 
 ## Project 2
-- FunctionPlotter (generates a csv file for the quadratic function)
+- FunctionPlotter (plots, salts, and smoothes a function)
 - StatsLibrary (Collection of formulas in code)
 - Octave (GNU Octave variant of FunctionPlotter)
 - HashLecture (A custom HashMap implementation)
 - JFreeApache (PSS variant using JfreeCharts and Apache Commons Math)
-- ResearchReport (Programs needed for research analysis on a dataset)
+- ResearchReport (Scientific study on a real-world dataset)
