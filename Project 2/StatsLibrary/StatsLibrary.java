@@ -161,7 +161,7 @@ public class StatsLibrary {
 
     /*
      * The function will return the expected value for a exponential distribution of a gamma function
-     * @param beta - a dobuel value
+     * @param beta - a int value
      * @return a int value
      */
     public int exponentialExpected(int beta){
@@ -170,10 +170,48 @@ public class StatsLibrary {
 
     /*
      * The function will return the variance value for a exponential distribution of a gamma function
-     * @param beta - a dobuel value
+     * @param beta - a int value
      * @return a double value
      */
     public double exponentialVariance(int beta){
         return Math.pow(beta, 2);
+    }
+
+    /*
+     * The function will return the expected value for a normal distribution
+     * @param mu - a int value
+     * @return a int value
+     */
+    public int normalExpected(int mu){
+        return mu;
+    }
+
+    /*
+     * The function will return the variance value for a normal distribution
+     * @param sigma - a int value
+     * @return a double value
+     */
+    public double normalVariance(int sigma){
+        return Math.pow(sigma, 2);
+    }
+
+    /*
+     * The function will return the expected value for a beta distribution
+     * @param alpha - a double value
+     * @param beta - a double value
+     * @return a double value
+     */
+    public double betaExpected(double alpha, double beta){
+        return alpha / (alpha + beta);
+    }
+
+    /*
+     * The function will return the variance value for a beta distribution
+     * @param alpha - a double value
+     * @param beta - a double value
+     * @return a double value
+     */
+    public double betaVariance(double alpha, double beta){
+        return (alpha * beta) / (Math.pow((alpha + beta), 2) * (alpha + beta + 1));
     }
 }

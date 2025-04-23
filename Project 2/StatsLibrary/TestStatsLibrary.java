@@ -36,5 +36,13 @@ public class TestStatsLibrary {
         //Testing Exponential Distribution for a Gamma Function Expected and Variance
         System.out.println("Given beta:3, the expected value is " + tester.exponentialExpected(3));
         System.out.println("Given beta:3, the variance value is " + tester.exponentialVariance(3));
+
+        //Testing Normal Distribution Expected and Variance
+        System.out.println("Given mu = 2, the expect value is " + tester.normalExpected(2));
+        System.out.println("Given sigma = 3, the variance value is " + tester.normalVariance(3));
+
+        //Testing Beta Distribution Expected and Variance
+        System.out.println("Given alpha = 1, beta = 3, the expected value is " + tester.betaExpected(1, 3));
+        System.out.println("Given alpha = 1, beta = 3, the variance value is " + tester.betaVariance(1, 3));
     }
 }
