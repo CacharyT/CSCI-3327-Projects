@@ -4,7 +4,9 @@
  */
 
 //Imports
+import java.io.File;
 import java.util.LinkedList;
+import java.util.Scanner;
 
 public class CacharySimpleHashMap{
 
@@ -136,6 +138,130 @@ public class CacharySimpleHashMap{
                 }
                 System.out.println();
             }
+        }
+    }
+
+    /*
+     * The function will load a csv to the hash map structure
+     * @param data - a string value (data file name)
+     * @return none
+     */
+    public void loadData(String data){
+        try{
+            Scanner scan = new Scanner(new File(data + ".csv"));
+            while(scan.hasNextLine()){ //iterates through each row for each word
+                String line = scan.nextLine();
+                String[] seperated = line.split(","); 
+                put(seperated[0]); //adds to the hash structure
+            }
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    /*
+     * The function will track the times and memory usage when loading the data into the data structure, this will output the tracked values
+     * @param dataName - a string value (data file name)
+     * @return none
+     * @sources: https://www.geeksforgeeks.org/java-runtime-getruntime-method/ 
+     * @sources: https://www.geeksforgeeks.org/garbage-collection-java/ 
+     * @sources: https://www.geeksforgeeks.org/java-system-nanotime-vs-system-currenttimemillis/
+     */
+    public void trackLoadTimeAndMemory(String dataName){
+        try{
+            Runtime runtime = Runtime.getRuntime(); //get an instance of the java runtime to get memory values
+            System.gc(); //runs the gc to free up memory to get accurate memory usage readings
+            Thread.sleep(100); //gives the gc some time to perform collection completely, results in better memory reading
+
+            long memoryBeforeTask = runtime.totalMemory() - runtime.freeMemory(); //calculates the currently used memory of the jvm
+            long start = System.nanoTime();
+
+            loadData(dataName); //task to measure
+
+            long end = System.nanoTime();
+            long memoryAfterTask = runtime.totalMemory() - runtime.freeMemory(); //calculates the change in memory usage 
+
+            //Converts the memory to KB from Bytes and Time from Nanoseconds to Miliseconds
+            long memoryInKB = (memoryAfterTask - memoryBeforeTask) / 1024;
+            long timeInMillis = (end - start) / 1000000;
+
+            System.out.println("[" + dataName + ".csv] Load time: " + timeInMillis + " ms");
+            System.out.println("[" + dataName + ".csv] Approx. memory used: " + memoryInKB + " KB");
+
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    /*
+     * The function will track the times and memory usage when checking a data value from the data structure
+     * @param dataName - a string value (data file name)
+     * @return none
+     * @sources: https://www.geeksforgeeks.org/java-runtime-getruntime-method/ 
+     * @sources: https://www.geeksforgeeks.org/garbage-collection-java/ 
+     * @sources: https://www.geeksforgeeks.org/java-system-nanotime-vs-system-currenttimemillis/
+     */
+    public void trackCheckTimeAndMemory(String dataName, String[] wordList){
+        try{
+            Runtime runtime = Runtime.getRuntime(); //get an instance of the java runtime to get memory values
+            System.gc(); //runs the gc to free up memory to get accurate memory usage readings
+            Thread.sleep(100); //gives the gc some time to perform collection completely, results in better memory reading
+
+            long memoryBeforeTask = runtime.totalMemory() - runtime.freeMemory(); //calculates the currently used memory of the jvm
+            long start = System.nanoTime();
+
+            for(String word : wordList){
+                contains(word);
+            }
+
+            long end = System.nanoTime();
+            long memoryAfterTask = runtime.totalMemory() - runtime.freeMemory(); //calculates the change in memory usage 
+
+            //No conversion (runtimes for checking or removing are assumed to be quick)
+            long timeInNanos = end - start;
+            long memoryInBytes = memoryAfterTask - memoryBeforeTask;
+
+            System.out.println("[" + dataName + ".csv] Check time: " + timeInNanos + " ns");
+            System.out.println("[" + dataName + ".csv] Approx. memory used: " + memoryInBytes + " bytes");
+
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    /*
+     * The function will track the times and memory usage when removing a data value from the data structure
+     * @param dataName - a string value (data file name)
+     * @return none
+     * @sources: https://www.geeksforgeeks.org/java-runtime-getruntime-method/ 
+     * @sources: https://www.geeksforgeeks.org/garbage-collection-java/ 
+     * @sources: https://www.geeksforgeeks.org/java-system-nanotime-vs-system-currenttimemillis/
+     */
+    public void trackRemoveTimeAndMemory(String dataName, String[] wordList){
+        try{
+            Runtime runtime = Runtime.getRuntime(); //get an instance of the java runtime to get memory values
+            System.gc(); //runs the gc to free up memory to get accurate memory usage readings
+            Thread.sleep(100); //gives the gc some time to perform collection completely, results in better memory reading
+
+            long memoryBeforeTask = runtime.totalMemory() - runtime.freeMemory(); //calculates the currently used memory of the jvm
+            long start = System.nanoTime();
+
+            for(String word : wordList){
+                remove(word);
+            }
+
+            long end = System.nanoTime();
+            long memoryAfterTask = runtime.totalMemory() - runtime.freeMemory(); //calculates the change in memory usage 
+
+            //No conversion (runtimes for checking or removing are assumed to be quick)
+            long timeInNanos = end - start;
+            long memoryInBytes = memoryAfterTask - memoryBeforeTask;
+
+            System.out.println("[" + dataName + ".csv] Remove time: " + timeInNanos + " ns");
+            System.out.println("[" + dataName + ".csv] Approx. memory used: " + memoryInBytes + " bytes");
+
+        } catch(Exception e){
+            e.printStackTrace();
         }
     }
 

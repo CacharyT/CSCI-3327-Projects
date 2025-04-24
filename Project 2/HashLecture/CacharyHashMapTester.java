@@ -66,5 +66,80 @@ public class CacharyHashMapTester {
         System.out.println("Does Map 1 contain Kiwi? " + map1.contains("Kiwi"));
         map1.remove("Kiwi");
         System.out.println("Does Map 1 contain Kiwi after removal? " + map1.contains("Kiwi"));
+
+
+        //New Test with loading large datasets and tracking speed and memory usage
+        CacharySimpleHashMap map3 = new CacharySimpleHashMap(); //initial size 10
+        CacharySimpleHashMap map4 = new CacharySimpleHashMap(); //initial size 10
+        CacharySimpleHashMap map5 = new CacharySimpleHashMap(); //initial size 10
+
+        //Ran seperately (to lessen interference with one another)
+        System.out.println("Load Time and Memory Usage for 100 Words");
+        map3.trackLoadTimeAndMemory("100_words");
+
+        System.out.println("Load Time and Memory Usage for 500 Words");
+        map4.trackLoadTimeAndMemory("500_words");
+
+        System.out.println("Load Time and Memory Usage for 1000 Words");
+        map5.trackLoadTimeAndMemory("1000_words");
+
+        //Ran seperately (to lessen interference with one another)
+        String[] oneWord = {"cat"};
+        String[] fiveWord = {"cat", "calm", "boat", "cabinet", "car"};
+        String[] tenWord = {"cat", "calm", "boat", "cabinet", "car", "fish", "calm", "sad", "cat", "tiger"};
+
+        System.out.println("Check Time and Memory Usage for 100 Words, Checking for 1 Word");
+        map3.trackCheckTimeAndMemory("100_words", oneWord);
+
+        System.out.println("Check Time and Memory Usage for 100 Words, Checking for 5 Word");
+        map3.trackCheckTimeAndMemory("100_words", fiveWord);
+
+        System.out.println("Check Time and Memory Usage for 100 Words, Checking for 10 Word");
+        map3.trackCheckTimeAndMemory("100_words", tenWord);
+
+        System.out.println("Remove Time and Memory Usage for 100 Words, Removing for 1 Word");
+        map3.trackRemoveTimeAndMemory("100_words", oneWord);
+
+        System.out.println("Remove Time and Memory Usage for 100 Words, Removing for 5 Word");
+        map3.trackRemoveTimeAndMemory("100_words", fiveWord);
+
+        System.out.println("Remove Time and Memory Usage for 100 Words, Removing for 10 Word");
+        map3.trackRemoveTimeAndMemory("100_words", tenWord);
+
+        System.out.println("Check Time and Memory Usage for 500 Words, Checking for 1 Word");
+        map4.trackCheckTimeAndMemory("500_words", oneWord);
+
+        System.out.println("Check Time and Memory Usage for 500 Words, Checking for 5 Word");
+        map4.trackCheckTimeAndMemory("500_words", fiveWord);
+
+        System.out.println("Check Time and Memory Usage for 500 Words, Checking for 10 Word");
+        map4.trackCheckTimeAndMemory("500_words", tenWord);
+
+        System.out.println("Remove Time and Memory Usage for 500 Words, Removing for 1 Word");
+        map4.trackRemoveTimeAndMemory("500_words", oneWord);
+
+        System.out.println("Remove Time and Memory Usage for 500 Words, Removing for 5 Word");
+        map4.trackRemoveTimeAndMemory("500_words", fiveWord);
+
+        System.out.println("Remove Time and Memory Usage for 500 Words, Removing for 10 Word");
+        map4.trackRemoveTimeAndMemory("500_words", tenWord);
+
+        System.out.println("Check Time and Memory Usage for 1000 Words, Checking for 1 Word");
+        map5.trackCheckTimeAndMemory("1000_words", oneWord);
+
+        System.out.println("Check Time and Memory Usage for 1000 Words, Checking for 5 Word");
+        map5.trackCheckTimeAndMemory("1000_words", fiveWord);
+
+        System.out.println("Check Time and Memory Usage for 1000 Words, Checking for 10 Word");
+        map5.trackCheckTimeAndMemory("1000_words", tenWord);
+
+        System.out.println("Remove Time and Memory Usage for 1000 Words, Removing for 1 Word");
+        map5.trackRemoveTimeAndMemory("1000_words", oneWord);
+
+        System.out.println("Remove Time and Memory Usage for 1000 Words, Removing for 5 Word");
+        map5.trackRemoveTimeAndMemory("1000_words", fiveWord);
+
+        System.out.println("Remove Time and Memory Usage for 1000 Words, Removing for 10 Word");
+        map5.trackRemoveTimeAndMemory("1000_words", tenWord);
     }
 }
