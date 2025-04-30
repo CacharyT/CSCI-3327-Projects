@@ -2,7 +2,6 @@
 
 #The function will handle smoothing the salted data
 #Param: fileName - name of the file containing the salted data
-#Param: windowValue - the number of values to average around
 #Return: none
 function [] = smoother(fileName)
  #Declared Variables

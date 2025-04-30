@@ -1,6 +1,6 @@
 /*
  * Cachary Tolentino
- * The data handler class will is responsible for handling data such as parsing data (string to double), writing into a data structure, and exporting as a csv
+ * The data handler class is responsible for handling data such as parsing data (string to double), writing into a data structure, and exporting as a csv
  */
 
 //Imports
@@ -44,7 +44,7 @@ public class DataHandler {
                 String line = scan.nextLine();
                 String[] seperated = line.split(",");
 
-                //Parse the data into seperate ints
+                //Parse the data into seperate ints or double (x are ints because they never change values unlike Y)
                 x = Integer.parseInt(seperated[0].trim());
                 y = Double.parseDouble(seperated[1].trim());
 
@@ -69,7 +69,7 @@ public class DataHandler {
         //Declared Variable
         ArrayList<String> value = new ArrayList<>();
 
-        //Revert data into strings and write into data structure
+        //Revert data into strings and write into the data structure
         for (int i = 0; i < data.size(); i += 2) {
             int xValue = data.get(i).intValue();
             double yValue = data.get(i + 1);

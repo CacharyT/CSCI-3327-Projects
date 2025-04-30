@@ -17,8 +17,8 @@ function [newData] = smootherFunction(data, windowValue)
     left = floor((windowValue - 1) / 2); #left side to count
     right = ceil((windowValue - 1) / 2); #right side to count
 
-    startVal = max(1, i - left); #leftmost value position; can't go lower than 0
-    endVal = min(length(yValues), i + right); #rightmost value position; can't go beyond size of data
+    startVal = max(1, i - left); #left most value position; can't go lower than 0
+    endVal = min(length(yValues), i + right); #right most value position; can't go beyond size of data
 
     #Replace current value with the average of the windowValue
     newYValues(i) = mean(yValues(startVal:endVal));

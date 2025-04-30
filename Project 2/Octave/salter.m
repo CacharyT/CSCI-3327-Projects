@@ -1,9 +1,7 @@
 #Cachary Tolentino
 
 #The function will handle the salting of the given data
-#Param: fiileName - the name of the file containing the data
-#Param: lowerBound - lower range of salting value
-#Param: upperBound - higher range of salting value
+#Param: fileName - the name of the file containing the data
 #Return: new file name of the salted data
 function [saltedName] = salter(fileName)
   #Declared Variables

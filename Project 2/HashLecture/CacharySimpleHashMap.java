@@ -63,7 +63,7 @@ public class CacharySimpleHashMap{
 
         //Check first if the current array has enough space, if not then resize (uses load factor to check for density of content)
         double loadFactor = (double) currentCount / dataSize;
-        if(loadFactor > 0.8){
+        if(loadFactor > 0.8){ //predetermined load factor
             resize();
         }
 
@@ -170,10 +170,10 @@ public class CacharySimpleHashMap{
     public void trackLoadTimeAndMemory(String dataName){
         try{
             Runtime runtime = Runtime.getRuntime(); //get an instance of the java runtime to get memory values
-            System.gc(); //runs the gc to free up memory to get accurate memory usage readings
-            Thread.sleep(100); //gives the gc some time to perform collection completely, results in better memory reading
+            System.gc(); //runs the garbage cleaner to free up memory to get accurate memory usage readings
+            Thread.sleep(100); //gives the garbage cleaner some time to perform collection completely, results in better memory reading
 
-            long memoryBeforeTask = runtime.totalMemory() - runtime.freeMemory(); //calculates the currently used memory of the jvm
+            long memoryBeforeTask = runtime.totalMemory() - runtime.freeMemory(); //calculates the currently used memory
             long start = System.nanoTime();
 
             loadData(dataName); //task to measure
@@ -207,11 +207,11 @@ public class CacharySimpleHashMap{
             System.gc(); //runs the gc to free up memory to get accurate memory usage readings
             Thread.sleep(100); //gives the gc some time to perform collection completely, results in better memory reading
 
-            long memoryBeforeTask = runtime.totalMemory() - runtime.freeMemory(); //calculates the currently used memory of the jvm
+            long memoryBeforeTask = runtime.totalMemory() - runtime.freeMemory(); //calculates the currently used memory
             long start = System.nanoTime();
 
             for(String word : wordList){
-                contains(word);
+                contains(word); //task to be tracked
             }
 
             long end = System.nanoTime();
@@ -243,11 +243,11 @@ public class CacharySimpleHashMap{
             System.gc(); //runs the gc to free up memory to get accurate memory usage readings
             Thread.sleep(100); //gives the gc some time to perform collection completely, results in better memory reading
 
-            long memoryBeforeTask = runtime.totalMemory() - runtime.freeMemory(); //calculates the currently used memory of the jvm
+            long memoryBeforeTask = runtime.totalMemory() - runtime.freeMemory(); //calculates the currently used memory
             long start = System.nanoTime();
 
             for(String word : wordList){
-                remove(word);
+                remove(word); //task to be tracked
             }
 
             long end = System.nanoTime();

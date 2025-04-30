@@ -35,8 +35,8 @@ public class Smoother {
         //Calculate the average based on the window value
         for (int i = 0; i < data.size(); i++) {
             if(i%2 != 0){ //ignore x
-                int start = (int) Math.max(0, i - windowValue); //leftmost value position (can't go lower than 0)
-                int end = (int) Math.min(i + windowValue, data.size() - 1); //rightmost value position (can't go beyond size of data)
+                int start = (int) Math.max(0, i - windowValue); //left most value position (can't go lower than 0)
+                int end = (int) Math.min(i + windowValue, data.size() - 1); //right most value position (can't go beyond size of data)
                 double total = 0;
                 int count = 0;
     
@@ -50,7 +50,7 @@ public class Smoother {
 
                 if(count == 0){ //handles cases where there are no values in the window (due to window size)
                     total = 0;
-                    count = 1; //prevents issue with division with 0
+                    count = 1; //prevents division issues with 0
                 }
                 newData.add(total / count); //replace old value with the average value
             } else{
